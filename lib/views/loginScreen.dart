@@ -1,7 +1,13 @@
-import 'package:client_apk/listScreen.dart';
+import 'package:client_apk/views/listScreen.dart';
+import 'package:client_apk/services/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:client_apk/detailScreen.dart';
+import 'package:client_apk/views/detailScreen.dart';
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../config/const.dart';
+import '../interceptors/logging_interceptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,7 +15,81 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //LOGO
+  final LoginService loginService =  new LoginService();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  String _userEmail="",_userPassword="";
+
+
+  //TODO atao dynamique eto ny nom an'ilay screen ho anaovana redirection
+  void redirectionToListScreen(){
+       Navigator.push(context, MaterialPageRoute(builder: (context)=>ListScreen()));
+  }
+
+  late SharedPreferences prefs;
+
+  void loginUser(String email,String password) async{
+    
+    //TODO Afindra any @ const daholo ny endpoint rehetra
+    var api=Const.host+"/api/client/login";
+    final dio=new Dio();
+
+    //API Input 
+    var data={"email":email,"password":password};
+
+    Response? response=null;
+    var body=null;
+
+    try{
+      
+        response=await dio.post(api,data:data);
+        if(response!=null){
+               Map<String,dynamic> responseMap=response.data;
+              int _codeRetour=responseMap["codeRetour"];
+              String _descRetour=responseMap["descRetour"];
+
+              if(_codeRetour==200){
+                  //Saving user information inside SharedPref
+                  prefs.setString('token', _descRetour);
+
+                  redirectionToListScreen();
+              
+              }
+              else{
+                   throw _descRetour;
+              }
+             
+        }
+        else{
+          throw "Erreur venant du serveur";
+        }
+     
+      }
+    catch(e){
+          print(e.toString());
+            Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        // textcolor: Colors.white
+      );
+    }
+     //
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   //txt
   Widget buildText() {
@@ -46,6 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
           height: 50,
           child: TextField(
+            onChanged: (value) => {
+              _userEmail=value
+            },
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
@@ -80,6 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
           height: 50,
           child: TextField(
+            onChanged: (value)=>{
+            _userPassword=value
+            },
+            controller: _passwordController,
             obscureText: true,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
@@ -119,8 +207,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+
   //LoginBtn
-  Widget buildLoginBtn() {
+  Widget buildLoginBtn(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(vertical: 25),
         width: double.infinity,
@@ -129,11 +218,8 @@ class _LoginScreenState extends State<LoginScreen> {
           // color: Color.fromARGB(255, 120, 180, 9),
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ListScreen()),
-              )
+            onPressed: () {
+              loginUser(_userEmail,_userPassword);
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -205,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Center(
                               child: Image(
-                            image: AssetImage('images/package.png'),
+                            image: AssetImage('/../images/package.png'),
                             height: 135,
                           ))),
                       SizedBox(height: 60),
@@ -221,7 +307,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             SizedBox(height: 10),
                             buildForgotPasswordBtn(),
                             SizedBox(height: 4),
-                            buildLoginBtn(),
+                            buildLoginBtn(context),
                             SizedBox(height: 25),
                             buildSignUpBtn(),
                           ],
@@ -237,4 +323,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+
+
 }
+

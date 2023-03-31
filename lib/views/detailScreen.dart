@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:client_apk/views/loginScreen.dart';
+
 
 class DetailScreen extends StatefulWidget {
   @override
@@ -7,18 +10,26 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreen extends State<DetailScreen> {
+
+   redirectToLoginScreen(){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen())
+          );
+    }
+
   @override
   Widget build(BuildContext context) {
-    // TableRow _tableRow = const TableRow(children: [
-    //   Padding(
-    //     padding: EdgeInsets.all(5),
-    //     child: Text('Content 1'),
-    //   ),
-    //   Padding(
-    //     padding: EdgeInsets.all(5),
-    //     child: Text('Content 2'),
-    //   ),
-    // ]);
+      checkToken() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("token");
+      if(token != null) {
+        redirectToLoginScreen();
+      }
+    }
+
+   
+    checkToken();
 
     return Scaffold(
       appBar: AppBar(

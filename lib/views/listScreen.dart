@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:client_apk/detailScreen.dart';
+import 'package:client_apk/views/detailScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:client_apk/views/loginScreen.dart';
+
+
 
 class ListScreen extends StatefulWidget {
   @override
@@ -8,8 +12,31 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreen extends State<ListScreen> {
+    late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
+    checkToken() async {
+      String? token = prefs.getString("token");
+      if(token != null) {
+          Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      }
+    }
+
+    checkToken();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF032547),
@@ -24,7 +51,11 @@ class _ListScreen extends State<ListScreen> {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
-              // do something
+              prefs.remove('token');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
             },
           ),
         ],

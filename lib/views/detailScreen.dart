@@ -72,10 +72,8 @@ class _DetailScreen extends State<DetailScreen> {
                       Column(children: [
                         Container(
                           child: Center(
-                              child: Image(
-                            image: AssetImage('images/hand.png'),
-                            height: 115,
-                          )),
+                             child: Image.asset("assets/images/hand.png",
+                              height: 115)),
                           padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 15.0),
                           height: 180,
                           decoration: BoxDecoration(color: Color(0xFF295078)),

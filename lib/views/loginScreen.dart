@@ -219,7 +219,8 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-              loginUser(_userEmail,_userPassword);
+              //loginUser(_userEmail,_userPassword);
+              redirectionToListScreen();
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -290,10 +291,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           child: Center(
-                              child: Image(
-                            image: AssetImage('/../images/package.png'),
-                            height: 135,
-                          ))),
+                              
+                              child: Image.asset("assets/images/package.png",
+                              height: 135,))),
                       SizedBox(height: 60),
                       Container(
                         padding: EdgeInsets.fromLTRB(43, 5, 43, 0),

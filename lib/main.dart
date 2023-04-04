@@ -4,7 +4,6 @@ import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:flutter/material.dart';
 import 'views/loginScreen.dart';
-import 'observers/TokenRouteObserver.dart';
 
 void main() => runApp(MaterialApp(
       home: MyApp(),

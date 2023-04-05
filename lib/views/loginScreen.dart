@@ -3,6 +3,7 @@ import 'package:client_apk/services/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
+import 'package:client_apk/views/signinScreen.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../config/const.dart';
@@ -239,10 +240,37 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  //buildSignUpBtn
+  // //buildSignUpBtn
+  // Widget buildSignUpBtn() {
+  //   return GestureDetector(
+  //     onTap: () => print("Sign Up Pressed"),
+  //     child: RichText(
+  //       text: TextSpan(children: [
+  //         TextSpan(
+  //             text: 'Vous n\'avez pas de compte?',
+  //             style: TextStyle(
+  //                 color: Color(0xFF1E354B),
+  //                 fontSize: 13,
+  //                 fontWeight: FontWeight.w600)),
+  //         TextSpan(
+  //             text: ' Inscrivez-vous',
+  //             style: TextStyle(
+  //                 color: Color(0xFF1E354B),
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w700))
+  //       ]),
+  //     ),
+  //   );
+  // }
+
   Widget buildSignUpBtn() {
     return GestureDetector(
-      onTap: () => print("Sign Up Pressed"),
+      onTap: () {
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SigninScreen()),
+       );
+      },
       child: RichText(
         text: TextSpan(children: [
           TextSpan(
@@ -252,6 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           TextSpan(
+              
               text: ' Inscrivez-vous',
               style: TextStyle(
                   color: Color(0xFF1E354B),
@@ -261,6 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           child: Center(
-                              
+ 
                               child: Image.asset("assets/images/package.png",
                               height: 135,))),
                       SizedBox(height: 60),

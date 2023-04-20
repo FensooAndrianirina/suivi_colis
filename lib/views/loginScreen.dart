@@ -11,17 +11,16 @@ import '../interceptors/logging_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginService loginService =  new LoginService();
+  final LoginService loginService = new LoginService();
 
-  String _emailOrPhone="";
-  String _userPassword="";
+  String _emailOrPhone = "";
+  String _userPassword = "";
   bool _passwordVisible = false;
 
   static bool isEmail(String value) {
@@ -34,52 +33,44 @@ class _LoginScreenState extends State<LoginScreen> {
     return RegExp(r'^\d{10}$').hasMatch(value);
   }
 
-  void redirectionToListScreen(){
-       Navigator.push(context, MaterialPageRoute(builder: (context)=>ListScreen()));
+  void redirectionToListScreen() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ListScreen()));
   }
 
   late SharedPreferences prefs;
 
-  void loginUser(String email,String password) async{
-    
-    //TODO Afindra any @ const daholo ny endpoint rehetra
-    var api= Const.host+"/api/client/login";
-    final dio=new Dio();
+  void loginUser(String email, String password) async {
+    var api = Const.host + "/api/client/login";
+    final dio = new Dio();
 
-    //API Input 
-    var data={"email":email,"password":password};
+    //API Input
+    var data = {"email": email, "password": password};
 
-    Response? response=null;
-    var body=null;
+    Response? response = null;
+    var body = null;
 
-    try{
-      
-        response=await dio.post(api,data:data);
-        if(response!=null){
-              Map<String,dynamic> responseMap=response.data;
-              int _codeRetour=responseMap["codeRetour"];
-              String _descRetour=responseMap["descRetour"];
+    try {
+      response = await dio.post(api, data: data);
+      if (response != null) {
+        Map<String, dynamic> responseMap = response.data;
+        int _codeRetour = responseMap["codeRetour"];
+        String _descRetour = responseMap["descRetour"];
 
-              if(_codeRetour==200){
-                  //Saving user information inside SharedPref
-                  prefs.setString('token', _descRetour);
-                  print("TONGA ETO");
-                  redirectionToListScreen();
-              
-              }
-              else{
-                   throw _descRetour;
-              }
-             
+        if (_codeRetour == 200) {
+          //Saving user information inside SharedPref
+          prefs.setString('token', _descRetour);
+          print("TONGA ETO");
+          redirectionToListScreen();
+        } else {
+          throw _descRetour;
         }
-        else{
-          throw "Erreur venant du serveur";
-        }
-     
+      } else {
+        throw "Erreur venant du serveur";
       }
-    catch(e){
-          print(e.toString());
-            Fluttertoast.showToast(
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
@@ -87,9 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.grey,
       );
     }
-     //
+    //
   }
-
 
   @override
   void initState() {
@@ -110,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Text(
             'Madagroupage',
             style: TextStyle(
-            color: Color(0xff295078),
-            fontSize: 35,
-            fontWeight: FontWeight.w900),
+                color: Color(0xff295078),
+                fontSize: 35,
+                fontWeight: FontWeight.w900),
           ),
         )
       ],
@@ -136,21 +126,20 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
           height: 50,
           child: TextFormField(
-            onChanged: (value) => {
-              _emailOrPhone=value
-            },
+            onChanged: (value) => {_emailOrPhone = value},
             // keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Color(0xff295078),
-                ),
-                hintText: 'Téléphone ou adresse mail',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13),), 
-                validator: (value) {
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14),
+              prefixIcon: Icon(
+                Icons.email,
+                color: Color(0xff295078),
+              ),
+              hintText: 'Téléphone ou adresse mail',
+              hintStyle: TextStyle(color: Colors.black38, fontSize: 13),
+            ),
+            validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
               }
@@ -158,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 return 'Entrez une adresse mail ou un numéro de téléphone valide';
               }
               return null;
-            },                          
+            },
           ),
         )
       ],
@@ -182,14 +171,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
           height: 50,
           child: TextFormField(
-            onChanged: (value)=>{
-            _userPassword=value
+            keyboardType: TextInputType.number,
+            maxLength: 4,
+            onChanged: (value) => {
+              _userPassword = value
             },
             // controller: _passwordController,
             obscureText: !_passwordVisible,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
-                 suffix: IconButton(
+                counterText: '',
+                suffix: IconButton(
                   icon: Icon(
                     _passwordVisible ? Icons.visibility_off : Icons.visibility,
                     color: Color(0xFF103962),
@@ -208,26 +200,35 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 hintText: 'Mot de passe',
                 hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez saisir votre mot de passe';
-                  }
-                  if (value.length < 6) {
-                    return 'Le mot de passe doit contenir au moins 6 caractères';
-                  }
-                  if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une majuscule';
-                  }
-                  if (!RegExp(r'[a-z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une minuscule';
-                  }
-                  if (!RegExp(r'[0-9]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un chiffre';
-                  }
-                  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un caractère spécial';
-                  }
-                return null;
+            validator: (value) {
+
+              // trim password
+              value = value!.trim();
+
+              if (value == null || value.isEmpty) {
+                return 'Veuillez saisir votre mot de passe';
+              }
+
+              if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+                return 'Le mot de passe doit contenir 4 chiffres';
+              }
+
+              // if (value.length != 4) {
+              //   return 'Le mot de passe doit contenir 4 chiffres';
+              // }
+              // if (!RegExp(r'[A-Z]').hasMatch(value)) {
+              //   return 'Le mot de passe doit contenir au moins une majuscule';
+              // }
+              // if (!RegExp(r'[a-z]').hasMatch(value)) {
+              //   return 'Le mot de passe doit contenir au moins une minuscule';
+              // }
+              // if (!RegExp(r'[0-9]').hasMatch(value)) {
+              //   return 'Le mot de passe doit contenir au moins un chiffre';
+              // }
+              // if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+              //   return 'Le mot de passe doit contenir au moins un caractère spécial';
+              // }
+              return null;
             },
           ),
         )
@@ -268,15 +269,16 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-              // loginUser(_userEmail,_userPassword);
-              loginUser(_emailOrPhone,_userPassword);
-              redirectionToListScreen();
-                if (formKey.currentState!.validate()) {
-                  print("OK");
-                }
-                else {
-                  print("NOT OK");
-                }
+              print("TEST ********************");
+
+              if (formKey.currentState!.validate()) {
+                print("OK");
+                // loginUser(_emailOrPhone,_userPassword);
+                // redirectionToListScreen();
+              } else {
+                print("NOT OK");
+              }
+              print("TEST 2 ********************");
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -295,15 +297,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-
-
   Widget buildSignUpBtn() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SigninScreen()),
-       );
+          context,
+          MaterialPageRoute(builder: (context) => SigninScreen()),
+        );
       },
       child: RichText(
         text: TextSpan(children: [
@@ -314,7 +314,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600)),
           TextSpan(
-              
               text: ' Inscrivez-vous',
               style: TextStyle(
                   color: Color(0xFF1E354B),
@@ -324,7 +323,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -357,30 +355,31 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           child: Center(
-                              child: Image.asset("assets/images/package.png",
-                              height: 135,))),
-                          SizedBox(height: 60),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
-                            child: Form(
-                              key: formKey,
-                                child: Column(
-                                  children: [
-                                  buildText(),
-                                  SizedBox(height:45),
-                                  buildEmail(),
-                                  SizedBox(height: 22),
-                                  buildPassword(),
-                                  SizedBox(height: 10),
-                                  buildForgotPasswordBtn(),
-                                  SizedBox(height: 4),
-                                  buildLoginBtn(context),
-                                  SizedBox(height: 25),
-                                  buildSignUpBtn(),
-                            ],
-                          ),
-                        )
-                      ),
+                              child: Image.asset(
+                            "assets/images/package.png",
+                            height: 135,
+                          ))),
+                      SizedBox(height: 60),
+                      Container(
+                          padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                buildText(),
+                                SizedBox(height: 45),
+                                buildEmail(),
+                                SizedBox(height: 22),
+                                buildPassword(),
+                                SizedBox(height: 10),
+                                buildForgotPasswordBtn(),
+                                SizedBox(height: 4),
+                                buildLoginBtn(context),
+                                SizedBox(height: 25),
+                                buildSignUpBtn(),
+                              ],
+                            ),
+                          )),
                     ],
                   ),
                 ),

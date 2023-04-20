@@ -5,6 +5,9 @@ import 'package:client_apk/views/signinScreen.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:flutter/material.dart';
 import 'views/loginScreen.dart';
+import 'views/changePassword.dart';
+import 'package:get/get.dart';
+
 
 void main() => runApp(MaterialApp(
       home: MyApp(),
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Connexion | MADAGROUPAGE',
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
@@ -26,7 +29,9 @@ class MyApp extends StatelessWidget {
         // '/signinScreen': (context) => SigninScreen(),
           // '/detailScreen': (context) => DetailScreen(),
       },
-      home: SigninScreen(),
+      // home: SigninScreen(),
+      // home: ChangePassword(),
+      home: LoginScreen(),
     );
   }
 }

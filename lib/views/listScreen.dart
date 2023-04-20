@@ -55,7 +55,7 @@ class _ListScreen extends State<ListScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
+              );
             },
           ),
         ],
@@ -223,45 +223,7 @@ class _ListScreen extends State<ListScreen> {
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: 5),
-                              Container(
-                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () => {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailScreen()),
-                                          )
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.all(13),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            foregroundColor: Colors.white,
-                                            backgroundColor: Color(0xFFD4833B)),
-                                        child: Row(children: [
-                                          Text(
-                                            'Voir détails',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_right,
-                                            color: Colors.white,
-                                          ),
-                                        ]),
-                                      ),
-                                    ],
-                                  ))
+                              ), 
                             ],
                           )),
                       SizedBox(height: 7),

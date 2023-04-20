@@ -9,6 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../config/const.dart';
 import '../interceptors/logging_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,13 +19,21 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final LoginService loginService =  new LoginService();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
-  String _userEmail="",_userPassword="";
+  String _emailOrPhone="";
+  String _userPassword="";
+  bool _passwordVisible = false;
 
+  static bool isEmail(String value) {
+    // Use a regular expression to check if value is a valid email address
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+  }
 
-  //TODO atao dynamique eto ny nom an'ilay screen ho anaovana redirection
+  bool isPhoneNumber(String value) {
+    // Use a regular expression to check if value is a 10-digit phone number
+    return RegExp(r'^\d{10}$').hasMatch(value);
+  }
+
   void redirectionToListScreen(){
        Navigator.push(context, MaterialPageRoute(builder: (context)=>ListScreen()));
   }
@@ -33,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void loginUser(String email,String password) async{
     
     //TODO Afindra any @ const daholo ny endpoint rehetra
-    var api=Const.host+"/api/client/login";
+    var api= Const.host+"/api/client/login";
     final dio=new Dio();
 
     //API Input 
@@ -46,14 +56,14 @@ class _LoginScreenState extends State<LoginScreen> {
       
         response=await dio.post(api,data:data);
         if(response!=null){
-               Map<String,dynamic> responseMap=response.data;
+              Map<String,dynamic> responseMap=response.data;
               int _codeRetour=responseMap["codeRetour"];
               String _descRetour=responseMap["descRetour"];
 
               if(_codeRetour==200){
                   //Saving user information inside SharedPref
                   prefs.setString('token', _descRetour);
-
+                  print("TONGA ETO");
                   redirectionToListScreen();
               
               }
@@ -75,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.grey,
-        // textcolor: Colors.white
       );
     }
      //
@@ -126,12 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
               ]),
           height: 50,
-          child: TextField(
+          child: TextFormField(
             onChanged: (value) => {
-              _userEmail=value
+              _emailOrPhone=value
             },
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
+            // keyboardType: TextInputType.emailAddress,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
                 border: InputBorder.none,
@@ -140,8 +148,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   Icons.email,
                   color: Color(0xff295078),
                 ),
-                hintText: 'Email',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
+                hintText: 'Téléphone ou adresse mail',
+                hintStyle: TextStyle(color: Colors.black38, fontSize: 13),), 
+                validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
+              }
+              if (!isEmail(value) && !isPhoneNumber(value)) {
+                return 'Entrez une adresse mail ou un numéro de téléphone valide';
+              }
+              return null;
+            },                          
           ),
         )
       ],
@@ -164,22 +181,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
               ]),
           height: 50,
-          child: TextField(
+          child: TextFormField(
             onChanged: (value)=>{
             _userPassword=value
             },
-            controller: _passwordController,
-            obscureText: true,
+            // controller: _passwordController,
+            obscureText: !_passwordVisible,
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
+                 suffix: IconButton(
+                  icon: Icon(
+                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                    color: Color(0xFF103962),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
+                // contentPadding: EdgeInsets.only(top: 1),
                 prefixIcon: Icon(
                   Icons.lock,
                   color: Color(0xff295078),
                 ),
                 hintText: 'Mot de passe',
                 hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez saisir votre mot de passe';
+                  }
+                  if (value.length < 6) {
+                    return 'Le mot de passe doit contenir au moins 6 caractères';
+                  }
+                  if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                    return 'Le mot de passe doit contenir au moins une majuscule';
+                  }
+                  if (!RegExp(r'[a-z]').hasMatch(value)) {
+                    return 'Le mot de passe doit contenir au moins une minuscule';
+                  }
+                  if (!RegExp(r'[0-9]').hasMatch(value)) {
+                    return 'Le mot de passe doit contenir au moins un chiffre';
+                  }
+                  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+                    return 'Le mot de passe doit contenir au moins un caractère spécial';
+                  }
+                return null;
+            },
           ),
         )
       ],
@@ -208,7 +257,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-
   //LoginBtn
   Widget buildLoginBtn(BuildContext context) {
     return Container(
@@ -220,8 +268,15 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-              //loginUser(_userEmail,_userPassword);
+              // loginUser(_userEmail,_userPassword);
+              loginUser(_emailOrPhone,_userPassword);
               redirectionToListScreen();
+                if (formKey.currentState!.validate()) {
+                  print("OK");
+                }
+                else {
+                  print("NOT OK");
+                }
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -240,28 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  // //buildSignUpBtn
-  // Widget buildSignUpBtn() {
-  //   return GestureDetector(
-  //     onTap: () => print("Sign Up Pressed"),
-  //     child: RichText(
-  //       text: TextSpan(children: [
-  //         TextSpan(
-  //             text: 'Vous n\'avez pas de compte?',
-  //             style: TextStyle(
-  //                 color: Color(0xFF1E354B),
-  //                 fontSize: 13,
-  //                 fontWeight: FontWeight.w600)),
-  //         TextSpan(
-  //             text: ' Inscrivez-vous',
-  //             style: TextStyle(
-  //                 color: Color(0xFF1E354B),
-  //                 fontSize: 12,
-  //                 fontWeight: FontWeight.w700))
-  //       ]),
-  //     ),
-  //   );
-  // }
+
 
   Widget buildSignUpBtn() {
     return GestureDetector(
@@ -292,6 +326,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -321,27 +357,29 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           child: Center(
- 
                               child: Image.asset("assets/images/package.png",
                               height: 135,))),
-                      SizedBox(height: 60),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
-                        child: Column(
-                          children: [
-                            buildText(),
-                            SizedBox(height:45),
-                            buildEmail(),
-                            SizedBox(height: 22),
-                            buildPassword(),
-                            SizedBox(height: 10),
-                            buildForgotPasswordBtn(),
-                            SizedBox(height: 4),
-                            buildLoginBtn(context),
-                            SizedBox(height: 25),
-                            buildSignUpBtn(),
-                          ],
-                        ),
+                          SizedBox(height: 60),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
+                            child: Form(
+                              key: formKey,
+                                child: Column(
+                                  children: [
+                                  buildText(),
+                                  SizedBox(height:45),
+                                  buildEmail(),
+                                  SizedBox(height: 22),
+                                  buildPassword(),
+                                  SizedBox(height: 10),
+                                  buildForgotPasswordBtn(),
+                                  SizedBox(height: 4),
+                                  buildLoginBtn(context),
+                                  SizedBox(height: 25),
+                                  buildSignUpBtn(),
+                            ],
+                          ),
+                        )
                       ),
                     ],
                   ),
@@ -353,8 +391,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-
-
 }
-

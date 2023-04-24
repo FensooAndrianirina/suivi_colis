@@ -43,6 +43,7 @@ class _InputWidgetState extends State<InputWidget> {
             style: TextStyle(color: Colors.black87),
             decoration: InputDecoration(
               counterText: "",
+              labelText: '',
               prefixIcon: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 5),
                 child: Icon(

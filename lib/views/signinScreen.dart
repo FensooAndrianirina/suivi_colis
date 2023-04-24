@@ -7,6 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:client_apk/views/textField_component.dart';
+import 'package:client_apk/routes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
+
+
+
+
 
 
 
@@ -17,7 +25,42 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-  
+  String _name = ""; 
+  String _email = ""; 
+  String _tel = ""; 
+  String _fb = ""; 
+  String _address = ""; 
+
+
+  static bool isName(String value){
+      //at least at least 4 letters, with at least one uppercase and one lowercase:
+      return RegExp(r'^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{4,}$').hasMatch(value);
+
+  }
+
+  static bool isEmail(String value) {
+    // Use a regular expression to check if value is a valid email address
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+  }
+
+  bool isPhoneNumber(String value) {
+    // Use a regular expression to check if value is a 10-digit phone number
+    return RegExp(r'^\d{10}$').hasMatch(value);
+  }
+
+   static bool isFb(String value){
+      //at least 2 letters
+      return RegExp(r'[a-zA-Z].*[a-zA-Z]').hasMatch(value);
+
+  }
+
+   static bool isAddress(String value){
+      //at least 5 letters
+      return RegExp(r'[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]').hasMatch(value);
+
+  }
+
+
  //txt
   Widget buildText() {
     return Column(
@@ -47,262 +90,109 @@ class _SigninScreenState extends State<SigninScreen> {
 
   //Name
   Widget buildName() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only( left: 9 , bottom: 5),
-          child: Text(
-              'Nom(s) et prénom(s) *',
-              style: TextStyle(
-                  color: Color(0xff295078),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900),
-              ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) {
-                // setState(() {
-                //   _nameError = formKey.currentState.validate()
-                //       ? null
-                //       : 'Please enter your name';
-                // });
-            },
-            keyboardType: TextInputType.emailAddress,  
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.people,
-                  color: Color(0xff295078),
-                ),
-                ),  
-                validator: MultiValidator(
-                [
-                  RequiredValidator(errorText: "Ce champ ne peut pas être vide"),
-                  MinLengthValidator(2, errorText: "Ce nom est trop court (minimum 2 caractères)"),
-                  // PatternValidator(r'^[a-zA-Z\s]*$', errorText: 'Entrer un nom valide'), r'^\d\d\d\d\d\d\d\d\d\d$'
-                ]
-              ),       
-          ),
-        )
-      ],
+    return InputWidget(
+      onChanged: (value) => {_name = value},
+      validator: (value) {
+         if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre nom et prénom';
+          }
+          if (!isName(value)) {
+            return 'Ce champ doit contenir au moins une majuscule et une minuscule(4 lettres minimum)';
+          }
+          return null;
+      },
+      textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: "Nom et prénom (Obligatoire)",
+      icon: Icons.people,
+      max: 50,
     );
   }
 
 
   //Tel
   Widget buildTel() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-         Padding(
-          padding: const EdgeInsets.only( left: 9 , bottom: 5),
-          child: Text(
-              'Téléphone *',
-              style: TextStyle(
-                  color: Color(0xff295078),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900),
-              ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value) => {},
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.phone,
-                  color: Color(0xff295078),
-                ),),  
-                validator: MultiValidator([
-                RequiredValidator(errorText: "Ce champ ne peut pas être vide"),
-                PatternValidator( r'^\d\d\d\d\d\d\d\d\d\d$', errorText: 'Entrer un numéro de téléphone valide'),
-            ]),       
-          ),
-        )
-      ],
+    return InputWidget(
+        onChanged: (value) => {_tel = value},
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre numéro de téléphone';
+          }
+          if (!isPhoneNumber(value)) {
+            return 'Entrez un numéro de téléphone valide';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: 'Entrez votre numéro de téléphone (Obligatoire)',
+      icon:  Icons.phone,
+      max: 10
     );
   }
 
 
   //Email
   Widget buildEmail() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-         Padding(
-          padding: const EdgeInsets.only( left: 9 , bottom: 5),
-          child: Text(
-              'Email *',
-              style: TextStyle(
-                  color: Color(0xff295078),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900),
-              ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (value) => {},
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Color(0xff295078),
-                ),),  
-                  validator: (value) {    
-                //   if(!GetUtils.isEmail(value!)) {
-                //    return "Adresse mail invalide";
-                //   } else {
-                //   return null;
-                // }
-                if (!GetUtils.isEmail(value!)) {
-                return "Adresse mail invalide";
-                } else {
-                return null;
-              }
-            },       
-          ),
-        )
-      ],
+     return InputWidget(
+        onChanged: (value) => {_email = value},
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre adresse mail';
+          }
+          if (!isEmail(value)) {
+            return 'Entrez une adresse mail';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: 'Entrez votra adresse mail',
+      icon:  Icons.email,
+      max: 80
     );
   }
 
   //Facebook
   Widget buildFb() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-         Padding(
-          padding: const EdgeInsets.only( left: 9 , bottom: 5),
-          child: Text(
-              'Facebook (Optionnel)',
-              style: TextStyle(
-                  color: Color(0xff295078),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900),
-              ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value) => {},
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 15),
-                prefixIcon : Padding(
-                  padding: EdgeInsets.only(left: 8, top:6),
-                  child: FaIcon(
-                  FontAwesomeIcons.facebook,
-                  color: Color(0xff295078),
-                  )
-                )
-               ),    
-                validator: MultiValidator([
-                RequiredValidator(errorText: "Ce champ ne peut pas être vide"),
-                MinLengthValidator(3, errorText: "Ce pseudo Facebook est trop court (minimum 3 caractères)"),
-            ]), 
-          ),
-        )
-      ],
+     return InputWidget(
+        onChanged: (value) => {_fb = value},
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre pseudo Facebook';
+          }
+          if (!isFb(value)) {
+            return 'Entrez votre pseudo Facebook';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: 'Téléphone ou adresse mail',
+      icon: Icons.email,
+      max: 25
     );
   }
                 
 
   //Address
   Widget buildAdd() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-         Padding(
-          padding: const EdgeInsets.only( left: 9 , bottom: 5),
-          child: Text(
-              'Adresse *',
-              style: TextStyle(
-                  color: Color(0xff295078),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900),
-              ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value) => {},
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.maps_home_work,
-                  color: Color(0xff295078),
-                )),  
-                validator: MultiValidator([
-                RequiredValidator(errorText: "Ce champ ne peut pas être vide"),
-                MinLengthValidator(10, errorText: "Cette adresse est trop courte"),
-            ]),       
-          ),
-        )
-      ],
+     return InputWidget(
+        onChanged: (value) => {_address = value},
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre adresse';
+          }
+          if (!isAddress(value)) {
+            return "L'adresse doit contenir au moins 5 lettres";
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: 'Entrez votre adresse (Obligatoire)',
+      icon:  Icons.email,
+      max: 80
     );
   }
 

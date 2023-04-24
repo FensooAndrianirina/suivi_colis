@@ -5,6 +5,8 @@ import 'package:client_apk/views/loginScreen.dart';
 
 
 class DetailScreen extends StatefulWidget {
+  const DetailScreen({super.key});
+
   @override
   _DetailScreen createState() => _DetailScreen();
 }

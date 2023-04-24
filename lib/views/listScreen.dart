@@ -7,6 +7,9 @@ import 'package:client_apk/views/loginScreen.dart';
 
 
 class ListScreen extends StatefulWidget {
+  const ListScreen({super.key});
+
+
   @override
   _ListScreen createState() => _ListScreen();
 }

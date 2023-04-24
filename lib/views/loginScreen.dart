@@ -1,15 +1,18 @@
+import 'package:client_apk/routes.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/services/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:client_apk/views/signinScreen.dart';
+import 'package:client_apk/views/textField_component.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../config/const.dart';
 import '../interceptors/logging_interceptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -17,11 +20,42 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final LoginService loginService = new LoginService();
 
   String _emailOrPhone = "";
   String _userPassword = "";
-  bool _passwordVisible = false;
+
+  _login() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        var rep = await LoginService()
+            .login(_emailOrPhone, _userPassword);
+        if(rep == 200){
+          if (context.mounted) Navigator.popAndPushNamed(context, Routes.list);
+        }else if(rep == 202){
+          if (context.mounted) Navigator.popAndPushNamed(context, Routes.changePass);
+        }
+      } on Exception catch (exception) {
+        ArtSweetAlert.show(
+            context: context,
+            artDialogArgs: ArtDialogArgs(
+                type: ArtSweetAlertType.danger,
+                dialogDecoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                title: "Erreur",
+                text: exception.toString(),
+                confirmButtonText: "OK",
+                confirmButtonColor: const Color(0xFF3E72A4)));
+       /* Fluttertoast.showToast(
+          msg: exception.toString(),
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey,
+        );*/
+      }
+    }
+  }
 
   static bool isEmail(String value) {
     // Use a regular expression to check if value is a valid email address
@@ -109,130 +143,43 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  //Emails
   Widget buildEmail() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value) => {_emailOrPhone = value},
-            // keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Color(0xff295078),
-              ),
-              hintText: 'Téléphone ou adresse mail',
-              hintStyle: TextStyle(color: Colors.black38, fontSize: 13),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
-              }
-              if (!isEmail(value) && !isPhoneNumber(value)) {
-                return 'Entrez une adresse mail ou un numéro de téléphone valide';
-              }
-              return null;
-            },
-          ),
-        )
-      ],
+    return InputWidget(
+        onChanged: (value) => {_emailOrPhone = value},
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
+          }
+          if (!isEmail(value) && !isPhoneNumber(value)) {
+            return 'Entrez une adresse mail ou un numéro de téléphone valide';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+      visiblePassword: false,
+      placeholder: 'Téléphone ou adresse mail',
+      icon:  Icons.email,
+      max: 80
     );
   }
 
-  //Password
   Widget buildPassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            maxLength: 4,
-            onChanged: (value) => {
-              _userPassword = value
-            },
-            // controller: _passwordController,
-            obscureText: !_passwordVisible,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                counterText: '',
-                suffix: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF103962),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-                border: InputBorder.none,
-                // contentPadding: EdgeInsets.only(top: 1),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Color(0xff295078),
-                ),
-                hintText: 'Mot de passe',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
-            validator: (value) {
+    return InputWidget(
+        onChanged: (value) => {_userPassword = value},
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Champ obligatoire";
+          }
 
-              // trim password
-              value = value!.trim();
-
-              if (value == null || value.isEmpty) {
-                return 'Veuillez saisir votre mot de passe';
-              }
-
-              if (!RegExp(r'^\d{4}$').hasMatch(value)) {
-                return 'Le mot de passe doit contenir 4 chiffres';
-              }
-
-              // if (value.length != 4) {
-              //   return 'Le mot de passe doit contenir 4 chiffres';
-              // }
-              // if (!RegExp(r'[A-Z]').hasMatch(value)) {
-              //   return 'Le mot de passe doit contenir au moins une majuscule';
-              // }
-              // if (!RegExp(r'[a-z]').hasMatch(value)) {
-              //   return 'Le mot de passe doit contenir au moins une minuscule';
-              // }
-              // if (!RegExp(r'[0-9]').hasMatch(value)) {
-              //   return 'Le mot de passe doit contenir au moins un chiffre';
-              // }
-              // if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-              //   return 'Le mot de passe doit contenir au moins un caractère spécial';
-              // }
-              return null;
-            },
-          ),
-        )
-      ],
+          if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+            return 'Le mot de passe doit contenir 4 chiffres';
+          }
+        },
+        textInputType: TextInputType.number,
+        visiblePassword: true,
+        placeholder: 'Mot de passe',
+        icon:  Icons.lock,
+        max: 4
     );
   }
 
@@ -269,16 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-              print("TEST ********************");
-
-              if (formKey.currentState!.validate()) {
-                print("OK");
-                // loginUser(_emailOrPhone,_userPassword);
-                // redirectionToListScreen();
-              } else {
-                print("NOT OK");
-              }
-              print("TEST 2 ********************");
+              _login();
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),

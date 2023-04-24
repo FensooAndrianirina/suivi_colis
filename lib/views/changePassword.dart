@@ -7,6 +7,8 @@ import 'package:flutter_dialogs/flutter_dialogs.dart';
 
 
 class ChangePassword extends StatefulWidget {
+  const ChangePassword({super.key});
+
   @override
   _ChangePassword createState() => _ChangePassword();
 }

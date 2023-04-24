@@ -1,4 +1,5 @@
 
+import 'package:client_apk/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/views/signinScreen.dart';
@@ -22,16 +23,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Connexion | MADAGROUPAGE',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        // '/': (context) => LoginScreen(),
-        // '/signinScreen': (context) => SigninScreen(),
-        // '/signinScreen': (context) => SigninScreen(),
-          // '/detailScreen': (context) => DetailScreen(),
-      },
-      // home: SigninScreen(),
-      // home: ChangePassword(),
-      home: LoginScreen(),
+      initialRoute: Routes.login,
+      routes: Routes.routes,
     );
   }
 }

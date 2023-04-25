@@ -1,7 +1,9 @@
 import 'package:client_apk/routes.dart';
+import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/listScreen.dart';
-import 'package:client_apk/views/resetPassword.dart';
+import 'package:client_apk/views/editProfile.dart';
 import 'package:client_apk/services/login_service.dart';
+import 'package:client_apk/views/resetPassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
@@ -156,11 +158,11 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           return null;
         },
-        textInputType: TextInputType.text,
-      visiblePassword: false,
-      placeholder: 'Téléphone ou adresse mail',
-      icon:  Icons.email,
-      max: 80
+        textInputType: TextInputType.emailAddress,
+        visiblePassword: false,
+        placeholder: 'Téléphone ou adresse mail',
+        icon:  Icons.email,
+        max: 80
     );
   }
 
@@ -255,13 +257,48 @@ class _LoginScreenState extends State<LoginScreen> {
           TextSpan(
               text: ' Inscrivez-vous',
               style: TextStyle(
-                  color: Color(0xFF1E354B),
+                  color: Colors.black,
                   fontSize: 12,
                   fontWeight: FontWeight.w700))
         ]),
       ),
     );
   }
+
+   Widget buildEditProfileLink() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EditProfile()),
+        );
+      },
+      child: Text(
+        'MODIFIER LE PROFIL',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
+   Widget buildChangePasswordLink() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePassword()),
+        );
+      },
+      child: Text(
+        'CHANGER LE MOT DE PASSE',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -316,6 +353,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buildLoginBtn(context),
                                 SizedBox(height: 25),
                                 buildSignUpBtn(),
+                                SizedBox(height: 5),
+                                buildEditProfileLink(),
+                                SizedBox(height: 5),
+                                buildChangePasswordLink()
                               ],
                             ),
                           )),

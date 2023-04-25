@@ -8,35 +8,101 @@ import 'package:client_apk/views/textField_component.dart';
 import 'package:client_apk/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:client_apk/routes.dart';
+import 'package:client_apk/services/reset_password_service.dart';
+import '../config/const.dart';
+import 'package:dio/dio.dart';
+
+
 
 
 class ResetPassword extends StatefulWidget {
   @override
-  _ResetPassword createState() => _ResetPassword();
+  _ResetPasswordState createState() => _ResetPasswordState();
 }
 
-
-class _ResetPassword extends State<ResetPassword> {
+class _ResetPasswordState extends State<ResetPassword> {
 
 String _email="";
 
 static bool isEmail(String value) {
     // Use a regular expression to check if value is a valid email address
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+}
+
+void redirectionToLoginScreen() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+}
+
+
+
+  _resetPassword() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        var rep = await ResetPasswordService()
+        .resetPassword(_email);
+        if(rep == 200){    
+          if (context.mounted) Navigator.popAndPushNamed(context, Routes.login);    
+          }
+      } on Exception catch (exception) {
+        ArtSweetAlert.show(
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.danger,
+            dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20)),
+            title: "Erreur",
+            text: exception.toString(),
+            confirmButtonText: "OK",
+            confirmButtonColor: const Color(0xFF3E72A4)));
+      }
+    }
   }
 
-// void redirectionToLoginScreen() {
-//     Navigator.push(
-//         context, MaterialPageRoute(builder: (context) => LoginScreen()));
-//   }
 
+  void UserEmail(String email) async {
+    var api = Const.host + "/api/client/resetPwd";
+    final dio = new Dio();
+
+    //API Input
+    var data = { "email": email };
+
+    Response? response = null;
+    var body = null;
+
+    try {
+      response = await dio.post(api, data: data);
+      if (response != null) {
+        Map<String, dynamic> responseMap = response.data;
+        int _codeRetour = responseMap["codeRetour"];
+        String _descRetour = responseMap["descRetour"];
+
+        if (_codeRetour == 200) {
+          redirectionToLoginScreen();
+        } else {
+          throw _descRetour;
+        }
+      } else {
+        throw "Erreur venant du serveur";
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+      );
+    }
+    //
+  }
 
   //txt
   Widget buildText() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
           Text(
             'Mot de passe oublié',
@@ -47,11 +113,11 @@ static bool isEmail(String value) {
           ),
           SizedBox(height: 15),
           Text(
-            "Entrez votre adresse mail pour recevoir l'email de réinitialisation de mot de passe",
+            "Recevez l'email de réinitialisation de votre mot de passe",
             style: TextStyle(
-            color: Color.fromARGB(255, 33, 66, 99),
-            fontSize: 17,
-            fontWeight: FontWeight.w600),
+            color: Color.fromARGB(255, 21, 43, 65),
+            fontSize: 15,
+            fontWeight: FontWeight.w700),
         )
       ],
     );   
@@ -88,12 +154,7 @@ static bool isEmail(String value) {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-               if (formKey.currentState!.validate()) {
-                  print("OK");
-                }
-                else {
-                  print("NOT OK");
-                }  
+              _resetPassword(); 
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -145,7 +206,15 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                          SizedBox(height: 160),
+                          SizedBox(height: 20),
+                          Container(
+                          padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
+                          child: Center(
+                              child: Image.asset("images/cadenas.png", height: 190,
+                                  )
+                               ),       
+                          ),
+                          SizedBox(height: 20),
                           Container(
                             padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
                             child: Form(

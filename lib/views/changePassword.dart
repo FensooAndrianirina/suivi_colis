@@ -1,4 +1,5 @@
 import 'package:client_apk/views/signinScreen.dart';
+import 'package:client_apk/views/listScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -8,8 +9,10 @@ import 'package:client_apk/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-
+import 'package:client_apk/services/change_password_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+import '../config/const.dart';
 
 
 class ChangePassword extends StatefulWidget {
@@ -21,11 +24,141 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePassword extends State<ChangePassword> {
 
-  String _oldPassword="";
+  String _password="";
   String _newPassword="";
   String _confirmPassword="";
   bool _passwordVisible = false;
   bool _showOldPasswordError = false;
+
+   void redirectionToListScreen() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ListScreen()));
+  }
+
+  void showError(String title, String text){
+    ArtSweetAlert.show(
+      context: context,
+      artDialogArgs: ArtDialogArgs(
+        type: ArtSweetAlertType.danger,
+        dialogDecoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20)),
+        text: text,
+        title: title,
+        confirmButtonText: "OK",
+        confirmButtonColor: const Color(0xFF3E72A4)));
+  }
+
+  _changePassword() async {
+    if (formKey.currentState!.validate()) {
+      try {
+        var rep = await ChangePasswordService()
+            .changePassword(_password, _newPassword, _confirmPassword);
+        if(rep == 200){
+            ArtSweetAlert.show(
+            context: context,
+            artDialogArgs: ArtDialogArgs(
+              type: ArtSweetAlertType.success,
+              dialogDecoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20)),
+              text: "Changement de mot de passe effectué",
+              // confirmButtonText: "OK",
+              // confirmButtonColor: const Color(0xFF3E72A4)
+            )
+          );
+
+          Future.delayed(Duration(seconds: 2), () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => ListScreen(),
+              ),
+            );
+          });
+        } 
+        else{
+          // redirectToChangePassword(context);
+            Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => ChangePassword(),
+            ),
+          );
+        }
+      } on Exception catch (exception) {
+        ArtSweetAlert.show(
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.danger,
+            dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20)),
+            title: "Erreur",
+            text: exception.toString(),
+            confirmButtonText: "OK",
+            confirmButtonColor: const Color(0xFF3E72A4)));
+      }
+    }
+  }
+
+  late SharedPreferences prefs;
+
+  void loginUser(String password, String newPassword, String confirmPassword) async {
+    var api = Const.host + "/api/client/changePwd";
+    final dio = new Dio();
+
+    //API Input
+    var data = 
+    { 
+      "password": password, 
+      "newPassword": newPassword,
+      "confirmPassword": confirmPassword
+    };
+
+    Response? response = null;
+    var body = null;
+
+    try {
+      response = await dio.post(api, data: data);
+      if (response != null) {
+        Map<String, dynamic> responseMap = response.data;
+        int _codeRetour = responseMap["codeRetour"];
+        String _descRetour = responseMap["descRetour"];
+
+        if (_codeRetour == 200) {
+          //Saving user information inside SharedPref
+          prefs.setString('token', _descRetour);
+          print("TONGA ETO");
+          redirectionToListScreen();
+        } else {
+          throw _descRetour;
+        }
+      } else {
+        throw "Erreur venant du serveur";
+      }
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+      );
+    }
+    //
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   //txt
   Widget buildText() {
@@ -45,12 +178,10 @@ class _ChangePassword extends State<ChangePassword> {
     );
   }
 
-
-
   //OLD Password
   Widget buildOldPassword() {
    return InputWidget(
-        onChanged: (value) => {_oldPassword = value},
+        onChanged: (value) => {_password = value},
         validator: (value) {
           if (value!.isEmpty) {
             return "Champ obligatoire";
@@ -61,7 +192,7 @@ class _ChangePassword extends State<ChangePassword> {
           }
         },
         textInputType: TextInputType.number,
-        visiblePassword: true,
+        visiblePassword: false,
         placeholder: 'Entrez votre ancien mot de passe',
         icon:  Icons.lock,
         max: 4
@@ -82,7 +213,7 @@ class _ChangePassword extends State<ChangePassword> {
           }
         },
         textInputType: TextInputType.number,
-        visiblePassword: true,
+        visiblePassword: false,
         placeholder: 'Entrez votre nouveau mot de passe',
         icon:  Icons.lock,
         max: 4
@@ -103,7 +234,7 @@ class _ChangePassword extends State<ChangePassword> {
           }
         },
         textInputType: TextInputType.number,
-        visiblePassword: true,
+        visiblePassword: false,
         placeholder: 'Confirmez le nouveau mot de passe',
         icon:  Icons.lock,
         max: 4
@@ -121,45 +252,17 @@ class _ChangePassword extends State<ChangePassword> {
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
             onPressed: () {
-              //loginUser(_userEmail,_userPassword);
-              // redirectionToListScreen();
-                // if (formKey.currentState!.validate()) {
-                //   print("OK");
-                // }
-                // else {
-                //   print("NOT OK");
-                // }
-                // }
-                if (formKey.currentState!.validate()) {
-                  if(_oldPassword == _newPassword){
-                   ArtSweetAlert.show(
-                      context: context,
-                      artDialogArgs: ArtDialogArgs(
-                          type: ArtSweetAlertType.danger,
-                          dialogDecoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          title: "Le nouveau mot de passe est le même que l'ancien mot de passe",
-                          // text: exception.toString(),
-                          confirmButtonText: "OK",
-                          confirmButtonColor: const Color(0xFF3E72A4)));
-                }
+              if (formKey.currentState!.validate()) {
+                if (_password == _newPassword) {
+                  showError("Le nouveau mot de passe et l'ancien sont identiques", "");
 
+                } else if (_newPassword != _confirmPassword){
+                  showError("Veuillez confirmer le bon mot de passe", "");
+                } 
                 else {
-                  ArtSweetAlert.show(
-                      context: context,
-                      artDialogArgs: ArtDialogArgs(
-                          type: ArtSweetAlertType.danger,
-                          dialogDecoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20)),
-                          title: "Veuillez confirmer le bon nouveau mot de passe",
-                          // text: exception.toString(),
-                          confirmButtonText: "OK",
-                          confirmButtonColor: const Color(0xFF3E72A4)));
+                  _changePassword();              
                 }
-            }
-    
+              }
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),
@@ -168,7 +271,7 @@ class _ChangePassword extends State<ChangePassword> {
                 foregroundColor: Colors.white,
                 backgroundColor: Color(0xFF103962)),
             child: Text(
-              'Sauvegarder',
+              'Valider',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 15,
@@ -177,137 +280,6 @@ class _ChangePassword extends State<ChangePassword> {
           ),
         ));
   }
-
-  Widget buildComeBackLink() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SigninScreen()),
-       );
-      },
-      child: RichText(
-        text: TextSpan(children: [
-          TextSpan(
-              text: 'Retour vers la page X',
-              style: TextStyle(
-                  color: Color(0xFF1E354B),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600))
-        ]),
-      ),
-    );
-  }
-
-
-//Popup
-// Future<void> _showPopupDialog(BuildContext context) async {
-//   showDialog(
-//     context: context,
-//     builder: (_) {
-//       bool isPopupClosed = false;
-//       return StatefulBuilder(
-//         builder: (context, setState) {
-//           if (isPopupClosed) {
-//             Navigator.of(context).pop();
-//           }
-//           return AlertDialog(
-//             backgroundColor: Colors.white,
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(10),
-//             ),
-//             contentPadding: EdgeInsets.all(23),
-//             titlePadding: EdgeInsets.fromLTRB(16, 16, 0, 0),
-//             contentTextStyle: TextStyle(
-//               color: Color(0xFF032547),
-//               fontSize: 18,
-//             ),
-//             titleTextStyle: TextStyle(
-//               color: Color(0xFF032547),
-//               fontSize: 20,
-//             ),
-//             title: Padding(
-//               padding: const EdgeInsets.only(left: 8, right: 11),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Change to center
-//                 children: [           
-//                   Text(
-//                     'Déconnexion ?',
-//                     style: TextStyle(
-//                       fontSize: 20,
-//                       fontWeight: FontWeight.w700,
-//                       color: Color(0xFF032547),
-//                     ),
-//                   ),
-//                   IconButton(
-//                     icon: Icon(Icons.close),
-//                     color: Color(0xFFD4833B),
-//                     onPressed: () {
-//                       setState(() {
-//                         isPopupClosed = true;
-//                       });
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             content: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   'Souhaitez-vous vraiment vous déconnecter ?',
-//                   style: TextStyle(
-//                     fontSize: 13,
-//                     fontWeight: FontWeight.w600,
-//                     color: Color(0xFF032547),
-//                   ),
-//                 ),
-//                 SizedBox(height: 20),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     ElevatedButton(
-//                       onPressed: () {
-//                         // Do something on 'Oui' button press
-//                       },
-//                       style: ButtonStyle(
-//                         backgroundColor:
-//                             MaterialStateProperty.all<Color>(Color(0xFFD4833B)),
-//                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                           RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(5),
-//                           ),
-//                         ),
-//                       ),
-//                       child: Text('Oui'),
-//                     ),
-//                     ElevatedButton(
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                       },
-//                       style: ButtonStyle(
-//                         backgroundColor:
-//                             MaterialStateProperty.all<Color>(Color(0xFFD4833B)),
-//                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-//                           RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(5),
-//                           ),
-//                         ),
-//                       ),
-//                       child: Text('No'),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//             actions: [],
-//           );
-//         },
-//       );
-//     },
-//   );
-// }
 
 Future<void> _showPopupDialog(BuildContext context) async {
   showDialog(
@@ -477,7 +449,15 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                          SizedBox(height: 160),
+                          SizedBox(height: 40),
+                           Container(
+                          padding: EdgeInsets.all(15),
+                          child: Center(
+                              child: Image.asset("images/padlock.png", height: 120
+                                  )
+                               ),       
+                            ),
+                          SizedBox(height: 40),
                           Container(
                             padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
                             child: Form(
@@ -493,8 +473,6 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                                   buildConfirmPassword(),
                                   SizedBox(height: 15),         
                                   buildSaveBtn(context),
-                                  SizedBox(height: 15),
-                                  buildComeBackLink()
                             ],
                           ),
                         )

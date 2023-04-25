@@ -4,6 +4,7 @@ import 'package:client_apk/views/detailScreen.dart';
 import 'package:client_apk/views/ChangePassword.dart';
 import 'package:client_apk/views/signinScreen.dart';
 import 'package:client_apk/views/resetPassword.dart';
+import 'package:client_apk/views/editProfile.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -13,6 +14,7 @@ class Routes {
   static const String detail = '/detail';
   static const String changePass = '/changePass';
   static const String resetPassword = '/resetPassword';
+  static const String editProfile = '/editProfile';
 
   static final Map<String, WidgetBuilder> routes = {
     list: (context) => const ListScreen(),
@@ -21,5 +23,6 @@ class Routes {
     register: (context) => SigninScreen(),
     changePass: (context) => ChangePassword(),
     resetPassword: (context) => ResetPassword(),
+    editProfile: (context) => EditProfile(),
   };
 }

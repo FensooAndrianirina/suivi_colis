@@ -7,6 +7,8 @@ import 'package:client_apk/views/textField_component.dart';
 import 'package:client_apk/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 
 
@@ -19,7 +21,9 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePassword extends State<ChangePassword> {
 
-  String _userPassword="";
+  String _oldPassword="";
+  String _newPassword="";
+  String _confirmPassword="";
   bool _passwordVisible = false;
   bool _showOldPasswordError = false;
 
@@ -46,7 +50,7 @@ class _ChangePassword extends State<ChangePassword> {
   //OLD Password
   Widget buildOldPassword() {
    return InputWidget(
-        onChanged: (value) => {_userPassword = value},
+        onChanged: (value) => {_oldPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
             return "Champ obligatoire";
@@ -67,7 +71,7 @@ class _ChangePassword extends State<ChangePassword> {
   //NEW Password
   Widget buildNewPassword() {
     return InputWidget(
-        onChanged: (value) => {_userPassword = value},
+        onChanged: (value) => {_newPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
             return "Champ obligatoire";
@@ -88,7 +92,7 @@ class _ChangePassword extends State<ChangePassword> {
 
   Widget buildConfirmPassword() {
     return InputWidget(
-        onChanged: (value) => {_userPassword = value},
+        onChanged: (value) => {_confirmPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
             return "Champ obligatoire";
@@ -119,12 +123,43 @@ class _ChangePassword extends State<ChangePassword> {
             onPressed: () {
               //loginUser(_userEmail,_userPassword);
               // redirectionToListScreen();
+                // if (formKey.currentState!.validate()) {
+                //   print("OK");
+                // }
+                // else {
+                //   print("NOT OK");
+                // }
+                // }
                 if (formKey.currentState!.validate()) {
-                  print("OK");
+                  if(_oldPassword == _newPassword){
+                   ArtSweetAlert.show(
+                      context: context,
+                      artDialogArgs: ArtDialogArgs(
+                          type: ArtSweetAlertType.danger,
+                          dialogDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          title: "Le nouveau mot de passe est le même que l'ancien mot de passe",
+                          // text: exception.toString(),
+                          confirmButtonText: "OK",
+                          confirmButtonColor: const Color(0xFF3E72A4)));
                 }
+
                 else {
-                  print("NOT OK");
+                  ArtSweetAlert.show(
+                      context: context,
+                      artDialogArgs: ArtDialogArgs(
+                          type: ArtSweetAlertType.danger,
+                          dialogDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20)),
+                          title: "Veuillez confirmer le bon nouveau mot de passe",
+                          // text: exception.toString(),
+                          confirmButtonText: "OK",
+                          confirmButtonColor: const Color(0xFF3E72A4)));
                 }
+            }
+    
             },
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(15),

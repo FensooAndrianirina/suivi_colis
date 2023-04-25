@@ -157,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         textInputType: TextInputType.text,
       visiblePassword: false,
-      placeholder: 'Téléphone ou adresse mail',
+      placeholder: 'Téléphone ou adresse mail (Optionnel)',
       icon:  Icons.email,
       max: 80
     );

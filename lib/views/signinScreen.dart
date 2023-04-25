@@ -147,7 +147,7 @@ class _SigninScreenState extends State<SigninScreen> {
         },
         textInputType: TextInputType.text,
       visiblePassword: false,
-      placeholder: 'Entrez votra adresse mail',
+      placeholder: 'Entrez votra adresse mail (Optionnel)',
       icon:  Icons.email,
       max: 80
     );
@@ -168,8 +168,9 @@ class _SigninScreenState extends State<SigninScreen> {
         },
         textInputType: TextInputType.text,
       visiblePassword: false,
-      placeholder: 'Téléphone ou adresse mail',
-      icon: Icons.email,
+      placeholder: 'Entrez votre pseudo Facebook',
+      icon: Icons.facebook,
+      // icon: FaIcon(FontAwesomeIcons.facebook).icon,
       max: 25
     );
   }
@@ -190,8 +191,8 @@ class _SigninScreenState extends State<SigninScreen> {
         },
         textInputType: TextInputType.text,
       visiblePassword: false,
-      placeholder: 'Entrez votre adresse (Obligatoire)',
-      icon:  Icons.email,
+      placeholder: 'Entrez votre adresse (Optionnel)',
+      icon:  Icons.maps_home_work,
       max: 80
     );
   }

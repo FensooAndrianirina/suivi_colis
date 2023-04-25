@@ -1,5 +1,6 @@
 import 'package:client_apk/routes.dart';
 import 'package:client_apk/views/listScreen.dart';
+import 'package:client_apk/views/resetPassword.dart';
 import 'package:client_apk/services/login_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -157,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         textInputType: TextInputType.text,
       visiblePassword: false,
-      placeholder: 'Téléphone ou adresse mail (Optionnel)',
+      placeholder: 'Téléphone ou adresse mail',
       icon:  Icons.email,
       max: 80
     );
@@ -187,14 +188,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
-      child: TextButton(
-        onPressed: () => print("Forgot Password pressed"),
-        style: TextButton.styleFrom(
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.only(right: 0),
-          textStyle: const TextStyle(fontSize: 16),
-        ),
-        child: const Text(
+      child: GestureDetector(
+        onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ResetPassword()),
+            );
+          },
+      child: const Text(
           'Mot de passe oublié ?',
           style: TextStyle(
               color: Color(0xFF1E354B),

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:client_apk/views/textField_component.dart';
+import 'package:client_apk/routes.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
 
 
 
@@ -15,7 +19,7 @@ class ChangePassword extends StatefulWidget {
 
 class _ChangePassword extends State<ChangePassword> {
 
-  String _userEmail="",_userPassword="";
+  String _userPassword="";
   bool _passwordVisible = false;
   bool _showOldPasswordError = false;
 
@@ -41,219 +45,64 @@ class _ChangePassword extends State<ChangePassword> {
 
   //OLD Password
   Widget buildOldPassword() {
-    double containerHeight = _showOldPasswordError ? 70 : 50;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value)=>{
-            _userPassword=value
-            },
-            // controller: _passwordController,
-            obscureText: !_passwordVisible,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                 suffix: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF103962),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-                border: InputBorder.none,
-                // contentPadding: EdgeInsets.only(top: 1),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Color(0xff295078),
-                ),
-                hintText: 'Ancien mot de passe',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    _showOldPasswordError = true;
-                    return 'Veuillez saisir votre mot de passe';
-                  }
-                  if (value.length < 6) {
-                    _showOldPasswordError = true;
-                    return 'Le mot de passe doit contenir au moins 8 caractères';
-                  }
-                  if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                    _showOldPasswordError = true;
-                    return 'Le mot de passe doit contenir au moins une majuscule';
-                  }
-                  if (!RegExp(r'[a-z]').hasMatch(value)) {
-                    _showOldPasswordError = true;
-                    return 'Le mot de passe doit contenir au moins une minuscule';
-                  }
-                  if (!RegExp(r'[0-9]').hasMatch(value)) {
-                    _showOldPasswordError = true;
-                    return 'Le mot de passe doit contenir au moins un chiffre';
-                  }
-                  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-                    _showOldPasswordError = true;
-                    return 'Le mot de passe doit contenir au moins un caractère spécial';
-                  }
-                _showOldPasswordError = false;
-                return null;
-            },
-          ),
-        )
-      ],
+   return InputWidget(
+        onChanged: (value) => {_userPassword = value},
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Champ obligatoire";
+          }
+
+          if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+            return 'Le mot de passe doit contenir 4 chiffres';
+          }
+        },
+        textInputType: TextInputType.number,
+        visiblePassword: true,
+        placeholder: 'Entrez votre ancien mot de passe',
+        icon:  Icons.lock,
+        max: 4
     );
   }
 
   //NEW Password
   Widget buildNewPassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value)=>{
-            _userPassword=value
-            },
-            // controller: _passwordController,
-            obscureText: !_passwordVisible,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                 suffix: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF103962),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-                border: InputBorder.none,
-                // contentPadding: EdgeInsets.only(top: 1),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Color(0xff295078),
-                ),
-                hintText: 'Nouveau mot de passe',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez saisir votre mot de passe';
-                  }
-                  if (value.length < 6) {
-                    return 'Le mot de passe doit contenir au moins 8 caractères';
-                  }
-                  if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une majuscule';
-                  }
-                  if (!RegExp(r'[a-z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une minuscule';
-                  }
-                  if (!RegExp(r'[0-9]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un chiffre';
-                  }
-                  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un caractère spécial';
-                  }
-                return null;
-            },
-          ),
-        )
-      ],
+    return InputWidget(
+        onChanged: (value) => {_userPassword = value},
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Champ obligatoire";
+          }
+
+          if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+            return 'Le mot de passe doit contenir 4 chiffres';
+          }
+        },
+        textInputType: TextInputType.number,
+        visiblePassword: true,
+        placeholder: 'Entrez votre nouveau mot de passe',
+        icon:  Icons.lock,
+        max: 4
     );
   }
 
 
   Widget buildConfirmPassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-              color: Color(0xFFF8F8F8),
-              borderRadius: BorderRadius.circular(21),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 6, offset: Offset(0, 2))
-              ]),
-          height: 50,
-          child: TextFormField(
-            onChanged: (value)=>{
-            _userPassword=value
-            },
-            // controller: _passwordController,
-            obscureText: !_passwordVisible,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                 suffix: IconButton(
-                  icon: Icon(
-                    _passwordVisible ? Icons.visibility_off : Icons.visibility,
-                    color: Color(0xFF103962),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordVisible = !_passwordVisible;
-                    });
-                  },
-                ),
-                border: InputBorder.none,
-                // contentPadding: EdgeInsets.only(top: 1),
-                prefixIcon: Icon(
-                  Icons.lock,
-                  color: Color(0xff295078),
-                ),
-                hintText: 'Confirmation de mot de passe',
-                hintStyle: TextStyle(color: Colors.black38, fontSize: 13)),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Veuillez saisir votre mot de passe';
-                  }
-                  if (value.length < 6) {
-                    return 'Le mot de passe doit contenir au moins 8 caractères';
-                  }
-                  if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une majuscule';
-                  }
-                  if (!RegExp(r'[a-z]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins une minuscule';
-                  }
-                  if (!RegExp(r'[0-9]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un chiffre';
-                  }
-                  if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-                    return 'Le mot de passe doit contenir au moins un caractère spécial';
-                  }
-                return null;
-            },
-          ),
-        )
-      ],
+    return InputWidget(
+        onChanged: (value) => {_userPassword = value},
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Champ obligatoire";
+          }
+
+          if (!RegExp(r'^\d{4}$').hasMatch(value)) {
+            return 'Le mot de passe doit contenir 4 chiffres';
+          }
+        },
+        textInputType: TextInputType.number,
+        visiblePassword: true,
+        placeholder: 'Confirmez le nouveau mot de passe',
+        icon:  Icons.lock,
+        max: 4
     );
   }
 

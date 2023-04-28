@@ -1,4 +1,5 @@
 import 'package:client_apk/routes.dart';
+import 'package:client_apk/views/aboutScreen.dart';
 import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/views/editProfile.dart';
@@ -299,6 +300,23 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget buildAboutLink(){
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AboutScreen()),
+        );
+      },
+      child: Text(
+        'A PROPOS',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -356,7 +374,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(height: 5),
                                 buildEditProfileLink(),
                                 SizedBox(height: 5),
-                                buildChangePasswordLink()
+                                buildChangePasswordLink(),
+                                SizedBox(height: 5),
+                                buildAboutLink()
                               ],
                             ),
                           )),

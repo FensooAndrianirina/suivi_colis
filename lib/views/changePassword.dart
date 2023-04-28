@@ -55,30 +55,14 @@ class _ChangePassword extends State<ChangePassword> {
         var rep = await ChangePasswordService()
             .changePassword(_password, _newPassword, _confirmPassword);
         if(rep == 200){
-            ArtSweetAlert.show(
-            context: context,
-            artDialogArgs: ArtDialogArgs(
-              type: ArtSweetAlertType.success,
-              dialogDecoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20)),
-              text: "Changement de mot de passe effectué",
-              // confirmButtonText: "OK",
-              // confirmButtonColor: const Color(0xFF3E72A4)
-            )
-          );
-
-          Future.delayed(Duration(seconds: 2), () {
-            Navigator.pushReplacement(
-              context,
+          Navigator.pushReplacement(
+            context,
               MaterialPageRoute(
                 builder: (BuildContext context) => ListScreen(),
               ),
             );
-          });
         } 
         else{
-          // redirectToChangePassword(context);
             Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -105,7 +89,7 @@ class _ChangePassword extends State<ChangePassword> {
   late SharedPreferences prefs;
 
   void loginUser(String password, String newPassword, String confirmPassword) async {
-    var api = Const.host + "/api/client/changePwd";
+    var api = Const.host + "api-client/change-pwd";
     final dio = new Dio();
 
     //API Input
@@ -120,7 +104,7 @@ class _ChangePassword extends State<ChangePassword> {
     var body = null;
 
     try {
-      response = await dio.post(api, data: data);
+      response = await dio.put(api, data: data);
       if (response != null) {
         Map<String, dynamic> responseMap = response.data;
         int _codeRetour = responseMap["codeRetour"];

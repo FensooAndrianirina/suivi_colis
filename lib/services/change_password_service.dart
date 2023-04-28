@@ -30,9 +30,9 @@ class ChangePasswordService {
         'confirmPassword': confirmPassword,
       };
    
-      var uri = Uri.parse("${Const.host}/api/client/changePwd");
+      var uri = Uri.parse("${Const.host}/api-client/change-pwd");
      
-      var reponse = await http.post( 
+      var reponse = await http.put( 
         uri,
         body: body,
         headers: headers
@@ -55,14 +55,12 @@ class ChangePasswordService {
         throw e;
       }
       on HttpException catch(e) {
-        print(e.message);
         throw ApiException("Token inexistant");
       }
       on SocketException catch (_) {
         // Gérer l'exception de connexion Internet manquante ici
         throw ApiException("Pas d'internet");
       } catch (e) {
-      // print(e);
       // Gérer toutes les autres exceptions ici
        throw ApiException("Erreur venant du serveur");
      }

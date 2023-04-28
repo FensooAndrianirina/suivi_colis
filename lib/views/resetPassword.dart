@@ -173,8 +173,6 @@ void redirectionToLoginScreen() {
         ));
   }
 
-
-
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override

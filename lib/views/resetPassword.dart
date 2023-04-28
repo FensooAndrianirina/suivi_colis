@@ -63,7 +63,7 @@ void redirectionToLoginScreen() {
 
 
   void UserEmail(String email) async {
-    var api = Const.host + "/api/client/resetPwd";
+    var api = Const.host + "/api-client/reset-pwd";
     final dio = new Dio();
 
     //API Input

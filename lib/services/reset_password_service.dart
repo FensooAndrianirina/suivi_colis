@@ -17,7 +17,7 @@ class ResetPasswordService {
       
       var body = { 'email': email };
    
-      var uri = Uri.parse("${Const.host}/api/client/resetPwd");
+      var uri = Uri.parse("${Const.host}/api-client/reset-pwd");
      
       var reponse = await http.post( 
         uri,

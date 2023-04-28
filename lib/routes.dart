@@ -1,3 +1,4 @@
+import 'package:client_apk/views/aboutScreen.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/views/loginScreen.dart';
 import 'package:client_apk/views/detailScreen.dart';
@@ -15,6 +16,7 @@ class Routes {
   static const String changePass = '/changePass';
   static const String resetPassword = '/resetPassword';
   static const String editProfile = '/editProfile';
+  static const String aboutScreen = '/aboutScreen';
 
   static final Map<String, WidgetBuilder> routes = {
     list: (context) => const ListScreen(),
@@ -24,5 +26,6 @@ class Routes {
     changePass: (context) => ChangePassword(),
     resetPassword: (context) => ResetPassword(),
     editProfile: (context) => EditProfile(),
+    aboutScreen: (context) => AboutScreen(),
   };
 }

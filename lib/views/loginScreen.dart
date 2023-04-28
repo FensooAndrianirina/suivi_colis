@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late SharedPreferences prefs;
 
   void loginUser(String email, String password) async {
-    var api = Const.host + "/api/client/login";
+    var api = Const.host + "/api-client/login";
     final dio = new Dio();
 
     //API Input

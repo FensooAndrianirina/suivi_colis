@@ -12,16 +12,16 @@ import '../exceptions/api_exception.dart';
 
 class LoginService {
 
-   gethttp () async {
-    final dio = Dio();
-    print("ato");
-    final response = await dio.get('https://reqres.in/api/users?page=2');
-    return response;
-    }
+  //  gethttp () async {
+  //   final dio = Dio();
+  //   print("ato");
+  //   final response = await dio.get('https://reqres.in/api/users?page=2');
+  //   return response;
+  //   }
 
    Future<dynamic> login(String login, String pwd) async {
      try{
-       var uri = Uri.parse("${Const.host}/api/client/login");
+       var uri = Uri.parse("${Const.host}/api-client/login");
        var reponse = await http.post(uri,body: {"login": login, "password": pwd});
       /* var reponse = await http.post(Uri.parse("${Const.host}/api/client/login"),
            body: {"login": login, "password": pwd});*/

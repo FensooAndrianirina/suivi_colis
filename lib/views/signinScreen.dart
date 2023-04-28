@@ -70,7 +70,7 @@ class _SigninScreenState extends State<SigninScreen> {
           child: Text(
             'Bienvenue sur Madagroupage',
             style: TextStyle(
-            color: Color.fromARGB(255, 16, 46, 76),
+            color: Color(0xFF102E4C),
             fontSize: 29,
             fontWeight: FontWeight.w900),
           ),

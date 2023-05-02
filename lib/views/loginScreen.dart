@@ -266,58 +266,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-   Widget buildEditProfileLink() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => EditProfile()),
-        );
-      },
-      child: Text(
-        'MODIFIER LE PROFIL',
-        style: TextStyle(
-        color: Color(0xFF1E354B),
-        fontSize: 13,
-        fontWeight: FontWeight.w600))
-    );
-  }
-
-   Widget buildChangePasswordLink() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ChangePassword()),
-        );
-      },
-      child: Text(
-        'CHANGER LE MOT DE PASSE',
-        style: TextStyle(
-        color: Color(0xFF1E354B),
-        fontSize: 13,
-        fontWeight: FontWeight.w600))
-    );
-  }
-
-  Widget buildAboutLink(){
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AboutScreen()),
-        );
-      },
-      child: Text(
-        'A PROPOS',
-        style: TextStyle(
-        color: Color(0xFF1E354B),
-        fontSize: 13,
-        fontWeight: FontWeight.w600))
-    );
-  }
-
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -371,12 +319,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buildLoginBtn(context),
                                 SizedBox(height: 25),
                                 buildSignUpBtn(),
-                                SizedBox(height: 5),
-                                buildEditProfileLink(),
-                                SizedBox(height: 5),
-                                buildChangePasswordLink(),
-                                SizedBox(height: 5),
-                                buildAboutLink()
                               ],
                             ),
                           )),

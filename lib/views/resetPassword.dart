@@ -208,7 +208,7 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                           Container(
                           padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                           child: Center(
-                              child: Image.asset("images/cadenas.png", height: 190,
+                              child: Image.asset("assets/images/cadenas.png", height: 190,
                                   )
                                ),       
                           ),

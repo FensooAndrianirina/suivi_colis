@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
             return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
           }
           if (!isEmail(value) && !isPhoneNumber(value)) {
-            return 'Entrez une adresse mail ou un numéro de téléphone valide';
+            return 'Entrez une adresse mail valide';
           }
           return null;
         },
@@ -317,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buildForgotPasswordBtn(),
                                 SizedBox(height: 4),
                                 buildLoginBtn(context),
-                                SizedBox(height: 25),
+                                SizedBox(height: 10),
                                 buildSignUpBtn(),
                               ],
                             ),

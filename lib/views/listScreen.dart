@@ -98,7 +98,7 @@ class _ListScreen extends State<ListScreen> {
                                     height:
                                         47, // set the height of the container
                                     width: 47, // set the width of the container
-                                    child: Image.asset('images/checklist.png'),
+                                    child: Image.asset('assets/images/checklist.png'),
                                     padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                   ),
                                   Text(
@@ -147,7 +147,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/desc.png'),
+                                      child: Image.asset('assets/images/desc.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -177,7 +177,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/package.png'),
+                                      child: Image.asset('assets/images/package.png'),
                                       padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                                     ),
                                     Text(
@@ -207,7 +207,7 @@ class _ListScreen extends State<ListScreen> {
                                           42, // set the height of the container
                                       width:
                                           42, // set the width of the container
-                                      child: Image.asset('images/etat.png'),
+                                      child: Image.asset('assets/images/etat.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -255,7 +255,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/desc.png'),
+                                      child: Image.asset('assets/images/desc.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -285,7 +285,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/package.png'),
+                                      child: Image.asset('assets/images/package.png'),
                                       padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                                     ),
                                     Text(
@@ -315,7 +315,7 @@ class _ListScreen extends State<ListScreen> {
                                           42, // set the height of the container
                                       width:
                                           42, // set the width of the container
-                                      child: Image.asset('images/etat.png'),
+                                      child: Image.asset('assets/images/etat.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -364,7 +364,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/desc.png'),
+                                      child: Image.asset('assets/images/desc.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -394,7 +394,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/package.png'),
+                                      child: Image.asset('assets/images/package.png'),
                                       padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                                     ),
                                     Text(
@@ -424,7 +424,7 @@ class _ListScreen extends State<ListScreen> {
                                           42, // set the height of the container
                                       width:
                                           42, // set the width of the container
-                                      child: Image.asset('images/etat.png'),
+                                      child: Image.asset('assets/images/etat.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -473,7 +473,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/desc.png'),
+                                      child: Image.asset('assets/images/desc.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(
@@ -503,7 +503,7 @@ class _ListScreen extends State<ListScreen> {
                                           41, // set the height of the container
                                       width:
                                           41, // set the width of the container
-                                      child: Image.asset('images/package.png'),
+                                      child: Image.asset('assets/images/package.png'),
                                       padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                                     ),
                                     Text(
@@ -533,7 +533,7 @@ class _ListScreen extends State<ListScreen> {
                                           42, // set the height of the container
                                       width:
                                           42, // set the width of the container
-                                      child: Image.asset('images/etat.png'),
+                                      child: Image.asset('assets/images/etat.png'),
                                       padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                     ),
                                     Text(

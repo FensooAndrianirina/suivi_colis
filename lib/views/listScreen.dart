@@ -101,31 +101,31 @@ class _ListScreen extends State<ListScreen> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             itemBuilder: (BuildContext context) => [
-               PopupMenuItem(
-                value: "profile",
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Icon(
-                        Icons.person,
-                        color: Color(0xFF295078),      
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.0),
-                        child: Text("Mon profil"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              //  PopupMenuItem(
+              //   value: "profile",
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 5),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.start,
+              //       children: const [
+              //         Icon(
+              //           Icons.person,
+              //           color: Color(0xFF295078),      
+              //         ),
+              //         Padding(
+              //           padding: EdgeInsets.only(left: 5.0),
+              //           child: Text("Mon profil"),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               PopupMenuItem(
                 value: "changePass",
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: const [
                       Icon(
                         Icons.lock,
@@ -156,9 +156,10 @@ class _ListScreen extends State<ListScreen> {
             onSelected: (String value) {
                 if (value == "deconnexion") {
                   showLogoutConfirmation(context);
-                } else if(value == "profile") {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfile()));
-                }
+                } 
+                // else if(value == "profile") {
+                //   Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfile()));
+                // }
                 else if(value == "changePass") {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword()));
                 }

@@ -1,21 +1,23 @@
+import 'package:client_apk/views/changePassword.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/views/loginScreen.dart';
+import 'components/confirmation_component.dart';
+import 'package:art_sweetalert/art_sweetalert.dart';
 
 
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
 
-
   @override
   _ListScreen createState() => _ListScreen();
 }
 
 class _ListScreen extends State<ListScreen> {
-    late SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   @override
   void initState() {
@@ -27,19 +29,60 @@ class _ListScreen extends State<ListScreen> {
     prefs = await SharedPreferences.getInstance();
   }
 
+  void showLogoutConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmation'),
+          content: Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Dismiss the dialog
+                // Perform logout logic
+                 SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+                      prefs.remove('token');
+                      if (context.mounted) {                        
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                  }                           
+              },
+              child: Text('Oui'),
+            ),
+            TextButton(
+              onPressed: () {
+                print('CANCEL');
+
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: Text('Non'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    checkToken() async {
-      String? token = prefs.getString("token");
-      if(token != null) {
-          Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
-      }
-    }
+   
+    // checkToken() async {
+    //   String? token = prefs.getString("token");
+    //   if(token != null) {
+    //       Navigator.push(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => LoginScreen()),
+    //     );
+    //   }
+    // }
 
-    checkToken();
+    // checkToken();
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF032547),
@@ -51,16 +94,53 @@ class _ListScreen extends State<ListScreen> {
         ),
         automaticallyImplyLeading: false, 
         actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              prefs.remove('token');
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
+          Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: PopupMenuButton(
+            offset: const Offset(0, kToolbarHeight + 10),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            itemBuilder: (BuildContext context) => [
+              // PopupMenuItem(
+              //   value: "changePass",
+              //   child: Padding(
+              //     padding: const EdgeInsets.symmetric(horizontal: 5),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: const [
+              //         Icon(
+              //           Icons.logout,
+              //           color: Colors.black,
+              //         ),
+              //         Text("Changement mot de passe"),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              PopupMenuItem(
+                value: "deconnexion",
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                      ),
+                      Text("Déconnexion"),
+                    ],
+                  ),
+                ),
+              )
+            ],
+            onSelected: (String value) {
+                if (value == "deconnexion") {
+                  showLogoutConfirmation(context);
+                } 
             },
           ),
+        ),
         ],
       ),
       body: AnnotatedRegion<SystemUiOverlayStyle>(

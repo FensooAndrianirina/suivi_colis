@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/views/loginScreen.dart';
-import 'components/confirmation_component.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 
 
@@ -101,22 +100,22 @@ class _ListScreen extends State<ListScreen> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             itemBuilder: (BuildContext context) => [
-              // PopupMenuItem(
-              //   value: "changePass",
-              //   child: Padding(
-              //     padding: const EdgeInsets.symmetric(horizontal: 5),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: const [
-              //         Icon(
-              //           Icons.logout,
-              //           color: Colors.black,
-              //         ),
-              //         Text("Changement mot de passe"),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              PopupMenuItem(
+                value: "changePass",
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Icon(
+                        Icons.lock,
+                        color: Color(0xFF295078),      
+                      ),
+                      Text("Mot de passe"),
+                    ],
+                  ),
+                ),
+              ),
               PopupMenuItem(
                 value: "deconnexion",
                 child: Padding(
@@ -126,7 +125,7 @@ class _ListScreen extends State<ListScreen> {
                     children: const [
                       Icon(
                         Icons.logout,
-                        color: Colors.black,
+                        color: Color(0xFF295078),  
                       ),
                       Text("Déconnexion"),
                     ],
@@ -137,13 +136,56 @@ class _ListScreen extends State<ListScreen> {
             onSelected: (String value) {
                 if (value == "deconnexion") {
                   showLogoutConfirmation(context);
-                } 
+                } else if(value == "changePass") {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword()));
+                }
             },
           ),
         ),
         ],
       ),
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
+      body:  WillPopScope(
+        onWillPop: () async {
+          // Handle back button press
+          // Implement your desired behavior here
+              showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Confirmation'),
+                content: Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+                actions: [
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop(); // Dismiss the dialog
+                      // Perform logout logic
+                      SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                            prefs.remove('token');
+                            if (context.mounted) {                        
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                        }                           
+                    },
+                    child: Text('Oui'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      print('CANCEL');
+
+                      Navigator.of(context).pop(); // Dismiss the dialog
+                    },
+                    child: Text('Non'),
+                  ),
+                ],
+              );
+            },
+          );
+          return false; // Return true to allow the back navigation, or false to prevent it
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
@@ -209,7 +251,7 @@ class _ListScreen extends State<ListScreen> {
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black26,
+                                    color: Color(0xFF295078),      
                                     blurRadius: 6,
                                     offset: Offset(0, 2))
                               ],
@@ -636,11 +678,12 @@ class _ListScreen extends State<ListScreen> {
                             ],
                           )),
                       SizedBox(height: 7),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

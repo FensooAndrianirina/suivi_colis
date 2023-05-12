@@ -1,4 +1,5 @@
 import 'package:client_apk/views/changePassword.dart';
+import 'package:client_apk/views/changeProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
@@ -100,6 +101,25 @@ class _ListScreen extends State<ListScreen> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             itemBuilder: (BuildContext context) => [
+               PopupMenuItem(
+                value: "profile",
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Icon(
+                        Icons.person,
+                        color: Color(0xFF295078),      
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5.0),
+                        child: Text("Mon profil"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               PopupMenuItem(
                 value: "changePass",
                 child: Padding(
@@ -136,7 +156,10 @@ class _ListScreen extends State<ListScreen> {
             onSelected: (String value) {
                 if (value == "deconnexion") {
                   showLogoutConfirmation(context);
-                } else if(value == "changePass") {
+                } else if(value == "profile") {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeProfile()));
+                }
+                else if(value == "changePass") {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword()));
                 }
             },
@@ -223,15 +246,17 @@ class _ListScreen extends State<ListScreen> {
                                     child: Image.asset('assets/images/checklist.png'),
                                     padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                   ),
-                                  Text(
-                                    'TOUS MES COLIS:',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
+                                  Center(
+                                    child: Text(
+                                      'TOUS MES COLIS:',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                   Text(
-                                    ' 12',
+                                    ' 4',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,

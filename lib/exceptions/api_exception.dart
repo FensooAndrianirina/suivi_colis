@@ -2,8 +2,8 @@ class ApiException implements Exception {
   String message;
 
   final Map<String, String> msg = {
-    "PAS_INTERNET": "Pas de connexion Internet",
-    "ERREUR_SERVEUR": "Une erreur est survenue"
+    "PAS_INTERNET" : "Serveur indisponible ou aucun accès internet",
+    "ERREUR_SERVEUR" : "Serveur indisponible ou aucun accès internet"
   };
 
   ApiException(this.message){

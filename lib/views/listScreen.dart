@@ -34,8 +34,19 @@ class _ListScreen extends State<ListScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmation'),
-          content: Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+          title: Text(
+                'Déconnexion',
+                style: TextStyle(
+                  color: Color(0xFFDA6D14)
+                ),
+            ),
+          content: Text(
+                'Êtes-vous sûr de vouloir vous déconnecter ?',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 28, 53, 78),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
           actions: [
             TextButton(
               onPressed: () async {
@@ -51,7 +62,12 @@ class _ListScreen extends State<ListScreen> {
                               builder: (context) => LoginScreen()));
                   }                           
               },
-              child: Text('Oui'),
+              child: Text(
+                'Oui',
+                style: TextStyle(
+                  color: Color(0xFFDA6D14)
+                ),
+              )
             ),
             TextButton(
               onPressed: () {
@@ -59,7 +75,12 @@ class _ListScreen extends State<ListScreen> {
 
                 Navigator.of(context).pop(); // Dismiss the dialog
               },
-              child: Text('Non'),
+              child: Text(
+                'Non',
+                style: TextStyle(
+                  color: Color(0xFFDA6D14)
+                ),
+              )
             ),
           ],
         );

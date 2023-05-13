@@ -8,6 +8,10 @@ class InputWidget extends StatefulWidget {
   final String placeholder;
   final IconData icon;
   final int max;
+  final String? initialValue;
+  final bool? enabled;
+  final InputDecoration? decoration;
+
 
   const InputWidget(
       {Key? key,
@@ -17,7 +21,10 @@ class InputWidget extends StatefulWidget {
       required this.visiblePassword,
       required this.placeholder,
       required this.icon,
-      required this.max
+      required this.max,
+      this.initialValue, // Add the initialValue parameter to the constructor
+      this.enabled = true, 
+      this.decoration, 
       })
       : super(key: key);
 
@@ -26,14 +33,31 @@ class InputWidget extends StatefulWidget {
 }
 
 class _InputWidgetState extends State<InputWidget> {
+  TextEditingController? _controller; // Declare the TextEditingController
+   @override
+  void initState() {
+    super.initState();
+    // Initialize the TextEditingController with the initialValue
+    _controller = TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    // Dispose the TextEditingController
+    _controller?.dispose();
+    super.dispose();
+  }
+
   String _emailOrPhone = '';
   bool afficherMDP = true;
+  
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+        return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          // Text(libelle),
           TextFormField(
             onChanged: widget.onChanged,
             validator: widget.validator,
@@ -85,8 +109,10 @@ class _InputWidgetState extends State<InputWidget> {
                 fontSize: 13,
               ),
             ),
-          )
-        ]
+            enabled: widget.enabled,
+            controller: _controller,  // Set the initial value if it exists
+          ),
+      ]
 
     );
   }

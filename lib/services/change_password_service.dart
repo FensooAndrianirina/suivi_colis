@@ -16,8 +16,10 @@ class ChangePasswordService {
   Future<dynamic> changePassword(String password, String newPassword, String confirmPassword) async {
  
     try{
+      print("getToken");
       String token = await Util.getToken();
-   
+
+      print(token);
       Map<String, String> headers = 
       {
         'x-access-token': token
@@ -37,7 +39,6 @@ class ChangePasswordService {
         body: body,
         headers: headers
       );
-      
       if (reponse.statusCode == 200) {
 
         dynamic data = jsonDecode(reponse.body);

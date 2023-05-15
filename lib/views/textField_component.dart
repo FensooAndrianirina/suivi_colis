@@ -8,9 +8,10 @@ class InputWidget extends StatefulWidget {
   final String placeholder;
   final IconData icon;
   final int max;
-  final String? initialValue;
   final bool? enabled;
   final InputDecoration? decoration;
+  final TextEditingController? ct;
+
 
 
   const InputWidget(
@@ -22,7 +23,7 @@ class InputWidget extends StatefulWidget {
       required this.placeholder,
       required this.icon,
       required this.max,
-      this.initialValue, // Add the initialValue parameter to the constructor
+      this.ct, // Add the controller parameter to the constructor
       this.enabled = true, 
       this.decoration, 
       })
@@ -33,20 +34,13 @@ class InputWidget extends StatefulWidget {
 }
 
 class _InputWidgetState extends State<InputWidget> {
-  TextEditingController? _controller; // Declare the TextEditingController
-   @override
-  void initState() {
-    super.initState();
-    // Initialize the TextEditingController with the initialValue
-    _controller = TextEditingController(text: widget.initialValue);
-  }
 
-  @override
-  void dispose() {
-    // Dispose the TextEditingController
-    _controller?.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Dispose the TextEditingController
+  //   _controller?.dispose();
+  //   super.dispose();
+  // }
 
   String _emailOrPhone = '';
   bool afficherMDP = true;
@@ -110,7 +104,7 @@ class _InputWidgetState extends State<InputWidget> {
               ),
             ),
             enabled: widget.enabled,
-            controller: _controller,  // Set the initial value if it exists
+            controller: widget.ct,  // Set the initial value if it exists
           ),
       ]
 

@@ -2,7 +2,7 @@ import 'package:client_apk/routes.dart';
 import 'package:client_apk/views/aboutScreen.dart';
 import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/listScreen.dart';
-import 'package:client_apk/views/editProfile.dart';
+import 'package:client_apk/views/changeProfile.dart';
 import 'package:client_apk/services/login_service.dart';
 import 'package:client_apk/views/resetPassword.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
         var rep = await LoginService()
             .login(_emailOrPhone, _userPassword);
         if(rep == 200){
-          if (context.mounted) Navigator.popAndPushNamed(context, Routes.list);
+          if (context.mounted) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ListScreen()));
+        }
         }else if(rep == 202){
-          if (context.mounted) Navigator.popAndPushNamed(context, Routes.changePass);
+          if (context.mounted){
+             Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword(data: "login")));
+          }
         }
       } on Exception catch (exception) {
         ArtSweetAlert.show(
@@ -50,13 +54,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: exception.toString(),
                 confirmButtonText: "OK",
                 confirmButtonColor: const Color(0xFF3E72A4)));
-       /* Fluttertoast.showToast(
-          msg: exception.toString(),
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-        );*/
       }
     }
   }
@@ -92,13 +89,19 @@ class _LoginScreenState extends State<LoginScreen> {
       response = await dio.post(api, data: data);
       if (response != null) {
         Map<String, dynamic> responseMap = response.data;
+
         int _codeRetour = responseMap["codeRetour"];
         String _descRetour = responseMap["descRetour"];
 
-        if (_codeRetour == 200) {
+        print("DESCRIPTION RETOUR");
+        if (_codeRetour == 200 || _codeRetour == 202 ) {
           //Saving user information inside SharedPref
-          prefs.setString('token', _descRetour);
-          print("TONGA ETO");
+          SharedPreferences prefs = await SharedPreferences.getInstance(); 
+          
+          prefs.setString('token', "test");
+  
+          print('OHATRAAAA');
+        
           redirectionToListScreen();
         } else {
           throw _descRetour;
@@ -116,7 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.grey,
       );
     }
-    //
   }
 
   @override
@@ -152,16 +154,16 @@ class _LoginScreenState extends State<LoginScreen> {
         onChanged: (value) => {_emailOrPhone = value},
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Veuillez saisir votre adresse mail ou votre numéro de téléphone';
+            return 'Entrez votre adresse email ou votre téléphone';
           }
           if (!isEmail(value) && !isPhoneNumber(value)) {
-            return 'Entrez une adresse mail valide';
+            return 'Entrez une adresse mail ou téléphone valide';
           }
           return null;
         },
         textInputType: TextInputType.emailAddress,
         visiblePassword: false,
-        placeholder: 'Téléphone ou adresse mail',
+        placeholder: 'Téléphone ou adresse email',
         icon:  Icons.email,
         max: 80
     );
@@ -172,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onChanged: (value) => {_userPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
-            return "Champ obligatoire";
+            return "Entrez votre mot de passe";
           }
 
           if (!RegExp(r'^\d{4}$').hasMatch(value)) {
@@ -266,12 +268,71 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+   Widget buildEditProfileLink() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangeProfile()),
+        );
+      },
+      child: Text(
+        'MODIFIER LE PROFIL',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
+   Widget buildChangePasswordLink() {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePassword()),
+        );
+      },
+      child: Text(
+        'CHANGER LE MOT DE PASSE',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
+  Widget buildAboutLink(){
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AboutScreen()),
+        );
+      },
+      child: Text(
+        'A PROPOS',
+        style: TextStyle(
+        color: Color(0xFF1E354B),
+        fontSize: 13,
+        fontWeight: FontWeight.w600))
+    );
+  }
+
+
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
+    body: WillPopScope(
+      onWillPop: () async {
+        // Handle back button press
+        // Implement your desired behavior here
+        SystemNavigator.pop(); // Exit the application
+        return true; // Return true to allow the back navigation, or false to prevent it
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
@@ -286,7 +347,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                          padding: EdgeInsets.fromLTRB(30, 10, 30, 70),
+                          padding: EdgeInsets.fromLTRB(30, 35, 30, 70),
                           width: double.infinity,
                           height: 260,
                           decoration: BoxDecoration(
@@ -317,8 +378,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 buildForgotPasswordBtn(),
                                 SizedBox(height: 4),
                                 buildLoginBtn(context),
-                                SizedBox(height: 10),
+                                SizedBox(height: 25),
                                 buildSignUpBtn(),
+                                // buildEditProfileLink(),
+                                // SizedBox(height: 5),
+                                // buildChangePasswordLink(),
+                                // SizedBox(height: 5),
+                                // buildAboutLink()
                               ],
                             ),
                           )),
@@ -330,6 +396,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+    );}
 }

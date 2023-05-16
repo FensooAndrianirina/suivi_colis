@@ -1,3 +1,4 @@
+import 'package:client_apk/views/loginScreen.dart';
 import 'package:client_apk/views/signinScreen.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,10 @@ import '../config/const.dart';
 
 
 class ChangePassword extends StatefulWidget {
-  const ChangePassword({super.key});
+  final String? data;
+
+  ChangePassword({this.data});
+  // const ChangePassword({super.key});
 
   @override
   _ChangePassword createState() => _ChangePassword();
@@ -55,7 +59,7 @@ class _ChangePassword extends State<ChangePassword> {
         var rep = await ChangePasswordService()
             .changePassword(_password, _newPassword, _confirmPassword);
         if(rep == 200){
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
               MaterialPageRoute(
                 builder: (BuildContext context) => ListScreen(),
@@ -63,7 +67,7 @@ class _ChangePassword extends State<ChangePassword> {
             );
         } 
         else{
-            Navigator.pushReplacement(
+            Navigator.push(
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => ChangePassword(),
@@ -112,7 +116,6 @@ class _ChangePassword extends State<ChangePassword> {
 
         if (_codeRetour == 200) {
           //Saving user information inside SharedPref
-          prefs.setString('token', _descRetour);
           print("TONGA ETO");
           redirectionToListScreen();
         } else {
@@ -149,13 +152,27 @@ class _ChangePassword extends State<ChangePassword> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+         Container(
+          child: Center(
+            child: Text(
+              'Changement de',
+              style: TextStyle(
+              color: Color(0xff295078),
+              fontSize: 24,
+              fontWeight: FontWeight.w900),
+            ),
+          ),
+        ),
+        SizedBox(height: 1),
         Container(
-          child: Text(
-            'Changement de mot de passe',
-            style: TextStyle(
-            color: Color(0xff295078),
-            fontSize: 27,
-            fontWeight: FontWeight.w900),
+          child: Center(
+            child: Text(
+              'mot de passe',
+              style: TextStyle(
+              color: Color(0xff295078),
+              fontSize: 24,
+              fontWeight: FontWeight.w900),
+            ),
           ),
         )
       ],
@@ -168,7 +185,7 @@ class _ChangePassword extends State<ChangePassword> {
         onChanged: (value) => {_password = value},
         validator: (value) {
           if (value!.isEmpty) {
-            return "Champ obligatoire";
+            return "Entrez le mode passe actuel";
           }
 
           if (!RegExp(r'^\d{4}$').hasMatch(value)) {
@@ -177,7 +194,7 @@ class _ChangePassword extends State<ChangePassword> {
         },
         textInputType: TextInputType.number,
         visiblePassword: false,
-        placeholder: 'Entrez votre ancien mot de passe',
+        placeholder: 'Mode passe actuel',
         icon:  Icons.lock,
         max: 4
     );
@@ -189,7 +206,7 @@ class _ChangePassword extends State<ChangePassword> {
         onChanged: (value) => {_newPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
-            return "Champ obligatoire";
+            return "Entrez le nouveau mot de passe";
           }
 
           if (!RegExp(r'^\d{4}$').hasMatch(value)) {
@@ -198,7 +215,7 @@ class _ChangePassword extends State<ChangePassword> {
         },
         textInputType: TextInputType.number,
         visiblePassword: false,
-        placeholder: 'Entrez votre nouveau mot de passe',
+        placeholder: 'Nouveau mot de passe',
         icon:  Icons.lock,
         max: 4
     );
@@ -210,7 +227,7 @@ class _ChangePassword extends State<ChangePassword> {
         onChanged: (value) => {_confirmPassword = value},
         validator: (value) {
           if (value!.isEmpty) {
-            return "Champ obligatoire";
+            return "Confirmez le nouveau mot de passe";
           }
 
           if (!RegExp(r'^\d{4}$').hasMatch(value)) {
@@ -219,7 +236,7 @@ class _ChangePassword extends State<ChangePassword> {
         },
         textInputType: TextInputType.number,
         visiblePassword: false,
-        placeholder: 'Confirmez le nouveau mot de passe',
+        placeholder: 'Confirmation du mot de passe',
         icon:  Icons.lock,
         max: 4
     );
@@ -304,7 +321,7 @@ Future<void> _showPopupDialog(BuildContext context) async {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('images/logout.png'),
+                            image: AssetImage('assets/images/logout.png'),
                           ),
                         ),
                       ),
@@ -392,34 +409,38 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
          leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SigninScreen()),
-            );
+            if (context.mounted) {
+              if (widget.data != null && widget.data == "login") {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              } else {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListScreen()));
+              }
+            } 
           },
         ),
         backgroundColor: Color(0xFF032547),
         actions: [
-          Container(
-            padding: EdgeInsets.fromLTRB(0, 1, 15, 0),
-            child:   IconButton(
-            icon: Icon(Icons.logout, color: Colors.white),
-            // onPressed: () {
-            //     prefs.remove('token');
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => LoginScreen()),
-            //     );
-
-            //   },
-              onPressed: () {
-                _showPopupDialog(context);
-              },
-            ),
-          ),
+        
         ],
       ),
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
+      body: WillPopScope(
+        onWillPop: () async {
+          // Handle back button press
+          // Implement your desired behavior here
+          if (context.mounted) {
+            if(widget.data != null && widget.data == "login"){
+               Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            }else{
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ListScreen()));
+            }      
+          } 
+          return true; // Return true to allow the back navigation, or false to prevent it
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
@@ -433,15 +454,15 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                          SizedBox(height: 40),
+                          SizedBox(height: 15),
                            Container(
                           padding: EdgeInsets.all(15),
                           child: Center(
-                              child: Image.asset("images/padlock.png", height: 120
+                              child: Image.asset("assets/images/padlock.png", height: 170
                                   )
                                ),       
                             ),
-                          SizedBox(height: 40),
+                          SizedBox(height: 10),
                           Container(
                             padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
                             child: Form(
@@ -449,7 +470,7 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                                 child: Column(
                                   children: [
                                   buildText(),
-                                  SizedBox(height:50),
+                                  SizedBox(height:30),
                                   buildOldPassword(),
                                   SizedBox(height:15),
                                   buildNewPassword(),
@@ -468,6 +489,7 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
             ],
           ),
         ),
+      ),
       ),
     );
   }

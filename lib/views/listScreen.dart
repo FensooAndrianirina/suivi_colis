@@ -1,11 +1,15 @@
 import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/changeProfile.dart';
+import 'package:client_apk/models/custom_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/views/loginScreen.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:client_apk/services/package_list_service.dart';
+import 'package:client_apk/models/package_model.dart';
+import 'package:intl/intl.dart';
 
 
 
@@ -18,15 +22,58 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreen extends State<ListScreen> {
   late SharedPreferences prefs;
+  List<PackageModel> packages = [];
 
   @override
   void initState() {
     super.initState();
+    print('ATO AM INIT');
+    //get List colis from api
+    _packageList();
     initPrefs();
   }
 
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+  }
+
+    _packageList() async {
+
+    try {
+        List<PackageModel> rep = await PackageListService()
+          .packageList(); 
+          print('REP');
+          print(rep);         
+        if(rep != null){
+          print('Package list fetched successfully');
+
+           setState(() {
+            packages = rep; // Assuming the API response returns a list of packages
+          });
+
+        } 
+        else{
+          //   Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (BuildContext context) => ChangeProfile(),
+          //   ),
+          // );
+        }
+      } on Exception catch (exception) {
+        ArtSweetAlert.show(
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.danger,
+            dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20)),
+            title: "Erreur",
+            text: exception.toString(),
+            confirmButtonText: "OK",
+            confirmButtonColor: const Color(0xFF3E72A4)));
+      }
+    
   }
 
   void showLogoutConfirmation(BuildContext context) {
@@ -101,14 +148,14 @@ class _ListScreen extends State<ListScreen> {
               'Liste de colisage: ',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFFF3CCAC)
+                  color: Color(0xFFFFF9F4)
                 ),
               ),
               Text(
-              '3',
+              '${packages.length}',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFFF3CCAC)
+                  color: Color.fromARGB(255, 230, 111, 13)
                 ),
               ),
           ]),
@@ -230,238 +277,290 @@ class _ListScreen extends State<ListScreen> {
           );
           return false; // Return true to allow the back navigation, or false to prevent it
         },
+        // child: AnnotatedRegion<SystemUiOverlayStyle>(
+        // value: SystemUiOverlayStyle.light,
+        // child: GestureDetector(
+        //   child: Stack(
+        //     children: <Widget>[
+        //       Container(
+        //         height: double.infinity,
+        //         width: double.infinity,
+        //         color: Color.fromARGB(255, 251, 242, 238),
+        //         child: SingleChildScrollView(
+        //           physics: AlwaysScrollableScrollPhysics(),
+        //           padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 30.0),
+        //           child: Column(
+        //             children: <Widget>[
+        //               SizedBox(height: 3),
+
+        //               ListView.builder(
+        //                 itemCount: 3,
+        //                 itemBuilder: (context, index) {
+        //                   return Container(
+        //                     // Customize the container's properties, such as width, height, color, etc.
+        //                     width: 200,
+        //                     height: 100,
+        //                     color: Colors.blue,
+        //                     margin: EdgeInsets.all(10),
+        //                     child: Center(
+        //                       child: Text('Container ${index + 1}'),
+        //                     ),
+        //                   );
+        //                 },
+        //                )                   
+        //               ],
+        //             ),
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Color.fromARGB(255, 251, 242, 238),
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 30.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 3),
-                      // COLIS 1
-                     Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Set the background color to white
-                            borderRadius: BorderRadius.circular(10), // Set the border radius to 10
-                          ),
-                          child: 
-                              Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //COLIS 1
-                                Container(
-                                    padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color(0xFF295078),      
-                                              blurRadius: 6,
-                                              offset: Offset(0, 2))
-                                        ],
-                                        color: Colors.white),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        //REF
-                                        Container(
-                                          child: Row(
+          value: SystemUiOverlayStyle.light,
+          child: GestureDetector(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Color.fromARGB(255, 251, 242, 238),
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 30.0),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 3),
+                        ListView.builder(
+                          shrinkWrap: true, // Added shrinkWrap property
+                          physics: NeverScrollableScrollPhysics(), // Added physics property
+                          itemCount:  packages.length,
+                          itemBuilder: (context, index) {
+                            var package = packages[index];
+                            var montant = (package.tarifEnvoiEUR ?? 0.0) + (package.tarifExtraEUR ?? 0.0);
+                            var formattedDate = DateFormat('dd/MM/yyyy').format(package.dateEnvoi);
+                            return Padding(
+                              padding: const EdgeInsets.only(top:10.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white, // Set the background color to white
+                                  borderRadius: BorderRadius.circular(10), // Set the border radius to 10
+                                ),
+                                child: 
+                                    Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      //COLIS 1
+                                      Container(
+                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Color(0xFF295078),      
+                                                    blurRadius: 6,
+                                                    offset: Offset(0, 2))
+                                              ],
+                                              color: Colors.white),
+                                          child: Column(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
+                                              //REF
                                               Container(
-                                                height:
-                                                    41, // set the height of the container
-                                                width:
-                                                    41, // set the width of the container
-                                                child: Image.asset('assets/images/desc.png'),
-                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          41, // set the height of the container
+                                                      width:
+                                                          41, // set the width of the container
+                                                      child: Image.asset('assets/images/desc.png'),
+                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      'Référence: ',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      '${package.reference}',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Text(
-                                                'Référence: ',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                '00120230323',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        //DESCRIPTION
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
+                                              //DESCRIPTION
                                               Container(
-                                                height:
-                                                    41, // set the height of the container
-                                                width:
-                                                    41, // set the width of the container
-                                                child: Image.asset('assets/images/etat.png'),
-                                                padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          41, // set the height of the container
+                                                      width:
+                                                          41, // set the width of the container
+                                                      child: Image.asset('assets/images/etat.png'),
+                                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      "Date d'envoi: ",
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      // '${package.dateEnvoi}',
+                                                      '${formattedDate}',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Text(
-                                                "Date d'envoi: ",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                '17/05/2023',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        //ETAT
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
+                                              //ETAT
                                               Container(
-                                                height:
-                                                    42, // set the height of the container
-                                                width:
-                                                    42, // set the width of the container
-                                                child: Image.asset('assets/images/package.png'),
-                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                              ),
-                                              Text(
-                                                'Nombre de colis: ',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                '3',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ), 
-
-                                        //EXPEDITEUR
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          42, // set the height of the container
+                                                      width:
+                                                          42, // set the width of the container
+                                                      child: Image.asset('assets/images/package.png'),
+                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      'Nombre de colis: ',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      '${package.nbreColis}',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ), 
+                            
+                                              //EXPEDITEUR
                                               Container(
-                                                height:
-                                                    42, // set the height of the container
-                                                width:
-                                                    42, // set the width of the container
-                                                child: Image.asset('assets/images/sender.png'),
-                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                              ),
-                                              Text(
-                                                'Expéditeur: ',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                'Rakotoarimanana Julie',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ), 
-
-                                        //DESTINATAIRE
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          42, // set the height of the container
+                                                      width:
+                                                          42, // set the width of the container
+                                                      child: Image.asset('assets/images/sender.png'),
+                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      'Expéditeur: ',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      '${package.expediteur}',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ), 
+                            
+                                              //DESTINATAIRE
                                               Container(
-                                                height:
-                                                    42, // set the height of the container
-                                                width:
-                                                    42, // set the width of the container
-                                                child: Image.asset('assets/images/recipient.png'),
-                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                              ),
-                                              Text(
-                                                'Destinataire: ',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                'Rakotoarimanana Julie',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                        ), 
-
-                                        //MONTANT
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          42, // set the height of the container
+                                                      width:
+                                                          42, // set the width of the container
+                                                      child: Image.asset('assets/images/recipient.png'),
+                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      'Destinataire: ',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      '${package.destinataire}',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ), 
+                            
+                                              //MONTANT
                                               Container(
-                                                height:
-                                                    42, // set the height of the container
-                                                width:
-                                                    42, // set the width of the container
-                                                child: Image.asset('assets/images/price.png'),
-                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                              ),
-                                              Text(
-                                                'Montant: ',
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700),
-                                              ),
-                                              Text(
-                                                '2 000 000 Ariary',
-                                                style: TextStyle(
-                                                    color: Color(0xFF797878),
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w500),
-                                              ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                          42, // set the height of the container
+                                                      width:
+                                                          42, // set the width of the container
+                                                      child: Image.asset('assets/images/price.png'),
+                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                                    ),
+                                                    Text(
+                                                      'Montant: ',
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w700),
+                                                    ),
+                                                    Text(
+                                                      '${montant} €',
+                                                      style: TextStyle(
+                                                          color: Color(0xFF797878),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w500),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ), 
                                             ],
-                                          ),
-                                        ), 
-                                      ],
-                                    )),     
-                              ]
-                           ),
+                                          )),     
+                                    ]
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

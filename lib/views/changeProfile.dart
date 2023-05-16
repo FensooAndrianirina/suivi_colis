@@ -141,6 +141,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
    void _getNameFromSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('id') ?? '';
     String nom = prefs.getString('nom') ?? '';
     String email = prefs.getString('email') ?? '';
     String telephone = prefs.getString('tel') ?? '';

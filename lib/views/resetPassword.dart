@@ -43,8 +43,10 @@ void redirectionToLoginScreen() {
         var rep = await ResetPasswordService()
         .resetPassword(_email);
         if(rep == 200){    
-          if (context.mounted) Navigator.popAndPushNamed(context, Routes.login);    
+          if (context.mounted) {  
+             Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
           }
+        }
       } on Exception catch (exception) {
         ArtSweetAlert.show(
           context: context,
@@ -113,7 +115,14 @@ void redirectionToLoginScreen() {
           ),
           SizedBox(height: 15),
           Text(
-            "Recevez l'email de réinitialisation de votre mot de passe",
+            "Recevez l'email de réinitialisation",
+            style: TextStyle(
+            color: Color.fromARGB(255, 21, 43, 65),
+            fontSize: 15,
+            fontWeight: FontWeight.w700),
+        ),
+         Text(
+            "de votre mot de passe",
             style: TextStyle(
             color: Color.fromARGB(255, 21, 43, 65),
             fontSize: 15,
@@ -190,7 +199,17 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
         ),
         backgroundColor: Color(0xFF032547),
       ),
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
+      body: WillPopScope(
+        onWillPop: () async {
+          // Handle back button press
+          // Implement your desired behavior here
+          if (context.mounted) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+          } // Exit the application
+          return true; // Return true to allow the back navigation, or false to prevent it
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
           child: Stack(
@@ -236,6 +255,7 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
           ),
         ),
       ),
+      )
     );
   }
 }

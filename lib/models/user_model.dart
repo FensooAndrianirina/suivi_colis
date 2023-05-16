@@ -8,7 +8,8 @@ class UserModel{
   String? tel;
   String? address;
   String? fb;
-  String? etat;
+  String? whatsapp;
+  String? contact;
   String? token;
 
   UserModel({
@@ -17,8 +18,9 @@ class UserModel{
     required this.id,
     required this.tel,
     this.address,
+    this.whatsapp,
+    required this.contact,   
     this.fb,
-    required this.etat
   });
 
   UserModel.login(String email,  String token){

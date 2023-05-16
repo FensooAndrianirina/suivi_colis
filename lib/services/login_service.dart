@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:client_apk/models/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,9 +20,10 @@ class LoginService {
       
          dynamic data = jsonDecode(reponse.body);
          if (data['CodeRetour'] == 200 || data['CodeRetour'] == 202) {
-           final instance = await SharedPreferences.getInstance();
+          int id =  data['Data']['id'];
+          final instance = await SharedPreferences.getInstance();
           await instance.setString("token", data['Data']['token'] ?? '' );
-          //  await instance.setString("token", data['Data']['id'] + "");
+          await instance.setString("id", '$id');
           await instance.setString("nom", data['Data']['nom'] ?? '');
           await instance.setString("email", data['Data']['email'] ?? '');
           await instance.setString("adresse", data['Data']['adresse'] ?? '');
@@ -52,6 +52,7 @@ class LoginService {
        throw ApiException("PAS_INTERNET");
       } catch (e) {
        // Gérer toutes les autres exceptions ici
+       print('catch');
        print(e);
        throw ApiException("ERREUR_SERVEUR");
      }

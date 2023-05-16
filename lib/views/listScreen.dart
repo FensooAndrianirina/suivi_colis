@@ -90,29 +90,29 @@ class _ListScreen extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
-    // checkToken() async {
-    //   String? token = prefs.getString("token");
-    //   if(token != null) {
-    //       Navigator.push(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => LoginScreen()),
-    //     );
-    //   }
-    // }
-
-    // checkToken();
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF032547),
-        title: Text(
-          'Liste de colis - MDG',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Row (
+            children: [
+              Text(
+              'Liste de colisage: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFFF3CCAC)
+                ),
+              ),
+              Text(
+              '3',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFFF3CCAC)
+                ),
+              ),
+          ]),
+        ),   
         automaticallyImplyLeading: false, 
         actions: [
           Padding(
@@ -238,493 +238,226 @@ class _ListScreen extends State<ListScreen> {
               Container(
                 height: double.infinity,
                 width: double.infinity,
-                color: Color.fromARGB(255, 248, 248, 248),
+                color: Color.fromARGB(255, 251, 242, 238),
                 child: SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 30.0),
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      //TOUS MES COLIS
-                      Container(
+                      SizedBox(height: 3),
+                      // COLIS 1
+                     Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            color: Color(0xFF295078),
+                            color: Colors.white, // Set the background color to white
+                            borderRadius: BorderRadius.circular(10), // Set the border radius to 10
                           ),
-                          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                          height: 70,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    height:
-                                        47, // set the height of the container
-                                    width: 47, // set the width of the container
-                                    child: Image.asset('assets/images/checklist.png'),
-                                    padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      'TOUS MES COLIS:',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Text(
-                                    ' 4',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ))
-                            ],
-                          )),
+                          child: 
+                              Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                //COLIS 1
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: Color(0xFF295078),      
+                                              blurRadius: 6,
+                                              offset: Offset(0, 2))
+                                        ],
+                                        color: Colors.white),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        //REF
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    41, // set the height of the container
+                                                width:
+                                                    41, // set the width of the container
+                                                child: Image.asset('assets/images/desc.png'),
+                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                'Référence: ',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                '00120230323',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        //DESCRIPTION
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    41, // set the height of the container
+                                                width:
+                                                    41, // set the width of the container
+                                                child: Image.asset('assets/images/etat.png'),
+                                                padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                "Date d'envoi: ",
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                '17/05/2023',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        //ETAT
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    42, // set the height of the container
+                                                width:
+                                                    42, // set the width of the container
+                                                child: Image.asset('assets/images/package.png'),
+                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                'Nombre de colis: ',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                '3',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ), 
 
-                      SizedBox(height: 15),
+                                        //EXPEDITEUR
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    42, // set the height of the container
+                                                width:
+                                                    42, // set the width of the container
+                                                child: Image.asset('assets/images/sender.png'),
+                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                'Expéditeur: ',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                'Rakotoarimanana Julie',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ), 
 
-                      //COLIS 1
-                      Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Color(0xFF295078),      
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2))
-                              ],
-                              color: Colors.white),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              //REF
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/desc.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Réf: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      '00120230323',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //DESCRIPTION
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/package.png'),
-                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Description: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'FIGURINE DEATH NOTE (BLACK)',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //ETAT
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          42, // set the height of the container
-                                      width:
-                                          42, // set the width of the container
-                                      child: Image.asset('assets/images/etat.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Etat: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'En attente d\'expédition',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ), 
-                            ],
-                          )),
-                      SizedBox(height: 7),
-                      //COLIS 2
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2))
-                              ],
-                              color: Colors.white),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              //REF
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/desc.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Réf: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      '00220230323',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //DESCRIPTION
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/package.png'),
-                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Description: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'FIGURINE DEATH NOTE (BLACK)',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //ETAT
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          42, // set the height of the container
-                                      width:
-                                          42, // set the width of the container
-                                      child: Image.asset('assets/images/etat.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Etat: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'En transit',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                      SizedBox(height: 7),
+                                        //DESTINATAIRE
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    42, // set the height of the container
+                                                width:
+                                                    42, // set the width of the container
+                                                child: Image.asset('assets/images/recipient.png'),
+                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                'Destinataire: ',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                'Rakotoarimanana Julie',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ), 
 
-                      //COLIS 3
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2))
-                              ],
-                              color: Colors.white),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              //REF
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/desc.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Réf: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'TEST20230323',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //DESCRIPTION
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/package.png'),
-                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Description: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'FIGURINE DEATH NOTE (BLACK)',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //ETAT
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          42, // set the height of the container
-                                      width:
-                                          42, // set the width of the container
-                                      child: Image.asset('assets/images/etat.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Etat: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'En transit',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                      SizedBox(height: 7),
-
-                      // COLIS 4
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black26,
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2))
-                              ],
-                              color: Colors.white),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              //REF
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/desc.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Réf: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'TEST20230323',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //DESCRIPTION
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          41, // set the height of the container
-                                      width:
-                                          41, // set the width of the container
-                                      child: Image.asset('assets/images/package.png'),
-                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Description: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'FIGURINE DEATH NOTE (BLACK)',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              //ETAT
-                              Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height:
-                                          42, // set the height of the container
-                                      width:
-                                          42, // set the width of the container
-                                      child: Image.asset('assets/images/etat.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      'Etat: ',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    Text(
-                                      'En attente de livraison',
-                                      style: TextStyle(
-                                          color: Color(0xFF797878),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                      SizedBox(height: 7),
+                                        //MONTANT
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                height:
+                                                    42, // set the height of the container
+                                                width:
+                                                    42, // set the width of the container
+                                                child: Image.asset('assets/images/price.png'),
+                                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                              ),
+                                              Text(
+                                                'Montant: ',
+                                                style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                              Text(
+                                                '2 000 000 Ariary',
+                                                style: TextStyle(
+                                                    color: Color(0xFF797878),
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
+                                        ), 
+                                      ],
+                                    )),     
+                              ]
+                           ),
+                        ),
                       ],
                     ),
                   ),

@@ -1,6 +1,5 @@
 import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/changeProfile.dart';
-import 'package:client_apk/models/custom_package.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:client_apk/views/detailScreen.dart';

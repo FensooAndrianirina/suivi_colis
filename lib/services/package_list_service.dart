@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../config/const.dart';
 import '../utils/util.dart';
 import '../exceptions/api_exception.dart';
-import 'package:client_apk/models/custom_package.dart';
+
 
 
 class PackageListService {

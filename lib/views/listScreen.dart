@@ -276,45 +276,6 @@ class _ListScreen extends State<ListScreen> {
           );
           return false; // Return true to allow the back navigation, or false to prevent it
         },
-        // child: AnnotatedRegion<SystemUiOverlayStyle>(
-        // value: SystemUiOverlayStyle.light,
-        // child: GestureDetector(
-        //   child: Stack(
-        //     children: <Widget>[
-        //       Container(
-        //         height: double.infinity,
-        //         width: double.infinity,
-        //         color: Color.fromARGB(255, 251, 242, 238),
-        //         child: SingleChildScrollView(
-        //           physics: AlwaysScrollableScrollPhysics(),
-        //           padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 30.0),
-        //           child: Column(
-        //             children: <Widget>[
-        //               SizedBox(height: 3),
-
-        //               ListView.builder(
-        //                 itemCount: 3,
-        //                 itemBuilder: (context, index) {
-        //                   return Container(
-        //                     // Customize the container's properties, such as width, height, color, etc.
-        //                     width: 200,
-        //                     height: 100,
-        //                     color: Colors.blue,
-        //                     margin: EdgeInsets.all(10),
-        //                     child: Center(
-        //                       child: Text('Container ${index + 1}'),
-        //                     ),
-        //                   );
-        //                 },
-        //                )                   
-        //               ],
-        //             ),
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
         child: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle.light,
           child: GestureDetector(
@@ -338,219 +299,289 @@ class _ListScreen extends State<ListScreen> {
                             var package = packages[index];
                             var montant = (package.tarifEnvoiEUR ?? 0.0) + (package.tarifExtraEUR ?? 0.0);
                             var formattedDate = DateFormat('dd/MM/yyyy').format(package.dateEnvoi);
-                            return Padding(
-                              padding: const EdgeInsets.only(top:10.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white, // Set the background color to white
-                                  borderRadius: BorderRadius.circular(10), // Set the border radius to 10
-                                ),
-                                child: 
-                                    Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      //COLIS 1
-                                      Container(
-                                          padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Color(0xFF295078),      
-                                                    blurRadius: 6,
-                                                    offset: Offset(0, 2))
+                            return GestureDetector(
+                              onTap: () {
+                                print('ON TAP START');
+                                // Navigate to the desired screen when the container is tapped
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailScreen(),
+                                  ),
+                                );
+                                print('ON TAP END');
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(top:10.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // Set the background color to white
+                                    borderRadius: BorderRadius.circular(10), // Set the border radius to 10
+                                  ),
+                                  child: 
+                                      Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        //COLIS 1
+                                        Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                10, 10, 10, 17),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFF295078),
+                                                      blurRadius: 6,
+                                                      offset: Offset(0, 2))
+                                                ],
+                                                color: Colors.white),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                //REF
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            41, // set the height of the container
+                                                        width:
+                                                            41, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/desc.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                12, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        'Référence: ',
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        '${package.reference}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                //DESCRIPTION
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            41, // set the height of the container
+                                                        width:
+                                                            41, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/etat.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                11, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        "Date d'envoi: ",
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        // '${package.dateEnvoi}',
+                                                        '${formattedDate}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                //ETAT
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            42, // set the height of the container
+                                                        width:
+                                                            42, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/package.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                12, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        'Nombre de colis: ',
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        '${package.nbreColis}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                //EXPEDITEUR
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            42, // set the height of the container
+                                                        width:
+                                                            42, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/sender.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                12, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        'Expéditeur: ',
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        '${package.expediteur}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                //DESTINATAIRE
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            42, // set the height of the container
+                                                        width:
+                                                            42, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/recipient.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                12, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        'Destinataire: ',
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        '${package.destinataire}',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                //MONTANT
+                                                Container(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height:
+                                                            42, // set the height of the container
+                                                        width:
+                                                            42, // set the width of the container
+                                                        child: Image.asset(
+                                                            'assets/images/price.png'),
+                                                        padding:
+                                                            EdgeInsets.fromLTRB(
+                                                                12, 0, 5, 0),
+                                                      ),
+                                                      Text(
+                                                        'Montant: ',
+                                                        style: TextStyle(
+                                                            color: Colors.grey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                      Text(
+                                                        '${montant} €',
+                                                        style: TextStyle(
+                                                            color: Color(
+                                                                0xFF797878),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ],
-                                              color: Colors.white),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              //REF
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          41, // set the height of the container
-                                                      width:
-                                                          41, // set the width of the container
-                                                      child: Image.asset('assets/images/desc.png'),
-                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      'Référence: ',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      '${package.reference}',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              //DESCRIPTION
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          41, // set the height of the container
-                                                      width:
-                                                          41, // set the width of the container
-                                                      child: Image.asset('assets/images/etat.png'),
-                                                      padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      "Date d'envoi: ",
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      // '${package.dateEnvoi}',
-                                                      '${formattedDate}',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              //ETAT
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          42, // set the height of the container
-                                                      width:
-                                                          42, // set the width of the container
-                                                      child: Image.asset('assets/images/package.png'),
-                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      'Nombre de colis: ',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      '${package.nbreColis}',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ), 
-                            
-                                              //EXPEDITEUR
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          42, // set the height of the container
-                                                      width:
-                                                          42, // set the width of the container
-                                                      child: Image.asset('assets/images/sender.png'),
-                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      'Expéditeur: ',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      '${package.expediteur}',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ), 
-                            
-                                              //DESTINATAIRE
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          42, // set the height of the container
-                                                      width:
-                                                          42, // set the width of the container
-                                                      child: Image.asset('assets/images/recipient.png'),
-                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      'Destinataire: ',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      '${package.destinataire}',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ), 
-                            
-                                              //MONTANT
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          42, // set the height of the container
-                                                      width:
-                                                          42, // set the width of the container
-                                                      child: Image.asset('assets/images/price.png'),
-                                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                                    ),
-                                                    Text(
-                                                      'Montant: ',
-                                                      style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w700),
-                                                    ),
-                                                    Text(
-                                                      '${montant} €',
-                                                      style: TextStyle(
-                                                          color: Color(0xFF797878),
-                                                          fontSize: 13,
-                                                          fontWeight: FontWeight.w500),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ), 
-                                            ],
-                                          )),     
-                                    ]
+                                            )),     
+                                      ]
+                                  ),
                                 ),
                               ),
                             );

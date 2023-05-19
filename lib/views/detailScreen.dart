@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:client_apk/views/loginScreen.dart';
 
 
 class DetailScreen extends StatefulWidget {
@@ -26,6 +25,249 @@ class _DetailScreen extends State<DetailScreen> {
     // }
 
     // checkToken();
+  void _showArticleList(BuildContext context) {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(15),
+            child: Container(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                    color: Color(0xFF295078),
+                    blurRadius: 6,
+                    offset: Offset(0, 2))
+              ], 
+              borderRadius: BorderRadius.circular(7),
+              color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Text(
+                            "ETAT:  En cours d'expédition - Date de reception: 20/05/2023 ",
+                            style: TextStyle(
+                                color: Color(0xFF295078),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: Container(
+                                    padding:
+                                        EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Color(0xFF295078),
+                                            blurRadius: 6,
+                                            offset: Offset(0, 2))
+                                      ],
+                                      color: Color(0xFF295078),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Nom de l'article: Smartwatch ",
+                                          style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Text(
+                                          "Poids/Nombre/Volume: 10kg ",
+                                          style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Text(
+                                          "Montant: 100 € ",
+                                          style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    )),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ),
+          );
+        },
+      );
+    }
+    
+
+  void _showPackageList(BuildContext context) {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return GestureDetector(
+            onTap: () {
+              _showArticleList(context);
+            },
+            child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(3),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Color(0xFF295078),
+                                blurRadius: 6,
+                                offset: Offset(0, 2))
+                          ],
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.white),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Container(
+                            width: double.infinity,
+                            child: Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    "ETAT:  En cours d'expédition - Date de reception: 20/05/2023 ",
+                                    style: TextStyle(
+                                        color: Color(0xFF295078),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                SizedBox(height: 3),
+                                Center(
+                                  child: Text(
+                                    "Nom du colis: COLIS TSY AIKO ",
+                                    style: TextStyle(
+                                        color: Color(0xFF295078),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ),
+                  );
+                }),
+          );
+        },
+      );
+    }
+
+  void _showPaymentList(BuildContext context) {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(15),
+            child: Container(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                    color: Color(0xFF295078),
+                    blurRadius: 6,
+                    offset: Offset(0, 2))
+              ], borderRadius: BorderRadius.circular(7), color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: 10,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: Container(
+                                    padding:
+                                        EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Color(0xFF295078),
+                                            blurRadius: 6,
+                                            offset: Offset(0, 2))
+                                      ],
+                                      color: Color(0xFF295078),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                          Text(
+                                            "Date: 19/05/2023 ",
+                                            style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                           Text(
+                                            "Réf du paiement: 0011505368 ",
+                                            style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                          ),   
+                                        ]),
+                                        SizedBox(height: 2),
+                                        Text(
+                                            "Devise: 478 100 Ariary ",
+                                            style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Text(
+                                            "Equivalence: 100 € ",
+                                            style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
+                                    )),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +297,7 @@ class _DetailScreen extends State<DetailScreen> {
       body: Column(
         children: [
           Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 17),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
@@ -67,7 +309,7 @@ class _DetailScreen extends State<DetailScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  //REF
+                  //1REF
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -79,7 +321,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Référence: ',
+                          'Expéditeur: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -95,7 +337,7 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                  //DESCRIPTION
+                  //2DESCRIPTION
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -107,7 +349,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                         ),
                         Text(
-                          "Date d'envoi: ",
+                          "Destinataire: ",
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -124,7 +366,7 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                  //ETAT
+                  //3ETAT
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -136,7 +378,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Nombre de colis: ',
+                          'Lieu de départ: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -153,7 +395,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //EXPEDITEUR
+                  //4EXPEDITEUR
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -165,7 +407,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Expéditeur: ',
+                          'Lieu de destination: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -182,7 +424,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //DESTINATAIRE
+                  //5DESTINATAIRE
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -194,7 +436,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Destinataire: ',
+                          "Date d'envoi prévue",
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -211,7 +453,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //MONTANT
+                  //6MONTANT
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -223,7 +465,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Montant: ',
+                          'Moyen: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -239,7 +481,7 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                  //REF
+                  //7REF
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -251,7 +493,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Référence: ',
+                          "Type d'envoi: ",
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 12,
@@ -267,7 +509,7 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                  //DESCRIPTION
+                  //8DESCRIPTION
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -279,7 +521,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(11, 0, 5, 0),
                         ),
                         Text(
-                          "Date d'envoi: ",
+                          "Type de reception: ",
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -296,7 +538,7 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                  //ETAT
+                  //9ETAT
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -308,7 +550,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Nombre de colis: ',
+                          'Montant: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -325,7 +567,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //EXPEDITEUR
+                  //10EXPEDITEUR
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -337,7 +579,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Expéditeur: ',
+                          'Extra: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -354,7 +596,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //DESTINATAIRE
+                  //11DESTINATAIRE
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -366,14 +608,14 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Destinataire: ',
+                          'Nombre de colis: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
                               fontWeight: FontWeight.w700),
                         ),
                         Text(
-                          'Rabe',
+                          '10',
                           style: TextStyle(
                               color: Color(0xFF797878),
                               fontSize: 13,
@@ -383,7 +625,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
 
-                  //MONTANT
+                  //12MONTANT
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -395,7 +637,7 @@ class _DetailScreen extends State<DetailScreen> {
                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                         ),
                         Text(
-                          'Montant: ',
+                          'Montant total: ',
                           style: TextStyle(
                               color: Colors.grey,
                               fontSize: 13,
@@ -411,138 +653,56 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-                ],
-              )),
-
-
-              //DRAGGABLE SCROLLABLE SHEET
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.zero,
-                      // color: Color(0xFF493B3B),
-                    ),
-                    width: double.infinity,
-                    child: SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                              ),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFDE7410)),
-                          ),
-                        child: Text('Mes colis/articles'),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return DraggableScrollableSheet(
-                                initialChildSize: 0.5,
-                                minChildSize: 0.1,
-                                maxChildSize: 0.9,
-                                builder: (BuildContext context,
-                                  ScrollController scrollController) {
-                                  return Container(
-                                    color: Color(0xFFE25656),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height:
-                                              41, // set the height of the container
-                                          width: 41, // set the width of the container
-                                          child:
-                                              Image.asset('assets/images/desc.png'),
-                                          padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                        ),
-                                        Text(
-                                          'Référence: ',
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          'FR_17052023_000',
-                                          style: TextStyle(
-                                              color: Color(0xFF797878),
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                
-                  Container(
-                    height: screenHeight * 0.1, // Adjust the height as needed
-                    width: double.infinity,
-                    child: SizedBox(
-                      height: 40,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0.0),
-                            ),
-                          ),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Color(0xFF032547)),
-                        ),
-                        child: Text('Liste de paiements'),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (BuildContext context) {
-                              return DraggableScrollableSheet(
-                                initialChildSize: 0.5,
-                                minChildSize: 0.1,
-                                maxChildSize: 0.9,
-                                builder: (BuildContext context,
-                                    ScrollController scrollController) {
-                                  return Container(
-                                    height: 100.0,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 224, 227, 230),
-                                      borderRadius: BorderRadius.zero,
-                                    ),
-                                    child: ListView.builder(
-                                      controller: scrollController,
-                                      itemCount: 30,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return ListTile(
-                                          title: Text('Second Sheet Item $index'),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ) 
           ),
-        );
-      }
-    }
+
+
+       
+          GestureDetector(
+             onTap: () {
+              _showPackageList(context);
+            },
+            child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 221, 100, 1) ),
+                child: Center(
+                child: Text(
+                  'Liste des colis ',
+                  style: TextStyle(
+                      color: Color(0xFFFFFFFF),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ),
+
+
+          GestureDetector(
+              onTap: () {
+              _showPaymentList(context);
+            },
+            child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xFF032547) ),
+                 child: Center(
+                child: Text(
+                  ' Liste de paiements ',
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

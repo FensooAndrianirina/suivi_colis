@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: <Widget>[
         Container(
           child: Text(
-            'Madagroupage',
+            'Mon colis',
             style: TextStyle(
                 color: Color(0xff295078),
                 fontSize: 35,

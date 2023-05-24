@@ -175,7 +175,7 @@ class _SigninScreenState extends State<SigninScreen> {
               child: Builder(builder: (context) {
                 return Center(
                   child: Text(
-                    'Bienvenue sur Madagroupage',
+                    ' ',
                     style: TextStyle(
                         color: Color(0xFF102E4C),
                         fontSize: 29,

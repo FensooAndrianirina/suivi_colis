@@ -43,26 +43,51 @@ class PackageModel{
   });
 
   factory PackageModel.fromJson(Map<String, dynamic> json) {
-    
+    // return PackageModel(
+    //   reference: json['reference'],
+    //   expediteur: json['expediteur'],
+    //   destinataire: json['destinataire'],
+    //   lieuDepart: json['lieuDepart'],
+    //   lieuDestination: json['lieuDestination'],
+    //   nbreColis: json['nbreColis'],
+    //   dateCreation: DateTime.parse(json['dateCreation']),
+    //   dateEnvoi: DateTime.parse(json['dateEnvoi']),
+    //   moyenExpedition: json['moyenExpedition'],
+    //   typeReception: json['typeReception'],
+    //   typeEnvoi: json['typeEnvoi'],
+    //   tarifEnvoiEUR: 3,
+    //   tarifExtraEUR:  json['tarifExtraEUR'] ?? null,
+    //   resteAPayerEUR: json['resteAPayerEUR'] ?? null,
+    //   descTarifExtra: json['descTarifExtra'],
+    //   tauxDeChange: json['tauxDeChange'] ,
+    //   expediteur_id: 10,
+    //   destinataire_id: 10,
+      
+    // );
+
+    print("json");
+    print(json);
+
     return PackageModel(
-      reference: json['reference'],
-      expediteur: json['expediteur'],
-      destinataire: json['destinataire'],
-      lieuDepart: json['lieuDepart'],
+      reference: "test",
+      expediteur: "test",
+      destinataire: "test",
+      lieuDepart: "test",
       lieuDestination: json['lieuDestination'],
-      nbreColis: json['nbreColis'],
+      nbreColis: 2,
       dateCreation: DateTime.parse(json['dateCreation']),
       dateEnvoi: DateTime.parse(json['dateEnvoi']),
       moyenExpedition: json['moyenExpedition'],
       typeReception: json['typeReception'],
       typeEnvoi: json['typeEnvoi'],
-      tarifEnvoiEUR: json['tarifEnvoiEUR'] ?? null,
-      tarifExtraEUR:  json['tarifExtraEUR'] ?? null,
-      resteAPayerEUR: json['resteAPayerEUR'] ?? null,
+      tarifEnvoiEUR: 3,
+      tarifExtraEUR:  3,
+      resteAPayerEUR: 3,
       descTarifExtra: json['descTarifExtra'],
-      tauxDeChange: json['tauxDeChange'],
-      expediteur_id: json['expediteur_id'],
-      destinataire_id: json['destinataire_id'],
+      tauxDeChange: 3,
+      expediteur_id: 2,
+      destinataire_id: 2,
+      
     );
   }
 }

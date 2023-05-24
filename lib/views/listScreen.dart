@@ -457,11 +457,10 @@ class _ListScreen extends State<ListScreen> {
                                                 SizedBox(height: 5),
                                                 //EXPEDIEUR ET DESTINATAIRE
                                                 Container(
-                                                  child: Row(
+                                                  child: Column(
                                                     children: [
                                                       //EXPANDED 1
-                                                      Expanded(
-                                                        child: Container(
+                                                        Container(
                                                           height: 30,
                                                           child: Row(
                                                             mainAxisAlignment:
@@ -508,11 +507,8 @@ class _ListScreen extends State<ListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                      ),
-                                                      SizedBox(width: 2.0),
-                                                      //EXPANDED 2
-                                                      Expanded(
-                                                        child: Container(
+                                                      SizedBox(height: 5.0),
+                                                      Container(
                                                           height: 30,
                                                           child: Row(
                                                             mainAxisAlignment:
@@ -559,7 +555,6 @@ class _ListScreen extends State<ListScreen> {
                                                             ],
                                                           ),
                                                         ),
-                                                      ),
                                                     ],
                                                   ),
                                                 ),

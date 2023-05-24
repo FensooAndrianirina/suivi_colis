@@ -170,19 +170,12 @@ class _SigninScreenState extends State<SigninScreen> {
       children: <Widget>[
         Container(
           child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 55, bottom: 10),
-              child: Builder(builder: (context) {
-                return Center(
-                  child: Text(
-                    ' ',
-                    style: TextStyle(
-                        color: Color(0xFF102E4C),
-                        fontSize: 29,
-                        fontWeight: FontWeight.w900),
-                  ),
-                );
-              }),
+            child: Text(
+              'Bienvenue',
+              style: TextStyle(
+                  color: Color.fromARGB(255, 29, 61, 92),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w900),
             ),
           ),
         ),

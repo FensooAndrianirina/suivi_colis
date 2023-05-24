@@ -354,17 +354,6 @@ class _ListScreen extends State<ListScreen> {
                                                                             0),
                                                               ),
                                                               Text(
-                                                                'Référence: ',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700),
-                                                              ),
-                                                              Text(
                                                                 '${package.reference}',
                                                                 style: TextStyle(
                                                                     color: Color(
@@ -423,17 +412,6 @@ class _ListScreen extends State<ListScreen> {
                                                                             0,
                                                                             5,
                                                                             0),
-                                                              ),
-                                                              Text(
-                                                                "Envoi: ",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700),
                                                               ),
                                                               Text(
                                                                 // '${package.dateEnvoi}',

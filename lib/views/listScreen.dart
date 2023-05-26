@@ -285,12 +285,13 @@ class _ListScreen extends State<ListScreen> {
                                 .format(package.dateEnvoi);
                             return GestureDetector(
                               onTap: () {
+                                String reference = package.reference;
                                 print('ON TAP START');
                                 // Navigate to the desired screen when the container is tapped
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => DetailScreen(),
+                                    builder: (context) => DetailScreen(reference: reference),
                                   ),
                                 );
                                 print('ON TAP END');

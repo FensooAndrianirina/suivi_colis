@@ -20,12 +20,12 @@ class Routes {
 
   static final Map<String, WidgetBuilder> routes = {
     list: (context) => const ListScreen(),
-    detail: (context) => const DetailScreen(),
+    detail: (context) => const DetailScreen(reference: ''),
     login: (context) => LoginScreen(),
     register: (context) => SigninScreen(),
     changePass: (context) => ChangePassword(),
     resetPassword: (context) => ResetPassword(),
-    changeProfile: (context) => ChangeProfile(),
+    changeProfile: (context) => const ChangeProfile(),
     aboutScreen: (context) => AboutScreen(),
   };
 }

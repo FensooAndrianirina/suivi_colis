@@ -22,7 +22,6 @@ class PackageListService {
       String token = await Util.getToken();
       UserModel user1 = await Util.getUser();
       
-
       print(token);
       Map<String, String> headers = 
       {
@@ -55,7 +54,7 @@ class PackageListService {
             print('ITEM');
             Map<String, dynamic> itemMap = Map<String, dynamic>.from(item.cast<String, dynamic>());
             print(itemMap);
-            print('PM');
+            print('PM - Standard');
             PackageModel pm = PackageModel.fromJson(itemMap);
             print(pm);
             packages.add(pm);
@@ -87,4 +86,6 @@ class PackageListService {
        throw ApiException("Erreur venant du serveur");
      }
   }
+
+
 }

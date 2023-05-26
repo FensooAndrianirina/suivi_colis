@@ -1,72 +1,83 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:client_apk/models/pack_model.dart';
 import 'package:client_apk/models/colis_model.dart';
-import 'package:client_apk/services/detail_service.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
+import 'package:client_apk/services/detail_service.dart';
+
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  final String reference;
+
+  const DetailScreen({required this.reference, Key? key}) : super(key: key);
 
   @override
   _DetailScreen createState() => _DetailScreen();
+  
 }
 
 class _DetailScreen extends State<DetailScreen> {
   late SharedPreferences prefs;
-  // List<ColisModel> ListeColis = [];
+  List<ColisModel> colisList = [];
 
-  //  @override
-  // void initState() {
-  //   super.initState();
-  //   print('ATO AM INIT');
-  //   //get List colis from api
-  //   _packList();
-  //   initPrefs();
-  // }
+  PackModel? package;
 
-  // Future<void> initPrefs() async {
-  //   prefs = await SharedPreferences.getInstance();
-  // }
+   @override
+  void initState() {
+    super.initState();
+    print('ATO AM INIT');
+    //get List colis from api
+    _packList();
+    initPrefs();
+  }
 
-  //   _packList() async {
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+    
+    _packList() async {
+    
+    String reference = widget.reference;
+    print('REFERENCE');
+    print(reference);
+    try {
+          List<ColisModel> rep = await DetailService().articleList(reference);
+          print('REP');
+          print(rep);
+        if(rep != null){
+          print('Package list fetched successfully');
 
-  //   try {
-  //       List<ColisModel> rep = await DetailService()
-  //         .packList();
-  //         print('REP');
-  //         print(rep);
-  //       if(rep != null){
-  //         print('Package list fetched successfully');
+           setState(() {
+            colisList = rep; // Assuming the API response returns a list of packages
+          });
 
-  //          setState(() {
-  //           ListeColis = rep; // Assuming the API response returns a list of packages
-  //         });
+        }
+        else{
+          //   Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (BuildContext context) => ChangeProfile(),
+          //   ),
+          // );
+        }
+      } on Exception catch (exception) {
+        ArtSweetAlert.show(
+          context: context,
+          artDialogArgs: ArtDialogArgs(
+            type: ArtSweetAlertType.danger,
+            dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20)),
+            title: "Erreur",
+            text: exception.toString(),
+            confirmButtonText: "OK",
+            confirmButtonColor: const Color(0xFF3E72A4)));
+      }
 
-  //       }
-  //       else{
-  //         //   Navigator.push(
-  //         //   context,
-  //         //   MaterialPageRoute(
-  //         //     builder: (BuildContext context) => ChangeProfile(),
-  //         //   ),
-  //         // );
-  //       }
-  //     } on Exception catch (exception) {
-  //       ArtSweetAlert.show(
-  //         context: context,
-  //         artDialogArgs: ArtDialogArgs(
-  //           type: ArtSweetAlertType.danger,
-  //           dialogDecoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(20)),
-  //           title: "Erreur",
-  //           text: exception.toString(),
-  //           confirmButtonText: "OK",
-  //           confirmButtonColor: const Color(0xFF3E72A4)));
-  //     }
-
-  // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +96,14 @@ class _DetailScreen extends State<DetailScreen> {
         context: context,
         builder: (BuildContext context) {
           return Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(20),
             child: Container(
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
-                    color: Color(0xFF295078),
+                    color: Color.fromARGB(0, 244, 244, 244),
                     blurRadius: 6,
                     offset: Offset(0, 2))
-              ], borderRadius: BorderRadius.circular(7), color: Colors.white),
+              ], borderRadius: BorderRadius.circular(0), color: Colors.white),
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Container(
@@ -111,8 +122,9 @@ class _DetailScreen extends State<DetailScreen> {
                         SizedBox(height: 20),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: 10,
+                            itemCount: colisList.length,
                             itemBuilder: (context, index) {
+                              var colis = colisList[index];
                               return Padding(
                                 padding: const EdgeInsets.all(3),
                                 child: Container(
@@ -139,7 +151,7 @@ class _DetailScreen extends State<DetailScreen> {
                                           padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                                         ),
                                         Text(
-                                          "Colis: N° 1 FEA_000X ",
+                                          "Colis: N° ${colis.numeroColis} ${colis.referenceColis} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 13,
@@ -157,19 +169,47 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          "Nom de l'article: SmartWatch ",
+                                          "Nom de l'article: ${colis.contenu} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500),
                                         ),
                                         SizedBox(height: 2),
-                                        Text(
-                                          "Poids/Nombre/Volume: 10kg ",
-                                          style: TextStyle(
-                                              color: Color(0xFFEBEBEB),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500),
+                                        Visibility(
+                                            visible: colis.poids != null,
+                                            child: Text(
+                                              "Poids: ${colis.poids} Kg",
+                                              style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Visibility(
+                                            visible: colis.volume != null,
+                                            child: Text(
+                                              "Volume: ${colis.volume} m3",
+                                              style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Visibility(
+                                            visible: colis.nombre != null,
+                                            child: Text(
+                                              "Nombre: ${colis.nombre}",
+                                              style: TextStyle(
+                                                color: Color(0xFFEBEBEB),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
                                         ),
                                         SizedBox(height: 7),
                                         Container(
@@ -179,7 +219,7 @@ class _DetailScreen extends State<DetailScreen> {
                                             borderRadius: BorderRadius.circular(15), // Set the border radius value
                                           ),
                                           child: Text(
-                                            "100 € ",
+                                            "${colis.tarifEnvoiEUR} € ",
                                             style: TextStyle(
                                                 color: Color(0xFFEBEBEB),
                                                 fontSize: 12,
@@ -335,10 +375,9 @@ class _DetailScreen extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   //DETAIL COLISAGE
-                  Row(
+                  Column(
                     children: [
-                      Expanded(
-                        child: Container(
+                     Container(
                           height: 30,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -350,44 +389,17 @@ class _DetailScreen extends State<DetailScreen> {
                                 padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
                               Text(
-                                'Rajaonarison Moreno ', //Expéditeur
+                                'Expéditeur: Rakotoanirina Lova  ', //Expéditeur
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 2.0),
-                      Expanded(
-                        child: Container(
-                          height: 30,
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.orange,
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                      // Expanded(
-                      //   child: Container(
-                      //     color: Colors.green,
-                      //     height: 30,
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(3.0),
-                      //       child: Image(
-                      //         image: AssetImage('assets/images/fleche.png'), // Replace 'your_image.png' with your actual image path
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(width: 2.0), // Add spacing between the columns
-                      Expanded(
-                        child: Container(
+                      ),   
+                      SizedBox(height: 2.0), // Add spacing between the columns              
+                      Container(
                           height: 30,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -400,7 +412,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
                               Text(
-                                "Rajaonson Fitia ", // Destinataire
+                                "Destinataire: Rajaonson Fitia ", // Destinataire
                                 style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: 12,
@@ -409,10 +421,9 @@ class _DetailScreen extends State<DetailScreen> {
                             ],
                           ),
                         ),
-                      ),
                     ],
                   ),
-
+                  SizedBox(height: 9),
                   //ETAT
                   Padding(
                     padding: const EdgeInsets.only(top: 5, left:15 ),
@@ -521,7 +532,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left:5.0),
                                 child: Text(
-                                  " Livré le 20/04/2023 (Récepteur: Rabeharijaona Ranto)",
+                                  " Livré le 20/04/2023)",
                                   style: TextStyle(
                                       color: Color(0xFFEC6701),
                                       fontSize: 12,
@@ -536,13 +547,12 @@ class _DetailScreen extends State<DetailScreen> {
                       ],
                     ),
                   ),
-
+                  SizedBox(height: 9),
                   //MONTANT 
                   Container(
-                    child: Row(
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: Container(
+                        Container(
                             height: 30,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -563,72 +573,63 @@ class _DetailScreen extends State<DetailScreen> {
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 2.0),
-                        Expanded(
-                          child: Container(
-                            height: 30,
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Icon(
-                                Icons.arrow_forward,
-                                color: Color.fromARGB(0, 255, 153, 0),
+                          ),      
+                        SizedBox(height: 2.0),
+                        Container(
+                              height: 30,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 41, // set the height of the container
+                                    width: 41, // set the width of the container
+                                    child: Image.asset(
+                                        'assets/images/price.png'),
+                                    padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                  ),
+                                  Text(
+                                    "Reste à payer: 50 € ", // Destinataire
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                        ), 
-                        Expanded(
-                          child: Container(
-                            height: 30,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 41, // set the height of the container
-                                  width: 41, // set the width of the container
-                                  child: Image.asset(
-                                      'assets/images/price.png'),
-                                  padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                ),
-                                Text(
-                                  "Reste à payer: 50 € ", // Destinataire
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+                SizedBox(height: 0.0),
+                Stack(
+                  children: [ GestureDetector(
+                    onTap: () {
+                      _showArticleList(context);
+                    },
+                    child: Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: double.infinity,
+                          height: 50,
+                          decoration:
+                              BoxDecoration(color: Color.fromARGB(255, 221, 100, 1)),
+                          child: Center(
+                            child: Text(
+                              'Liste des colis ',
+                              style: TextStyle(
+                                  color: Color(0xFFFFFFFF),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
-              )),
-            SizedBox(height: 3.0),
-
-            GestureDetector(
-              onTap: () {
-                _showArticleList(context);
-              },
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration:
-                    BoxDecoration(color: Color.fromARGB(255, 221, 100, 1)),
-                child: Center(
-                  child: Text(
-                    'Liste des colis ',
-                    style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500),
-                  ),
+                  ), ]
                 ),
-              ),
-            ),
 
           // GestureDetector(
           //     onTap: () {

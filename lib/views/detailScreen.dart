@@ -116,7 +116,7 @@ class _DetailScreen extends State<DetailScreen> {
                           child: Text(
                             " Mes articles ",
                             style: TextStyle(
-                                color: Color(0xFF295078),
+                                color: Color(0xFF295078), 
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900),
                           ),
@@ -378,12 +378,26 @@ class _DetailScreen extends State<DetailScreen> {
       ),
       body: Column(
         children: [
+          SizedBox(height: 15),
+          Container(
+              padding: EdgeInsets.fromLTRB(30, 35, 30, 70),
+              width: double.infinity,
+              height: 150,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+              ),
+              child: Center(
+                  child: Image.asset(
+                "assets/images/livraison.png",
+                height: 135,
+              ))),
+          SizedBox(height: 30),
           Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
-                    color: Color(0xFF295078),
-                    blurRadius: 6,
+                    color: Color(0xFFFFFFFF),
+                    blurRadius: 0,
                     offset: Offset(0, 2))
               ], color: Colors.white),
               child: Column(

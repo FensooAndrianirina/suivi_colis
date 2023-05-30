@@ -580,7 +580,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
                               Text(
-                                "Montant: ${package!.tarifEnvoiEUR}${package!.tarifExtraEUR != 0 ? " + ${package!.tarifExtraEUR} " : ""} €", // Expéditeur
+                                "Montant: ${package?.tarifEnvoiEUR}${package?.tarifExtraEUR != 0 ? " + ${package?.tarifExtraEUR} " : ""} €",
                                 style: TextStyle(
                                   color: Color(0xFF797878),
                                   fontSize: 12,
@@ -603,7 +603,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
                               Text(
-                                "Reste à payer: ${package!.resteAPayerEUR} € ", // Destinataire
+                                "Reste à payer: ${package?.resteAPayerEUR} € ", // Destinataire
                                 style: TextStyle(
                                     color: Color(0xFF797878),
                                     fontSize: 12,
@@ -618,34 +618,35 @@ class _DetailScreen extends State<DetailScreen> {
                 ],
               )),
           SizedBox(height: 10.0),
-          Stack(children: [
-            GestureDetector(
-              onTap: () {
-                _showArticleList(context);
-              },
-              child: Positioned.fill(
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _showArticleList(context);
+                },
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     width: double.infinity,
                     height: 50,
-                    decoration:
-                        BoxDecoration(color: Color.fromARGB(255, 221, 100, 1)),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 221, 100, 1),
+                    ),
                     child: Center(
                       child: Text(
-                        'Liste des colis ',
+                        'Liste des colis',
                         style: TextStyle(
-                            color: Color(0xFFFFFFFF),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500),
+                          color: Color(0xFFFFFFFF),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ]),
-
+            ],
+          ),
           // GestureDetector(
           //     onTap: () {
           //     _showPaymentList(context);

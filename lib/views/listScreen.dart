@@ -285,7 +285,7 @@ class _ListScreen extends State<ListScreen> {
                                 .format(package.dateEnvoi);
                             return GestureDetector(
                               onTap: () {
-                                String reference = package.reference;
+                                String reference = package!.reference;
                                 print('ON TAP START');
                                 // Navigate to the desired screen when the container is tapped
                                 Navigator.push(

@@ -7,6 +7,7 @@ import 'package:client_apk/models/pack_model.dart';
 import 'package:client_apk/models/colis_model.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:client_apk/services/detail_service.dart';
+import 'package:intl/intl.dart';
 
 
 class DetailScreen extends StatefulWidget {
@@ -16,7 +17,6 @@ class DetailScreen extends StatefulWidget {
 
   @override
   _DetailScreen createState() => _DetailScreen();
-  
 }
 
 class _DetailScreen extends State<DetailScreen> {
@@ -24,12 +24,12 @@ class _DetailScreen extends State<DetailScreen> {
   List<ColisModel> colisList = [];
 
   PackModel? package;
+  // List<PackModel> packages = [];
 
-   @override
+  @override
   void initState() {
     super.initState();
     print('ATO AM INIT');
-    //get List colis from api
     _packList();
     initPrefs();
   }
@@ -37,50 +37,52 @@ class _DetailScreen extends State<DetailScreen> {
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
-    
-    _packList() async {
-    
+
+  _packList() async {
     String reference = widget.reference;
     print('REFERENCE');
     print(reference);
     try {
-          List<ColisModel> rep = await DetailService().articleList(reference);
-          print('REP');
-          print(rep);
-        if(rep != null){
-          print('Package list fetched successfully');
+      // List<ColisModel> rep = await DetailService().articleList(reference);
+      PackModel packModel = await DetailService().getPackageDetails(reference);
 
-           setState(() {
-            colisList = rep; // Assuming the API response returns a list of packages
-          });
+      print('REP');
+      print(packModel);
+      if (packModel != null) {
+        print('Package list fetched successfully');
 
-        }
-        else{
-          //   Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (BuildContext context) => ChangeProfile(),
-          //   ),
-          // );
-        }
-      } on Exception catch (exception) {
-        ArtSweetAlert.show(
+        setState(() {
+          // colisList = rep; // Assuming the API response returns a list of packages
+          package = packModel;
+        });
+      } else {
+        //   Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => ChangeProfile(),
+        //   ),
+        // );
+      }
+    } on Exception catch (exception) {
+      ArtSweetAlert.show(
           context: context,
           artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.danger,
-            dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20)),
-            title: "Erreur",
-            text: exception.toString(),
-            confirmButtonText: "OK",
-            confirmButtonColor: const Color(0xFF3E72A4)));
-      }
-
+              type: ArtSweetAlertType.danger,
+              dialogDecoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              title: "Erreur",
+              text: exception.toString(),
+              confirmButtonText: "OK",
+              confirmButtonColor: const Color(0xFF3E72A4)));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var expedition = DateFormat('dd/MM/yyyy').format(package!.dateExpedition!);
+    var arrivee = DateFormat('dd/MM/yyyy').format(package!.dateArrivee!);
+    var livraison = DateFormat('dd/MM/yyyy').format(package!.dateLivraison!);
+
     final double screenHeight = MediaQuery.of(context).size.height;
     //   checkToken() async {
     //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -122,14 +124,19 @@ class _DetailScreen extends State<DetailScreen> {
                         SizedBox(height: 20),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: colisList.length,
+                            itemCount: package?.colis.length,
                             itemBuilder: (context, index) {
-                              var colis = colisList[index];
+                              var colis = package!.colis[index];
+                              
+                             
+
+                              // var fArrivee = DateFormat('dd/MM/yyyy').format(package!.dateArrivee);
+                              // var fLivraison = DateFormat('dd/MM/yyyy').format(package!.dateLivraison);
+
                               return Padding(
                                 padding: const EdgeInsets.all(3),
                                 child: Container(
-                                    padding:
-                                        EdgeInsets.fromLTRB(5, 10, 10, 14),
+                                    padding: EdgeInsets.fromLTRB(5, 10, 10, 14),
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -143,15 +150,19 @@ class _DetailScreen extends State<DetailScreen> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
-                                      children:  [
+                                      children: [
                                         Container(
-                                          height: 41, // set the height of the container
-                                          width: 41, // set the width of the container
-                                          child: Image.asset('assets/images/package.png'),
-                                          padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                          height:
+                                              41, // set the height of the container
+                                          width:
+                                              41, // set the width of the container
+                                          child: Image.asset(
+                                              'assets/images/package.png'),
+                                          padding:
+                                              EdgeInsets.fromLTRB(12, 0, 5, 0),
                                         ),
                                         Text(
-                                          "Colis: N° ${colis.numeroColis} ${colis.referenceColis} ",
+                                          "Colis: N° ${colis.numeroColis} - ${colis.referenceColis} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 13,
@@ -159,17 +170,17 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 10),
                                         Container(
-                                          height: 1, 
-                                          width: 150, 
+                                          height: 1,
+                                          width: 150,
                                           child: DecoratedBox(
                                             decoration: BoxDecoration(
-                                              color: Color(0xFFCBCACA), 
+                                              color: Color(0xFFCBCACA),
                                             ),
                                           ),
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          "Nom de l'article: ${colis.contenu} ",
+                                          "Article: ${colis.contenu} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
@@ -177,46 +188,51 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                            visible: colis.poids != null,
-                                            child: Text(
-                                              "Poids: ${colis.poids} Kg",
-                                              style: TextStyle(
-                                                color: Color(0xFFEBEBEB),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                          visible: (colis.poids != 0),
+                                          child: Text(
+                                            "Poids: ${colis.poids} Kg",
+                                            style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                          ),
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                            visible: colis.volume != null,
-                                            child: Text(
-                                              "Volume: ${colis.volume} m3",
-                                              style: TextStyle(
-                                                color: Color(0xFFEBEBEB),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                          visible: (colis.volume != 0),
+                                          child: Text(
+                                            "Volume: ${colis.volume} m³",
+                                            style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                          ),
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                            visible: colis.nombre != null,
-                                            child: Text(
-                                              "Nombre: ${colis.nombre}",
-                                              style: TextStyle(
-                                                color: Color(0xFFEBEBEB),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                          visible: (colis.nombre != 0),
+                                          child: Text(
+                                            "Nombre: ${colis.nombre}",
+                                            style: TextStyle(
+                                              color: Color(0xFFEBEBEB),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
                                             ),
+                                          ),
                                         ),
                                         SizedBox(height: 7),
                                         Container(
-                                          padding: EdgeInsets.only(left: 14, top: 7, right: 14, bottom:7),
+                                          padding: EdgeInsets.only(
+                                              left: 14,
+                                              top: 7,
+                                              right: 14,
+                                              bottom: 7),
                                           decoration: BoxDecoration(
                                             color: Color(0xFFD97E07),
-                                            borderRadius: BorderRadius.circular(15), // Set the border radius value
+                                            borderRadius: BorderRadius.circular(
+                                                15), // Set the border radius value
                                           ),
                                           child: Text(
                                             "${colis.tarifEnvoiEUR} € ",
@@ -241,100 +257,99 @@ class _DetailScreen extends State<DetailScreen> {
       );
     }
 
-
-    void _showPaymentList(BuildContext context) {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(15),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                    color: Color(0xFF295078),
-                    blurRadius: 6,
-                    offset: Offset(0, 2))
-              ], borderRadius: BorderRadius.circular(7), color: Colors.white),
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Container(
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: 10,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Container(
-                                    padding:
-                                        EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Color(0xFF295078),
-                                            blurRadius: 6,
-                                            offset: Offset(0, 2))
-                                      ],
-                                      color: Color(0xFF295078),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Text(
-                                                "Date: 19/05/2023 ",
-                                                style: TextStyle(
-                                                    color: Color(0xFFEBEBEB),
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                              Text(
-                                                "Réf du paiement: 0011505368 ",
-                                                style: TextStyle(
-                                                    color: Color(0xFFEBEBEB),
-                                                    fontSize: 12,
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                            ]),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          "Devise: 478 100 Ariary ",
-                                          style: TextStyle(
-                                              color: Color(0xFFEBEBEB),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        SizedBox(height: 2),
-                                        Text(
-                                          "Equivalence: 100 € ",
-                                          style: TextStyle(
-                                              color: Color(0xFFEBEBEB),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ],
-                                    )),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
-            ),
-          );
-        },
-      );
-    }
+    // void _showPaymentList(BuildContext context) {
+    //   showModalBottomSheet(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return Padding(
+    //         padding: const EdgeInsets.all(15),
+    //         child: Container(
+    //           decoration: BoxDecoration(boxShadow: [
+    //             BoxShadow(
+    //                 color: Color(0xFF295078),
+    //                 blurRadius: 6,
+    //                 offset: Offset(0, 2))
+    //           ], borderRadius: BorderRadius.circular(7), color: Colors.white),
+    //           child: Padding(
+    //             padding: const EdgeInsets.all(15),
+    //             child: Container(
+    //                 width: double.infinity,
+    //                 child: Column(
+    //                   children: [
+    //                     Expanded(
+    //                       child: ListView.builder(
+    //                         itemCount: 10,
+    //                         itemBuilder: (context, index) {
+    //                           return Padding(
+    //                             padding: const EdgeInsets.all(3),
+    //                             child: Container(
+    //                                 padding:
+    //                                     EdgeInsets.fromLTRB(10, 10, 10, 10),
+    //                                 decoration: BoxDecoration(
+    //                                   boxShadow: [
+    //                                     BoxShadow(
+    //                                         color: Color(0xFF295078),
+    //                                         blurRadius: 6,
+    //                                         offset: Offset(0, 2))
+    //                                   ],
+    //                                   color: Color(0xFF295078),
+    //                                   borderRadius: BorderRadius.circular(10),
+    //                                 ),
+    //                                 child: Column(
+    //                                   mainAxisAlignment:
+    //                                       MainAxisAlignment.start,
+    //                                   children: [
+    //                                     Row(
+    //                                         mainAxisAlignment:
+    //                                             MainAxisAlignment.spaceEvenly,
+    //                                         children: [
+    //                                           Text(
+    //                                             "Date: 19/05/2023 ",
+    //                                             style: TextStyle(
+    //                                                 color: Color(0xFFEBEBEB),
+    //                                                 fontSize: 12,
+    //                                                 fontWeight:
+    //                                                     FontWeight.w700),
+    //                                           ),
+    //                                           Text(
+    //                                             "Réf du paiement: 0011505368 ",
+    //                                             style: TextStyle(
+    //                                                 color: Color(0xFFEBEBEB),
+    //                                                 fontSize: 12,
+    //                                                 fontWeight:
+    //                                                     FontWeight.w700),
+    //                                           ),
+    //                                         ]),
+    //                                     SizedBox(height: 2),
+    //                                     Text(
+    //                                       "Devise: 478 100 Ariary ",
+    //                                       style: TextStyle(
+    //                                           color: Color(0xFFEBEBEB),
+    //                                           fontSize: 12,
+    //                                           fontWeight: FontWeight.w700),
+    //                                     ),
+    //                                     SizedBox(height: 2),
+    //                                     Text(
+    //                                       "Equivalence: 100 € ",
+    //                                       style: TextStyle(
+    //                                           color: Color(0xFFEBEBEB),
+    //                                           fontSize: 12,
+    //                                           fontWeight: FontWeight.w700),
+    //                                     ),
+    //                                   ],
+    //                                 )),
+    //                           );
+    //                         },
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 )),
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -351,7 +366,7 @@ class _DetailScreen extends State<DetailScreen> {
             child: Row(
               children: [
                 Text(
-                  'Réf: AKD20230314',
+                  'Réf: ${package?.reference}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
@@ -377,56 +392,57 @@ class _DetailScreen extends State<DetailScreen> {
                   //DETAIL COLISAGE
                   Column(
                     children: [
-                     Container(
-                          height: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child: Image.asset('assets/images/sender.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                'Expéditeur: Rakotoanirina Lova  ', //Expéditeur
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 41, // set the height of the container
+                              width: 41, // set the width of the container
+                              child: Image.asset('assets/images/sender.png'),
+                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                            ),
+                            Text(
+                              // 'Expéditeur: Rajaonarison Antoine' ,
+                              // 'Expéditeur: ${package.expediteur}' ,
+                              'Expéditeur: ${package?.expediteur}',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700),
                             ),
                           ],
                         ),
-                      ),   
-                      SizedBox(height: 2.0), // Add spacing between the columns              
+                      ),
+                      SizedBox(height: 2.0), // Add spacing between the columns
                       Container(
-                          height: 30,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child:
-                                    Image.asset('assets/images/recipient.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                "Destinataire: Rajaonson Fitia ", // Destinataire
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
+                        height: 30,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 41, // set the height of the container
+                              width: 41, // set the width of the container
+                              child: Image.asset('assets/images/recipient.png'),
+                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                            ),
+                            Text(
+                              "Destinataire: ${package?.destinataire}", // Destinataire
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
                         ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 9),
                   //ETAT
                   Padding(
-                    padding: const EdgeInsets.only(top: 5, left:15 ),
+                    padding: const EdgeInsets.only(top: 5, left: 15),
                     child: Column(
                       children: [
                         //LES 4 ETATS
@@ -436,27 +452,33 @@ class _DetailScreen extends State<DetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
-                                height: 15, // set the height of the container
-                                width: 15, // set the width of the container
+                                height: 15,
+                                width: 15,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: expedition != null
+                                      ? Color(0xFFEC6701)
+                                      : Color(0xFF9E9E9E),
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               SizedBox(width: 3),
                               Padding(
-                                padding: const EdgeInsets.only(left:5.0),
+                                padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  " En cours d'expédition ",
+                                  "Départ: ${package?.lieuDepart} (${expedition})",
                                   style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
+                                    color: expedition != null
+                                        ? Color(0xFFEC6701)
+                                        : Color(0xFF9E9E9E),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
+
                         SizedBox(height: 5),
                         //ETAT 2
                         Container(
@@ -467,17 +489,21 @@ class _DetailScreen extends State<DetailScreen> {
                                 height: 15, // set the height of the container
                                 width: 15, // set the width of the container
                                 decoration: BoxDecoration(
-                                  color: Colors.grey,
+                                  color: arrivee != null
+                                      ? Color(0xFFEC6701)
+                                      : Color(0xFF9E9E9E),
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               SizedBox(width: 3),
                               Padding(
-                                padding: const EdgeInsets.only(left:5.0),
+                                padding: const EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  " Expédié (15/04/2023)",
+                                  " Destination:  ${package?.lieuDestination}  (${arrivee})",
                                   style: TextStyle(
-                                      color: Colors.grey,
+                                      color: arrivee != null
+                                      ? Color(0xFFEC6701)
+                                      : Color(0xFF9E9E9E),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -486,35 +512,6 @@ class _DetailScreen extends State<DetailScreen> {
                           ),
                         ),
                         SizedBox(height: 5),
-                        //ETAT 3
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 15, // set the height of the container
-                                width: 15, // set the width of the container
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Padding(
-                                padding: const EdgeInsets.only(left:5.0),
-                                child: Text(
-                                  " En attente de livraison",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                  
                         //ETAT 4
                         Container(
                           child: Row(
@@ -524,17 +521,21 @@ class _DetailScreen extends State<DetailScreen> {
                                 height: 15, // set the height of the container
                                 width: 15, // set the width of the container
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFEC6701),
+                                  color: livraison != null
+                                      ? Color(0xFFEC6701)
+                                      : Color(0xFF9E9E9E),
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               SizedBox(width: 3),
                               Padding(
-                                padding: const EdgeInsets.only(left:5.0),
+                                padding: const EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  " Livré le 20/04/2023)",
+                                  " Livré (${livraison})",
                                   style: TextStyle(
-                                      color: Color(0xFFEC6701),
+                                      color: livraison != null
+                                      ? Color(0xFFEC6701)
+                                      : Color(0xFF9E9E9E),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -548,88 +549,87 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
                   SizedBox(height: 9),
-                  //MONTANT 
+                  //MONTANT
                   Container(
                     child: Column(
                       children: [
                         Container(
-                            height: 30,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 41, // set the height of the container
-                                  width: 41, // set the width of the container
-                                  child:
-                                      Image.asset('assets/images/price.png'),
-                                  padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                ),
-                                Text(
-                                  'Montant: 200 € ', //Expéditeur
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          ),      
-                        SizedBox(height: 2.0),
-                        Container(
-                              height: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 41, // set the height of the container
-                                    width: 41, // set the width of the container
-                                    child: Image.asset(
-                                        'assets/images/price.png'),
-                                    padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                  ),
-                                  Text(
-                                    "Reste à payer: 50 € ", // Destinataire
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ],
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 41, // set the height of the container
+                                width: 41, // set the width of the container
+                                child: Image.asset('assets/images/price.png'),
+                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  )),
-                SizedBox(height: 0.0),
-                Stack(
-                  children: [ GestureDetector(
-                    onTap: () {
-                      _showArticleList(context);
-                    },
-                    child: Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          width: double.infinity,
-                          height: 50,
-                          decoration:
-                              BoxDecoration(color: Color.fromARGB(255, 221, 100, 1)),
-                          child: Center(
-                            child: Text(
-                              'Liste des colis ',
-                              style: TextStyle(
-                                  color: Color(0xFFFFFFFF),
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
+                              Text(
+                                "Montant: ${package!.tarifEnvoiEUR}${package!.tarifExtraEUR != 0 ? " + ${package!.tarifExtraEUR} " : ""} €", // Expéditeur
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                        SizedBox(height: 2.0),
+                        Container(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 41, // set the height of the container
+                                width: 41, // set the width of the container
+                                child: Image.asset('assets/images/price.png'),
+                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                              ),
+                              Text(
+                                "Reste à payer: ${package!.resteAPayerEUR} € ", // Destinataire
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              )),
+          SizedBox(height: 0.0),
+          Stack(children: [
+            GestureDetector(
+              onTap: () {
+                _showArticleList(context);
+              },
+              child: Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration:
+                        BoxDecoration(color: Color.fromARGB(255, 221, 100, 1)),
+                    child: Center(
+                      child: Text(
+                        'Liste des colis ',
+                        style: TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
-                  ), ]
+                  ),
                 ),
+              ),
+            ),
+          ]),
 
           // GestureDetector(
           //     onTap: () {

@@ -5,7 +5,7 @@ class ColisModel {
   String contenu;
   double volume;
   double? poids;
-  double tarifEnvoiEUR;
+  double tarifEnvoiEUR; 
   int? nombre;
   int numeroColis;
   String referenceColis;
@@ -23,11 +23,11 @@ class ColisModel {
   factory ColisModel.fromJson(Map<String, dynamic> json) {
     return ColisModel(
       contenu: json['contenu'],
-      volume: json['volume'],
-      poids: json['poids'],
-      tarifEnvoiEUR: json['tarifEnvoiEUR'],
-      nombre: json['nombre'],
-      numeroColis: json['numeroColis'],
+      volume: json['volume']  ?? 0,
+      poids: json['poids'] ?? 0,
+      tarifEnvoiEUR: json['tarifEnvoiEUR'] ?? 0,
+      nombre: json['nombre'] ?? 0,
+      numeroColis: json['numeroColis'] ?? 0,
       referenceColis: json['referenceColis'],
     );
   }

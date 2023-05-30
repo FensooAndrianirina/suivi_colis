@@ -51,32 +51,6 @@ class PackageModel{
     print("json");
     print(json);
 
-    // List<dynamic> colisData = json['colis'];
-    // List<ColisModel> colisList =
-    // colisData.map((item) => ColisModel.fromJson(item)).toList();
-
-
-    // return PackageModel(
-    //   reference: "test",
-    //   expediteur: "test",
-    //   destinataire: "test",
-    //   lieuDepart: "test",
-    //   lieuDestination: json['lieuDestination'],
-    //   nbreColis: 2,
-    //   dateCreation: DateTime.parse(json['dateCreation']),
-    //   dateEnvoi: DateTime.parse(json['dateEnvoi']),
-    //   moyenExpedition: json['moyenExpedition'],
-    //   typeReception: json['typeReception'],
-    //   typeEnvoi: json['typeEnvoi'],
-    //   tarifEnvoiEUR: 3,
-    //   tarifExtraEUR:  3,
-    //   resteAPayerEUR: 3,
-    //   descTarifExtra: json['descTarifExtra'],
-    //   tauxDeChange: 3,
-    //   expediteur_id: 2,
-    //   destinataire_id: 2,
-      
-    // );
 
     return PackageModel(
       reference: json['reference'],

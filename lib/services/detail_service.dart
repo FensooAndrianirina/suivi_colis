@@ -47,9 +47,18 @@ class DetailService {
         if (jsonData['CodeRetour'] == 200) {
             print('200');
           final data = jsonData['Data'];
+            
+            // final reference = data['reference'];
+            // print(reference);
+            // final expediteur = data['expediteur'];
+            // print(expediteur);
+            // final destinataire = data['destinataire'];
+            // final tarifEnvoiEUR = data['tarifEnvoiEUR'];
+            // final tarifExtraEUR = data['tarifExtraEUR'];
+            // final resteAPayerEUR = data['resteAPayerEUR'];
+
             print(data);
             print('LISTE JSON');
-            print(data['Data']);
             print(data['colis']);
           List<ColisModel> colisList = [];
           if (data['colis'] != null) {
@@ -57,32 +66,60 @@ class DetailService {
             colisList = (data['colis'] as List)
                 .map((item) => ColisModel(
                       contenu: item['contenu'],
-                      volume: item['volume'],
-                      poids: item['poids'],
-                      tarifEnvoiEUR: item['tarifEnvoi'],
-                      nombre: item['nombre'],
-                      numeroColis: item['numeroColis'],
-                      referenceColis: item['referenceColis'],
+                      volume: item['volume'] ?? 0,
+                      poids: item['poids'] ?? 0,
+                      tarifEnvoiEUR: item['tarifEnvoiEUR'] ?? 0,
+                      nombre: item['nombre'] ?? 0,
+                      numeroColis: item['numeroColis'] ?? 0,
+                      referenceColis: item['referenceColis']
                     ))
                 .toList();
           }
 
+          print("COLIS LIST");
+          for( var item in colisList) {
+           print("item");
+            print(item.contenu);
+            print(item.volume);
+            print(item.poids);
+            print(item.tarifEnvoiEUR);
+            print(item.nombre);
+            print(item.numeroColis);
+            print(item.referenceColis);
+
+          }
+      
+          print("******** RETURN ********");
+          print ("AVANT *********************");
           return PackModel(
             reference: data['reference'],
+
             expediteur: data['expediteur'],
             destinataire: data['destinataire'],
+
             tarifEnvoiEUR: data['tarifEnvoiEUR'],
             tarifExtraEUR: data['tarifExtraEUR'],
             resteAPayerEUR: data['resteAPayerEUR'],
+
+            lieuDepart: data['lieuDepart'],
+            lieuDestination: data['lieuDestination'],
+
+            dateExpedition: data['dateExpedition'] != null ? DateTime.parse(data['dateExpedition']) : null,
+            dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
+            dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
+            // dateLivraison: data['dateLivraison'],
+
             colis: colisList,
+
           );
+          
         }
       }
     } catch (e) {
       print('CATCH');
       print(e);
     }
-
+    
     throw Exception('Failed to fetch package details');
   }
 
@@ -117,7 +154,7 @@ class DetailService {
           print('LISTE JSON');
           print(data['Data']);
 
-          List<dynamic> lisitra = data['Data'];
+          List<dynamic> lisitra = data['Data']['colis'];
 
           print('PRINT LISITRA');
           print(lisitra);

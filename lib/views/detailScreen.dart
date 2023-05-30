@@ -408,7 +408,7 @@ class _DetailScreen extends State<DetailScreen> {
                               // 'Expéditeur: ${package.expediteur}' ,
                               'Expéditeur: ${package?.expediteur}',
                               style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Color(0xFF797878),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700),
                             ),
@@ -430,7 +430,7 @@ class _DetailScreen extends State<DetailScreen> {
                             Text(
                               "Destinataire: ${package?.destinataire}", // Destinataire
                               style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Color(0xFF797878),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700),
                             ),
@@ -457,7 +457,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 decoration: BoxDecoration(
                                   color: expedition != null
                                       ? Color(0xFFEC6701)
-                                      : Color(0xFF9E9E9E),
+                                      : Color(0xFF797878),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -467,9 +467,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 child: Text(
                                   "Départ: ${package?.lieuDepart} (${expedition})",
                                   style: TextStyle(
-                                    color: expedition != null
-                                        ? Color(0xFFEC6701)
-                                        : Color(0xFF9E9E9E),
+                                    color: Color(0xFF797878),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -491,7 +489,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 decoration: BoxDecoration(
                                   color: arrivee != null
                                       ? Color(0xFFEC6701)
-                                      : Color(0xFF9E9E9E),
+                                      : Color(0xFF797878),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -501,9 +499,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 child: Text(
                                   " Destination:  ${package?.lieuDestination}  (${arrivee})",
                                   style: TextStyle(
-                                      color: arrivee != null
-                                      ? Color(0xFFEC6701)
-                                      : Color(0xFF9E9E9E),
+                                      color: Color(0xFF797878),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -523,7 +519,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 decoration: BoxDecoration(
                                   color: livraison != null
                                       ? Color(0xFFEC6701)
-                                      : Color(0xFF9E9E9E),
+                                      : Color(0xFF797878),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -533,9 +529,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 child: Text(
                                   " Livré (${livraison})",
                                   style: TextStyle(
-                                      color: livraison != null
-                                      ? Color(0xFFEC6701)
-                                      : Color(0xFF9E9E9E),
+                                      color: Color(0xFF797878),
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
                                 ),
@@ -567,7 +561,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Text(
                                 "Montant: ${package!.tarifEnvoiEUR}${package!.tarifExtraEUR != 0 ? " + ${package!.tarifExtraEUR} " : ""} €", // Expéditeur
                                 style: TextStyle(
-                                  color: Colors.grey,
+                                  color: Color(0xFF797878),
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -590,7 +584,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Text(
                                 "Reste à payer: ${package!.resteAPayerEUR} € ", // Destinataire
                                 style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Color(0xFF797878),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
                               ),

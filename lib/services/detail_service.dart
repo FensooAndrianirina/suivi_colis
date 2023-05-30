@@ -25,10 +25,10 @@ class DetailService {
     
       var uri =  Uri.parse(url);
     
-      // var response = await http.get(
-      //   uri,
-      //   headers: headers    
-      // );
+      var response = await http.get(
+        uri,
+        headers: headers
+      );
 
       return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
    
@@ -75,20 +75,20 @@ class DetailService {
           final data = jsonData['Data'];
           
           List<ColisModel> colisList = [];
-          // if (data['colis'] != null) {
-          //   print('TONGA ETO ARY ISIKA AN');
-          //   colisList = (data['colis'] as List)
-          //       .map((item) => ColisModel(
-          //             contenu: item['contenu'],
-          //             volume: item['volume'] ?? 0,
-          //             poids: item['poids'] ?? 0,
-          //             tarifEnvoiEUR: item['tarifEnvoiEUR'] ?? 0,
-          //             nombre: item['nombre'] ?? 0,
-          //             numeroColis: item['numeroColis'] ?? 0,
-          //             referenceColis: item['referenceColis']
-          //           ))
-          //       .toList();
-          // }
+          if (data['colis'] != null) {
+            print('TONGA ETO ARY ISIKA AN');
+            colisList = (data['colis'] as List)
+                .map((item) => ColisModel(
+                      contenu: item['contenu'],
+                      volume: item['volume'] != null ? item['volume'].toDouble() : 0,
+                      poids: item['poids'] != null ? item['poids'].toDouble() : 0,
+                      tarifEnvoiEUR:  item['tarifEnvoiEUR'] != null ? item['tarifEnvoiEUR'].toDouble() : 0,
+                      nombre: item['nombre'] ?? 0,
+                      numeroColis: item['numeroColis'] ?? 1,
+                      referenceColis: item['referenceColis']
+                    ))
+                .toList();
+          }
 
           print("COLIS LIST");
           for( var item in colisList) {
@@ -111,35 +111,29 @@ class DetailService {
           print(data['tarifExtraEUR']);
           print(data['resteAPayerEUR']);
           print(data['lieuDepart']);
-          print(data['lieuDepart']);
+          print(data['lieuDestination']);
 
           print ("AVANT *********************");
-          // return PackModel(
-          //   reference: data['reference'],
+          return PackModel(
+            reference: data['reference'],
 
-          //   expediteur: data['expediteur'],
-          //   destinataire: data['destinataire'],
+            expediteur: data['expediteur'],
+            destinataire: data['destinataire'],
 
-          //   tarifEnvoiEUR: data['tarifEnvoiEUR'],
-          //   tarifExtraEUR: data['tarifExtraEUR'],
-          //   resteAPayerEUR: data['resteAPayerEUR'],
+            tarifEnvoiEUR: data['tarifEnvoiEUR'] != null ? data['tarifEnvoiEUR'].toDouble() : 0,
+            tarifExtraEUR: data['tarifExtraEUR'] != null ? data['tarifExtraEUR'].toDouble() : 0,
+            resteAPayerEUR: data['resteAPayerEUR'] != null ? data['resteAPayerEUR'].toDouble() : 0,
 
-          //   lieuDepart: data['lieuDepart'],
-          //   lieuDestination: data['lieuDestination'],
+            lieuDepart: data['lieuDepart'],
+            lieuDestination: data['lieuDestination'],
 
-          //   // dateExpedition: data['dateExpedition'] != null ? DateTime.parse(data['dateExpedition']) : null,
-          //   // dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
-          //   // dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
-          //   dateExpedition:  DateTime.parse("2023-04-20"),
-          //   dateArrivee:  DateTime.parse("2023-04-20"),
-          //   dateLivraison:  DateTime.parse("2023-04-20"),
+            dateExpedition: data['dateExpedition'] != null ? DateTime.parse(data['dateExpedition']) : null,
+            dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
+            dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
 
+            colis: colisList,
 
-          //   colis: colisList,
-
-          // );    
-
-        return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
+          );
 
         }else{
            print(' --------------- CODERETOUR = '+jsonData['CodeRetour']+' ---------------');

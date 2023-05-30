@@ -45,7 +45,7 @@ class _DetailScreen extends State<DetailScreen> {
     print(reference);
     try {
       // List<ColisModel> rep = await DetailService().articleList(reference);
-      PackModel packModel = await DetailService().getPackageDetails2(reference);
+      PackModel packModel = await DetailService().getPackageDetails(reference);
 
       print('REP');
       print(packModel);
@@ -81,14 +81,9 @@ class _DetailScreen extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     
-    // var expedition = package!.dateExpedition !=null ? DateFormat('dd/MM/yyyy').format(package!.dateExpedition!) : null;
-    // var arrivee = package!.dateArrivee !=null ? DateFormat('dd/MM/yyyy').format(package!.dateArrivee!) : null;
-    // var livraison = package!.dateLivraison !=null ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!) : null;
-
-    var expedition = "22/04/2023";
-    var arrivee = "22/04/2023";
-    var livraison = "22/04/2023";
-
+    var expedition = package?.dateExpedition !=null ? DateFormat('dd/MM/yyyy').format(package!.dateExpedition!) : null;
+    var arrivee = package?.dateArrivee !=null ? DateFormat('dd/MM/yyyy').format(package!.dateArrivee!) : null;
+    var livraison = package?.dateLivraison !=null ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!) : null;
 
     final double screenHeight = MediaQuery.of(context).size.height;
     //   checkToken() async {
@@ -133,12 +128,12 @@ class _DetailScreen extends State<DetailScreen> {
                           child: ListView.builder(
                             itemCount: package?.colis.length,
                             itemBuilder: (context, index) {
-                              var colis = package!.colis[index];
+                              var colis = package?.colis[index];
                               
                              
 
-                              // var fArrivee = DateFormat('dd/MM/yyyy').format(package!.dateArrivee);
-                              // var fLivraison = DateFormat('dd/MM/yyyy').format(package!.dateLivraison);
+                              // var fArrivee = DateFormat('dd/MM/yyyy').format(package?.dateArrivee);
+                              // var fLivraison = DateFormat('dd/MM/yyyy').format(package?.dateLivraison);
 
                               return Padding(
                                 padding: const EdgeInsets.all(3),
@@ -169,7 +164,7 @@ class _DetailScreen extends State<DetailScreen> {
                                               EdgeInsets.fromLTRB(12, 0, 5, 0),
                                         ),
                                         Text(
-                                          "Colis: N° ${colis.numeroColis} - ${colis.referenceColis} ",
+                                          "Colis: N° ${colis?.numeroColis} - ${colis?.referenceColis} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 13,
@@ -187,7 +182,7 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          "Article: ${colis.contenu} ",
+                                          "Article: ${colis?.contenu} ",
                                           style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
@@ -195,9 +190,9 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                          visible: (colis.poids != 0),
+                                          visible: (colis?.poids != 0),
                                           child: Text(
-                                            "Poids: ${colis.poids} Kg",
+                                            "Poids: ${colis?.poids} Kg",
                                             style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
@@ -207,9 +202,9 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                          visible: (colis.volume != 0),
+                                          visible: (colis?.volume != 0),
                                           child: Text(
-                                            "Volume: ${colis.volume} m³",
+                                            "Volume: ${colis?.volume} m³",
                                             style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
@@ -219,9 +214,9 @@ class _DetailScreen extends State<DetailScreen> {
                                         ),
                                         SizedBox(height: 2),
                                         Visibility(
-                                          visible: (colis.nombre != 0),
+                                          visible: (colis?.nombre != 0),
                                           child: Text(
-                                            "Nombre: ${colis.nombre}",
+                                            "Nombre: ${colis?.nombre}",
                                             style: TextStyle(
                                               color: Color(0xFFEBEBEB),
                                               fontSize: 12,
@@ -242,7 +237,7 @@ class _DetailScreen extends State<DetailScreen> {
                                                 15), // Set the border radius value
                                           ),
                                           child: Text(
-                                            "${colis.tarifEnvoiEUR} € ",
+                                            "${colis?.tarifEnvoiEUR} € ",
                                             style: TextStyle(
                                                 color: Color(0xFFEBEBEB),
                                                 fontSize: 12,

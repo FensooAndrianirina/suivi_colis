@@ -5,7 +5,6 @@ import 'package:client_apk/models/user_model.dart';
 
 class Util {
   static Future<String> getToken() async {
-    print("MI GET");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.get('token') != null && prefs.get("token").toString().isNotEmpty) { 
       print("IF");

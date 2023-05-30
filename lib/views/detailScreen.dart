@@ -29,8 +29,9 @@ class _DetailScreen extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
-    print('ATO AM INIT');
     _packList();
+    // package = new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
+
     initPrefs();
   }
 
@@ -44,7 +45,7 @@ class _DetailScreen extends State<DetailScreen> {
     print(reference);
     try {
       // List<ColisModel> rep = await DetailService().articleList(reference);
-      PackModel packModel = await DetailService().getPackageDetails(reference);
+      PackModel packModel = await DetailService().getPackageDetails2(reference);
 
       print('REP');
       print(packModel);
@@ -79,9 +80,15 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var expedition = DateFormat('dd/MM/yyyy').format(package!.dateExpedition!);
-    var arrivee = DateFormat('dd/MM/yyyy').format(package!.dateArrivee!);
-    var livraison = DateFormat('dd/MM/yyyy').format(package!.dateLivraison!);
+    
+    // var expedition = package!.dateExpedition !=null ? DateFormat('dd/MM/yyyy').format(package!.dateExpedition!) : null;
+    // var arrivee = package!.dateArrivee !=null ? DateFormat('dd/MM/yyyy').format(package!.dateArrivee!) : null;
+    // var livraison = package!.dateLivraison !=null ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!) : null;
+
+    var expedition = "22/04/2023";
+    var arrivee = "22/04/2023";
+    var livraison = "22/04/2023";
+
 
     final double screenHeight = MediaQuery.of(context).size.height;
     //   checkToken() async {
@@ -378,18 +385,16 @@ class _DetailScreen extends State<DetailScreen> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 15),
           Container(
-              padding: EdgeInsets.fromLTRB(30, 35, 30, 70),
-              width: double.infinity,
-              height: 150,
+              padding: EdgeInsets.fromLTRB(30, 30, 30, 70),
+              width: double.infinity,   
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Color(0x00FFFFFF),
               ),
               child: Center(
                   child: Image.asset(
-                "assets/images/livraison.png",
-                height: 135,
+                  "assets/images/liv.png",
+                  height: 165,
               ))),
           SizedBox(height: 30),
           Container(
@@ -404,54 +409,56 @@ class _DetailScreen extends State<DetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   //DETAIL COLISAGE
-                  Column(
-                    children: [
-                      Container(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 41, // set the height of the container
-                              width: 41, // set the width of the container
-                              child: Image.asset('assets/images/sender.png'),
-                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                            ),
-                            Text(
-                              // 'Expéditeur: Rajaonarison Antoine' ,
-                              // 'Expéditeur: ${package.expediteur}' ,
-                              'Expéditeur: ${package?.expediteur}',
-                              style: TextStyle(
-                                  color: Color(0xFF797878),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
+                  Center(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 41, // set the height of the container
+                                width: 41, // set the width of the container
+                                child: Image.asset('assets/images/sender.png'),
+                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                              ),
+                              Text(
+                                // 'Expéditeur: Rajaonarison Antoine' ,
+                                // 'Expéditeur: ${package.expediteur}' ,
+                                'Expéditeur: ${package?.expediteur}',
+                                style: TextStyle(
+                                    color: Color(0xFF797878),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 2.0), // Add spacing between the columns
-                      Container(
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 41, // set the height of the container
-                              width: 41, // set the width of the container
-                              child: Image.asset('assets/images/recipient.png'),
-                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                            ),
-                            Text(
-                              "Destinataire: ${package?.destinataire}", // Destinataire
-                              style: TextStyle(
-                                  color: Color(0xFF797878),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ],
+                        SizedBox(height: 2.0), // Add spacing between the columns
+                        Container(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 41, // set the height of the container
+                                width: 41, // set the width of the container
+                                child: Image.asset('assets/images/recipient.png'),
+                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                              ),
+                              Text(
+                                "Destinataire: ${package?.destinataire}", // Destinataire
+                                style: TextStyle(
+                                    color: Color(0xFF797878),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   SizedBox(height: 9),
                   //ETAT
@@ -610,7 +617,7 @@ class _DetailScreen extends State<DetailScreen> {
                   ),
                 ],
               )),
-          SizedBox(height: 0.0),
+          SizedBox(height: 10.0),
           Stack(children: [
             GestureDetector(
               onTap: () {

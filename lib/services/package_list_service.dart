@@ -86,6 +86,4 @@ class PackageListService {
        throw ApiException("Erreur venant du serveur");
      }
   }
-
-
 }

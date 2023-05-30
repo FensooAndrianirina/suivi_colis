@@ -13,107 +13,140 @@ import '../utils/util.dart';
 
 
 class DetailService {
+   Future<PackModel> getPackageDetails2(String reference) async {
+     try {
+        String token = await Util.getToken();
+
+        Map<String, String> headers = 
+      {
+        'x-access-token': token
+      };
+      final url = "${Const.host}/api-client/declarations/${reference}";
+    
+      var uri =  Uri.parse(url);
+    
+      // var response = await http.get(
+      //   uri,
+      //   headers: headers    
+      // );
+
+      return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
+   
+   } catch (e) {
+      print('CATCH');
+      print(e);
+      
+    throw Exception('Failed to fetch package details');
+    }
+    
+   }
+
   Future<PackModel> getPackageDetails(String reference) async {
     
     try {
-      print("getToken  ETO AMIN ITOOOOOOOO");
+      // print("getToken  ETO AMIN ITOOOOOOOO");
       String token = await Util.getToken();
-      print(token);
-
+    
       Map<String, String> headers = 
       {
         'x-access-token': token
       };
       final url = "${Const.host}/api-client/declarations/${reference}";
-      print(url);
-      print('AMBOOOOOONY');
+      // print(url);
+      // print('AMBOOOOOONY');
 
       var uri =  Uri.parse(url);
+      // print(uri);
+      // print('URRRRRRRRRRRRRRRRI');
       var response = await http.get(
         uri,
         headers: headers    
       );
-
-      print(response);
-      print('AMBAAAAAAAANY');
 
 
       if (response.statusCode == 200) {
         print('200');
 
         final jsonData = jsonDecode(response.body);
-        print(jsonData);
+        // print(jsonData);
 
         if (jsonData['CodeRetour'] == 200) {
-            print('200');
+            print('CODERETOUR = 200');
           final data = jsonData['Data'];
-            
-            // final reference = data['reference'];
-            // print(reference);
-            // final expediteur = data['expediteur'];
-            // print(expediteur);
-            // final destinataire = data['destinataire'];
-            // final tarifEnvoiEUR = data['tarifEnvoiEUR'];
-            // final tarifExtraEUR = data['tarifExtraEUR'];
-            // final resteAPayerEUR = data['resteAPayerEUR'];
-
-            print(data);
-            print('LISTE JSON');
-            print(data['colis']);
+          
           List<ColisModel> colisList = [];
-          if (data['colis'] != null) {
-            print('TONGA ETO ARY ISIKA AN');
-            colisList = (data['colis'] as List)
-                .map((item) => ColisModel(
-                      contenu: item['contenu'],
-                      volume: item['volume'] ?? 0,
-                      poids: item['poids'] ?? 0,
-                      tarifEnvoiEUR: item['tarifEnvoiEUR'] ?? 0,
-                      nombre: item['nombre'] ?? 0,
-                      numeroColis: item['numeroColis'] ?? 0,
-                      referenceColis: item['referenceColis']
-                    ))
-                .toList();
-          }
+          // if (data['colis'] != null) {
+          //   print('TONGA ETO ARY ISIKA AN');
+          //   colisList = (data['colis'] as List)
+          //       .map((item) => ColisModel(
+          //             contenu: item['contenu'],
+          //             volume: item['volume'] ?? 0,
+          //             poids: item['poids'] ?? 0,
+          //             tarifEnvoiEUR: item['tarifEnvoiEUR'] ?? 0,
+          //             nombre: item['nombre'] ?? 0,
+          //             numeroColis: item['numeroColis'] ?? 0,
+          //             referenceColis: item['referenceColis']
+          //           ))
+          //       .toList();
+          // }
 
           print("COLIS LIST");
           for( var item in colisList) {
-           print("item");
-            print(item.contenu);
-            print(item.volume);
-            print(item.poids);
-            print(item.tarifEnvoiEUR);
-            print(item.nombre);
-            print(item.numeroColis);
-            print(item.referenceColis);
+          //  print("item");
+          //   print(item.contenu);
+          //   print(item.volume);
+          //   print(item.poids);
+          //   print(item.tarifEnvoiEUR);
+          //   print(item.nombre);
+          //   print(item.numeroColis);
+          //   print(item.referenceColis);
 
           }
       
           print("******** RETURN ********");
+          print(data['reference']);
+          print(data['expediteur']);
+          print(data['destinataire']);
+          print(data['tarifEnvoiEUR']);
+          print(data['tarifExtraEUR']);
+          print(data['resteAPayerEUR']);
+          print(data['lieuDepart']);
+          print(data['lieuDepart']);
+
           print ("AVANT *********************");
-          return PackModel(
-            reference: data['reference'],
+          // return PackModel(
+          //   reference: data['reference'],
 
-            expediteur: data['expediteur'],
-            destinataire: data['destinataire'],
+          //   expediteur: data['expediteur'],
+          //   destinataire: data['destinataire'],
 
-            tarifEnvoiEUR: data['tarifEnvoiEUR'],
-            tarifExtraEUR: data['tarifExtraEUR'],
-            resteAPayerEUR: data['resteAPayerEUR'],
+          //   tarifEnvoiEUR: data['tarifEnvoiEUR'],
+          //   tarifExtraEUR: data['tarifExtraEUR'],
+          //   resteAPayerEUR: data['resteAPayerEUR'],
 
-            lieuDepart: data['lieuDepart'],
-            lieuDestination: data['lieuDestination'],
+          //   lieuDepart: data['lieuDepart'],
+          //   lieuDestination: data['lieuDestination'],
 
-            dateExpedition: data['dateExpedition'] != null ? DateTime.parse(data['dateExpedition']) : null,
-            dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
-            dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
-            // dateLivraison: data['dateLivraison'],
+          //   // dateExpedition: data['dateExpedition'] != null ? DateTime.parse(data['dateExpedition']) : null,
+          //   // dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
+          //   // dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
+          //   dateExpedition:  DateTime.parse("2023-04-20"),
+          //   dateArrivee:  DateTime.parse("2023-04-20"),
+          //   dateLivraison:  DateTime.parse("2023-04-20"),
 
-            colis: colisList,
 
-          );
-          
+          //   colis: colisList,
+
+          // );    
+
+        return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
+
+        }else{
+           print(' --------------- CODERETOUR = '+jsonData['CodeRetour']+' ---------------');
         }
+      }else{
+        var statuscode = (response.statusCode).toString() ;
+        print(' ---------------- RESPONSE CODE ='+ statuscode + ' ---------------');
       }
     } catch (e) {
       print('CATCH');

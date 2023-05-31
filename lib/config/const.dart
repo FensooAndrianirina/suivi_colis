@@ -1,3 +1,3 @@
 class Const {
-  static final String host ="https://madagroupage.com/";
+  static final String host ="https://madagroupage.com";
 }

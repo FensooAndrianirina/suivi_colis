@@ -12,12 +12,14 @@ class LoginService {
    Future<dynamic> login(String login, String pwd) async {
      try{
        var uri = Uri.parse("${Const.host}/api-client/login");
+       print(uri);
        var reponse = await http.post(uri,body: {"login": login, "password": pwd});
+       print(reponse.body);
       /* var reponse = await http.post(Uri.parse("${Const.host}/api/client/login"),
            body: {"login": login, "password": pwd});*/
        if (reponse.statusCode == 200) {
          print('1');
-      
+
          dynamic data = jsonDecode(reponse.body);
          if (data['CodeRetour'] == 200 || data['CodeRetour'] == 202) {
           int id =  data['Data']['id'];

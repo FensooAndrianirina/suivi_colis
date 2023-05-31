@@ -53,24 +53,25 @@ class _AboutScreenState extends State<AboutScreen> {
         scrollDirection: Axis.vertical,
         child: DataTable(
           columns: [
-            DataColumn(label: Icon(Icons.email, color: Color(0xFF102E4C))),
-            DataColumn(label: Text('clientmdg@gmail.com', style: TextStyle(color: Color(0xFF2F3943)))),
+            DataColumn(label: Wrap(
+              children: [
+                Text('APPLICATION MADAGROUPAGE v0.1', style: TextStyle(color: Color(0xFF2F3943))),
+              ],
+            )),
 
           ],
           rows: [
             DataRow(cells: [
-              DataCell(Icon(Icons.phone, color: Color(0xFF102E4C))),
               DataCell(Row(
                 children: [
-                  Text('+261 34 50 890 00', style: TextStyle(color: Color(0xFF2F3943)), softWrap: true),
+                  Text('Copyright © 2023', style: TextStyle(color: Color(0xFF2F3943)), softWrap: true),
                 ],
               )),
             ]),
             DataRow(cells: [
-              DataCell(Icon(Icons.language, color: Color(0xFF102E4C))),
               DataCell(Row(
                 children: [
-                  Text('www.madagroupagefr.com', style: TextStyle(color: Color(0xFF2F3943)), softWrap: true),
+                  Text('Tous droits réservés', style: TextStyle(color: Color(0xFF2F3943)), softWrap: true),
                 ],
               )),
             ]),
@@ -113,7 +114,7 @@ class _AboutScreenState extends State<AboutScreen> {
                           Container(
                           padding: EdgeInsets.fromLTRB(15, 40, 15, 15),
                           child: Center(
-                              child: Image.asset("images/info.png", height: 100,
+                              child: Image.asset("assets/images/info.png", height: 100,
                                   )
                                ),       
                           ),

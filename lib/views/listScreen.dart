@@ -9,6 +9,7 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:client_apk/services/package_list_service.dart';
 import 'package:client_apk/models/package_model.dart';
 import 'package:intl/intl.dart';
+import 'package:client_apk/views/aboutScreen.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -142,76 +143,103 @@ class _ListScreen extends State<ListScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
-            child: PopupMenuButton(
-              offset: const Offset(0, kToolbarHeight + 10),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem(
-                  value: "profile",
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        Icon(
-                          Icons.person,
-                          color: Color(0xFF295078),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                PopupMenuButton(
+                  offset: const Offset(0, kToolbarHeight + 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  itemBuilder: (BuildContext context) => [
+                    PopupMenuItem(
+                      value: "profile",
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(
+                              Icons.person,
+                              color: Color(0xFF295078),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                              child: Text("Mon profil"),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5.0),
-                          child: Text("Mon profil"),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    PopupMenuItem(
+                      value: "changePass",
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(
+                              Icons.lock,
+                              color: Color(0xFF295078),
+                            ),
+                            Text("Mot de passe"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "deconnexion",
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Icon(
+                              Icons.logout,
+                              color: Color(0xFF295078),
+                            ),
+                            Text("Déconnexion"),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: "about",
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Row(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Icon(
+                              Icons.info,
+                              color: Color(0xFF295078),
+                            ),
+                            Text("A propos"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  onSelected: (String value) {
+                    if (value == "deconnexion") {
+                      showLogoutConfirmation(context);
+                    } else if (value == "profile") {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ChangeProfile()));
+                    } else if (value == "changePass") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangePassword()));
+                    }
+                    else if (value == "about") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AboutScreen()));
+                    }
+                  },
                 ),
-                PopupMenuItem(
-                  value: "changePass",
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
-                        Icon(
-                          Icons.lock,
-                          color: Color(0xFF295078),
-                        ),
-                        Text("Mot de passe"),
-                      ],
-                    ),
-                  ),
-                ),
-                PopupMenuItem(
-                  value: "deconnexion",
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(
-                          Icons.logout,
-                          color: Color(0xFF295078),
-                        ),
-                        Text("Déconnexion"),
-                      ],
-                    ),
-                  ),
-                )
               ],
-              onSelected: (String value) {
-                if (value == "deconnexion") {
-                  showLogoutConfirmation(context);
-                } else if (value == "profile") {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ChangeProfile()));
-                } else if (value == "changePass") {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ChangePassword()));
-                }
-              },
             ),
           ),
         ],
@@ -279,13 +307,12 @@ class _ListScreen extends State<ListScreen> {
                           itemCount: packages.length,
                           itemBuilder: (context, index) {
                             var package = packages[index];
-                            var montant = (package.tarifEnvoiEUR ?? 0.0) +
-                                (package.tarifExtraEUR ?? 0.0);
+            
                             var formattedDate = DateFormat('dd/MM/yyyy')
                                 .format(package.dateEnvoi);
                             return GestureDetector(
                               onTap: () {
-                                String reference = package!.reference;
+                                String reference = package.reference;
                                 print('ON TAP START');
                                 // Navigate to the desired screen when the container is tapped
                                 Navigator.push(
@@ -370,26 +397,6 @@ class _ListScreen extends State<ListScreen> {
                                                         ),
                                                       ),
                                                       SizedBox(width: 2.0),
-                                                      // Expanded(
-                                                      //   child: Container(
-                                                      //     height: 30,
-                                                      //     child: Padding(
-                                                      //       padding:
-                                                      //           const EdgeInsets
-                                                      //               .all(3.0),
-                                                      //       child: Icon(
-                                                      //         Icons
-                                                      //             .arrow_forward,
-                                                      //         color: Color
-                                                      //             .fromARGB(
-                                                      //                 0,
-                                                      //                 255,
-                                                      //                 153,
-                                                      //                 0),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
                                                       //EXPANDED 2
                                                       Expanded(
                                                         child: Container(

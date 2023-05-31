@@ -89,8 +89,7 @@ class _AboutScreenState extends State<AboutScreen> {
           onPressed: () {
               Navigator.push(
               context,
-              // MaterialPageRoute(builder: (context) => ListScreen()),
-              MaterialPageRoute(builder: (context) => LoginScreen()),
+              MaterialPageRoute(builder: (context) => ListScreen()),
             );
           },
         ),

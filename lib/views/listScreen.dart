@@ -128,7 +128,8 @@ class _ListScreen extends State<ListScreen> {
           child: Row(
             children: [
               if (packages.isEmpty)
-                Center(
+                Padding(
+                  padding: const EdgeInsets.only(left:20),
                   child: Text(
                     "Vous n'avez pas encore de colis",
                     style: TextStyle(

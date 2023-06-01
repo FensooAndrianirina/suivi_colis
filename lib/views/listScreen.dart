@@ -498,34 +498,47 @@ class _ListScreen extends State<ListScreen> {
                                                                             5,
                                                                             0),
                                                               ),
-                                                              Text(
-                                                                'Expéditeur: ',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700),
+                                                                  Text(
+                                                                    'Expéditeur: ',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        fontSize:
+                                                                            13,
+                                                                        fontWeight:
+                                                                            FontWeight.w700),
+                                                                  ),
+                                                                  Container(
+                                                                    width: 170,
+                                                                    child: Wrap(
+                                                                      alignment:
+                                                                          WrapAlignment
+                                                                              .start,
+                                                                      runSpacing:
+                                                                          8,
+                                                                      children: [
+                                                                        Text(
+                                                                          '${package.expediteur}',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Color(0xFF797878),
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              Text(
-                                                                '${package.expediteur}',
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xFF797878),
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      SizedBox(height: 5.0),
-                                                      Container(
-                                                          height: 30,
+                                                            ),
+                                                            SizedBox(
+                                                                height: 5.0),
+                                                            Container(
+                                                              height: 30,
                                                           child: Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment

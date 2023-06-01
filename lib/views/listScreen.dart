@@ -125,19 +125,39 @@ class _ListScreen extends State<ListScreen> {
         backgroundColor: Color(0xFF032547),
         title: Padding(
           padding: const EdgeInsets.only(left: 20),
-          child: Row(children: [
-            Text(
-              'Liste de colisage: ',
-              style: TextStyle(
-                  fontWeight: FontWeight.w500, color: Color(0xFFFFF9F4)),
-            ),
-            Text(
-              '${packages.length}',
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Color.fromARGB(255, 230, 111, 13)),
-            ),
-          ]),
+          child: Row(
+            children: [
+              if (packages.isEmpty)
+                Center(
+                  child: Text(
+                    "Vous n'avez pas encore de colis",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              if (!packages
+                  .isEmpty) // Alternatively, you can use if (packages.isNotEmpty)
+                Text(
+                  'Liste de colisage: ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFFFFF9F4),
+                  ),
+                ),
+              if (!packages
+                  .isEmpty) // Alternatively, you can use if (packages.isNotEmpty)
+                Text(
+                  '${packages.length}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 230, 111, 13),
+                  ),
+                ),
+            ],
+          ),
         ),
         automaticallyImplyLeading: false,
         actions: [
@@ -300,7 +320,16 @@ class _ListScreen extends State<ListScreen> {
                     child: Column(
                       children: <Widget>[
                         SizedBox(height: 3),
-                        ListView.builder(
+                         packages.isEmpty
+                          ? Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                                alignment: Alignment.center,
+                                child: Image.asset('assets/images/boxes.png'), 
+                                height: 140
+                              ),
+                          )
+                          : ListView.builder(
                           shrinkWrap: true, // Added shrinkWrap property
                           physics:
                               NeverScrollableScrollPhysics(), // Added physics property

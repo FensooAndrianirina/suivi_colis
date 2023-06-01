@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/models/pack_model.dart';
+import 'package:client_apk/models/package_model.dart';
 import 'package:client_apk/models/colis_model.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:client_apk/services/detail_service.dart';
@@ -24,6 +25,8 @@ class _DetailScreen extends State<DetailScreen> {
   List<ColisModel> colisList = [];
 
   PackModel? package;
+
+  PackageModel? paquet;
   // List<PackModel> packages = [];
 
   @override
@@ -381,7 +384,7 @@ class _DetailScreen extends State<DetailScreen> {
       body: Column(
         children: [
           Container(
-              padding: EdgeInsets.fromLTRB(30, 30, 30, 70),
+              padding: EdgeInsets.fromLTRB(15, 15, 30, 30),
               width: double.infinity,   
               decoration: BoxDecoration(
                 color: Color(0x00FFFFFF),
@@ -389,9 +392,9 @@ class _DetailScreen extends State<DetailScreen> {
               child: Center(
                   child: Image.asset(
                   "assets/images/liv.png",
-                  height: 165,
+                  height: 170,
               ))),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               decoration: BoxDecoration(boxShadow: [
@@ -410,7 +413,29 @@ class _DetailScreen extends State<DetailScreen> {
                         Container(
                           height: 30,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 41, // set the height of the container
+                                width: 41, // set the width of the container
+                                child: Image.asset('assets/images/package.png'),
+                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                              ),
+                              Text(
+                                'Nombre de colis: ${paquet?.nbreColis ?? 0}',
+                                style: TextStyle(
+                                    color: Color(0xFF797878),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 2.0), 
+                        Container(
+                          height: 30,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 41, // set the height of the container
@@ -434,7 +459,7 @@ class _DetailScreen extends State<DetailScreen> {
                         Container(
                           height: 30,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 41, // set the height of the container
@@ -465,7 +490,7 @@ class _DetailScreen extends State<DetailScreen> {
                         //ETAT 1
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 15,
@@ -497,7 +522,7 @@ class _DetailScreen extends State<DetailScreen> {
                         //ETAT 2
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 15, // set the height of the container
@@ -527,7 +552,7 @@ class _DetailScreen extends State<DetailScreen> {
                         //ETAT 4
                         Container(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 15, // set the height of the container
@@ -566,7 +591,7 @@ class _DetailScreen extends State<DetailScreen> {
                         Container(
                           height: 30,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 41, // set the height of the container
@@ -589,7 +614,7 @@ class _DetailScreen extends State<DetailScreen> {
                         Container(
                           height: 30,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Container(
                                 height: 41, // set the height of the container
@@ -629,7 +654,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                     child: Center(
                       child: Text(
-                        'Liste des colis',
+                        'Liste des articles',
                         style: TextStyle(
                           color: Color(0xFFFFFFFF),
                           fontSize: 13,

@@ -569,20 +569,33 @@ class _ListScreen extends State<ListScreen> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w700),
+                                                                  ),
+                                                                  Container(
+                                                                    width: 170,
+                                                                    child: Wrap(
+                                                                      alignment:
+                                                                          WrapAlignment
+                                                                              .start,
+                                                                      runSpacing:
+                                                                          8,
+                                                                      children: [
+                                                                        Text(
+                                                                          '${package.destinataire}',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Color(0xFF797878),
+                                                                            fontSize:
+                                                                                13,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                              Text(
-                                                                '${package.destinataire}',
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xFF797878),
-                                                                    fontSize:
-                                                                        13,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                              ),
-                                                            ],
-                                                          ),
                                                         ),
                                                     ],
                                                   ),

@@ -63,12 +63,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
   }
 
-  // bool isPhoneNumber(String value) {
-  //   // Use a regular expression to check if value is a 10-digit phone number
-  //   return RegExp(r'^\d{10}$').hasMatch(value);
-  // }
+//   static bool isPhoneNumber(String value) {
+//   return RegExp(r'^\+?\d{10,15}$').hasMatch(value);
+// }
   static bool isPhoneNumber(String value) {
-  return RegExp(r'^\+?\d{10,15}$').hasMatch(value);
+    String sanitizedValue = value.replaceAll(' ', ''); 
+    return RegExp(r'^\+?\d{10,15}$').hasMatch(sanitizedValue);
 }
 
 

@@ -8,44 +8,47 @@ import 'package:client_apk/models/colis_model.dart';
 import 'package:client_apk/models/pack_model.dart';
 import '../config/const.dart';
 import '../utils/util.dart';
+import 'package:client_apk/models/user_model.dart';
 
 
 
 
 class DetailService {
-   Future<PackModel> getPackageDetails2(String reference) async {
-     try {
-        String token = await Util.getToken();
+  //  Future<PackModel> getPackageDetails2(String reference) async {
+  //    try {
+  //       String token = await Util.getToken();
+  //       UserModel user1 = await Util.getUser();
 
-        Map<String, String> headers = 
-      {
-        'x-access-token': token
-      };
-      final url = "${Const.host}/api-client/declarations/${reference}";
+  //       Map<String, String> headers = 
+  //     {
+  //       'x-access-token': token
+  //     };
+  //     final url = "${Const.host}/api-client/declarations/${reference}";
     
-      var uri =  Uri.parse(url);
+  //     var uri =  Uri.parse(url);
     
-      var response = await http.get(
-        uri,
-        headers: headers
-      );
+  //     var response = await http.get(
+  //       uri,
+  //       headers: headers
+  //     );
 
-      return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
+  //     return new PackModel(reference: "reference", expediteur: "expediteur", destinataire: "destinataire", tarifEnvoiEUR: 100, tarifExtraEUR: 100, resteAPayerEUR: 100, lieuDepart: "lieuDepart", lieuDestination: "lieuDestination", dateExpedition: null, dateArrivee:null, dateLivraison:DateTime.parse("2023-04-20"), colis: []);
    
-   } catch (e) {
-      print('CATCH');
-      print(e);
+  //  } catch (e) {
+  //     print('CATCH');
+  //     print(e);
       
-    throw Exception('Failed to fetch package details');
-    }
+  //   throw Exception('Failed to fetch package details');
+  //   }
     
-   }
+  //  }
 
   Future<PackModel> getPackageDetails(String reference) async {
     
     try {
       // print("getToken  ETO AMIN ITOOOOOOOO");
       String token = await Util.getToken();
+     
     
       Map<String, String> headers = 
       {
@@ -113,6 +116,9 @@ class DetailService {
           print(data['lieuDepart']);
           print(data['lieuDestination']);
 
+          print('///////////////////// TEEEEEEEEEEEEEEEEEEEES');
+          // print(data['expediteur_id'] == userId);
+
           print ("AVANT *********************");
           return PackModel(
             reference: data['reference'],
@@ -124,6 +130,8 @@ class DetailService {
             tarifExtraEUR: data['tarifExtraEUR'] != null ? data['tarifExtraEUR'].toDouble() : 0,
             resteAPayerEUR: data['resteAPayerEUR'] != null ? data['resteAPayerEUR'].toDouble() : 0,
 
+            nbreColis: data['nbreColis'],
+
             lieuDepart: data['lieuDepart'],
             lieuDestination: data['lieuDestination'],
 
@@ -131,7 +139,13 @@ class DetailService {
             dateArrivee: data['dateArrivee'] != null ? DateTime.parse(data['dateArrivee']) : null,
             dateLivraison: data['dateLivraison'] != null ? DateTime.parse(data['dateLivraison']) : null,
 
+            expediteur_id: data['expediteur_id'],
+            destinataire_id: data['destinataire_id'],
+
             colis: colisList,
+            
+            contactExpediteur: data['contactExpediteur'] ,
+            contactDestinataire: data['contactDestinataire'],
 
           );
 

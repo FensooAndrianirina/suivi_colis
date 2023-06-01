@@ -20,7 +20,7 @@ class Util {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.get('token') != null && prefs.get("token").toString().isNotEmpty) { 
 
-      String id = prefs.getString('id') ?? '';
+      int id = prefs.getInt('id') ?? 0;
       String nom = prefs.getString('nom') ?? '';
       String email = prefs.getString('email') ?? '';
       String telephone = prefs.getString('tel') ?? '';

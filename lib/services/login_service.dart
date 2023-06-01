@@ -25,7 +25,7 @@ class LoginService {
           int id =  data['Data']['id'];
           final instance = await SharedPreferences.getInstance();
           await instance.setString("token", data['Data']['token'] ?? '' );
-          await instance.setString("id", '$id');
+          await instance.setInt("id", id);
           await instance.setString("nom", data['Data']['nom'] ?? '');
           await instance.setString("email", data['Data']['email'] ?? '');
           await instance.setString("adresse", data['Data']['adresse'] ?? '');

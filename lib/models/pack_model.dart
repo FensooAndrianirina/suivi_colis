@@ -13,6 +13,8 @@ class PackModel {
   double tarifExtraEUR;
   double resteAPayerEUR;
 
+  int? nbreColis;
+
   String lieuDepart;
   String lieuDestination;
 
@@ -20,7 +22,13 @@ class PackModel {
   DateTime? dateArrivee;
   DateTime? dateLivraison;
 
+  int? expediteur_id;
+  int? destinataire_id;
+
   List<ColisModel> colis;
+
+  String contactExpediteur;
+  String contactDestinataire;
 
   PackModel({
     required this.reference,
@@ -32,6 +40,8 @@ class PackModel {
     required this.tarifExtraEUR,
     required this.resteAPayerEUR,
 
+    this.nbreColis,
+
     required this.lieuDepart,
     required this.lieuDestination,
 
@@ -39,7 +49,14 @@ class PackModel {
     this.dateArrivee,
     this.dateLivraison,
 
+    this.expediteur_id,
+    this.destinataire_id,
+
     required this.colis,
+
+    required this.contactExpediteur,
+    required this.contactDestinataire,
+
   });
 
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class UserModel{
   String? email;
   String? name;
-  String? id;
+  int? id;
   String? tel;
   String? address;
   String? fb;

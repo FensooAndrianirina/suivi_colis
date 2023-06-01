@@ -92,6 +92,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
         var rep = await ProfileService()
           .profile(nom, email, telephone, adresse, facebook, whatsapp, contact);          
         if(rep == 200){
+          _saveNameToSharedPreferences(nom, email, telephone, contact, facebook, whatsapp, adresse);   
+
           Navigator.push(
             context,
               MaterialPageRoute(
@@ -141,7 +143,6 @@ class _ChangeProfileState extends State<ChangeProfile> {
 
    void _getNameFromSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String id = prefs.getString('id') ?? '';
     String nom = prefs.getString('nom') ?? '';
     String email = prefs.getString('email') ?? '';
     String telephone = prefs.getString('tel') ?? '';
@@ -171,6 +172,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
     await prefs.setString('compteFB', facebook);
     await prefs.setString('whatsapp', whatsapp);
     await prefs.setString('adresse', adresse);
+
   }
 
  //txt
@@ -392,8 +394,6 @@ Widget buildText() {
               String contact = _contactController.text;
               String whatsapp = _whatsappController.text;
               String adresse= _adresseController.text;
-
-              _saveNameToSharedPreferences(nom, email, telephone, contact, facebook, whatsapp, adresse);   
 
               _changeProfile(nom, email, telephone, adresse, facebook, whatsapp, contact); 
 

@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client_apk/models/pack_model.dart';
+import 'package:client_apk/models/user_model.dart';
 import 'package:client_apk/models/package_model.dart';
 import 'package:client_apk/models/colis_model.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:client_apk/services/detail_service.dart';
 import 'package:intl/intl.dart';
-
+import '../utils/util.dart';
 
 class DetailScreen extends StatefulWidget {
   final String reference;
@@ -26,7 +27,8 @@ class _DetailScreen extends State<DetailScreen> {
 
   PackModel? package;
 
-  PackageModel? paquet;
+  int? userId;
+
   // List<PackModel> packages = [];
 
   @override
@@ -40,6 +42,8 @@ class _DetailScreen extends State<DetailScreen> {
 
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+    UserModel user = await Util.getUser();
+    userId = user.id;
   }
 
   _packList() async {
@@ -83,10 +87,15 @@ class _DetailScreen extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    var expedition = package?.dateExpedition !=null ? DateFormat('dd/MM/yyyy').format(package!.dateExpedition!) : null;
-    var arrivee = package?.dateArrivee !=null ? DateFormat('dd/MM/yyyy').format(package!.dateArrivee!) : null;
-    var livraison = package?.dateLivraison !=null ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!) : null;
+    var expedition = package?.dateExpedition != null
+        ? DateFormat('dd/MM/yyyy').format(package!.dateExpedition!)
+        : null;
+    var arrivee = package?.dateArrivee != null
+        ? DateFormat('dd/MM/yyyy').format(package!.dateArrivee!)
+        : null;
+    var livraison = package?.dateLivraison != null
+        ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!)
+        : null;
 
     final double screenHeight = MediaQuery.of(context).size.height;
     //   checkToken() async {
@@ -98,6 +107,7 @@ class _DetailScreen extends State<DetailScreen> {
     // }
 
     // checkToken();
+
     void _showArticleList(BuildContext context) {
       showModalBottomSheet(
         context: context,
@@ -121,7 +131,7 @@ class _DetailScreen extends State<DetailScreen> {
                           child: Text(
                             " Mes articles ",
                             style: TextStyle(
-                                color: Color(0xFF295078), 
+                                color: Color(0xFF295078),
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900),
                           ),
@@ -132,8 +142,6 @@ class _DetailScreen extends State<DetailScreen> {
                             itemCount: package?.colis.length,
                             itemBuilder: (context, index) {
                               var colis = package?.colis[index];
-                              
-                             
 
                               // var fArrivee = DateFormat('dd/MM/yyyy').format(package?.dateArrivee);
                               // var fLivraison = DateFormat('dd/MM/yyyy').format(package?.dateLivraison);
@@ -384,17 +392,17 @@ class _DetailScreen extends State<DetailScreen> {
       body: Column(
         children: [
           Container(
-              padding: EdgeInsets.fromLTRB(15, 15, 30, 30),
-              width: double.infinity,   
+              padding: EdgeInsets.fromLTRB(15, 15, 30, 10),
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: Color(0x00FFFFFF),
               ),
               child: Center(
                   child: Image.asset(
-                  "assets/images/liv.png",
-                  height: 170,
+                "assets/images/liv.png",
+                height: 170,
               ))),
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
               decoration: BoxDecoration(boxShadow: [
@@ -410,28 +418,7 @@ class _DetailScreen extends State<DetailScreen> {
                   Center(
                     child: Column(
                       children: [
-                        Container(
-                          height: 30,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child: Image.asset('assets/images/package.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                'Nombre de colis: ${paquet?.nbreColis ?? 0}',
-                                style: TextStyle(
-                                    color: Color(0xFF797878),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 2.0), 
+                        SizedBox(height: 2.0),
                         Container(
                           height: 30,
                           child: Row(
@@ -455,7 +442,27 @@ class _DetailScreen extends State<DetailScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 2.0), // Add spacing between the columns
+                        Container(
+                          height: 20,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                       
+                              Padding(
+                                padding: const EdgeInsets.only(left:35.0),
+                                child: Text(
+                                                          
+                                  ' ${package?.contactExpediteur}',
+                                  style: TextStyle(
+                                      color: Color(0xFF797878),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 15.0), 
                         Container(
                           height: 30,
                           child: Row(
@@ -464,7 +471,8 @@ class _DetailScreen extends State<DetailScreen> {
                               Container(
                                 height: 41, // set the height of the container
                                 width: 41, // set the width of the container
-                                child: Image.asset('assets/images/recipient.png'),
+                                child:
+                                    Image.asset('assets/images/recipient.png'),
                                 padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
                               ),
                               Text(
@@ -473,6 +481,26 @@ class _DetailScreen extends State<DetailScreen> {
                                     color: Color(0xFF797878),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 20,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                       
+                              Padding(
+                                padding: const EdgeInsets.only(left:35.0),
+                                child: Text(
+                                                          
+                                  ' ${package?.contactDestinataire}',
+                                  style: TextStyle(
+                                      color: Color(0xFF797878),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
                             ],
                           ),
@@ -506,7 +534,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  "Départ: ${package?.lieuDepart} (${expedition})",
+                                  "Départ: ${package?.lieuDepart} ${expedition != null ? '(' + expedition + ')' : ''} ",
                                   style: TextStyle(
                                     color: Color(0xFF797878),
                                     fontSize: 12,
@@ -538,7 +566,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  " Destination:  ${package?.lieuDestination}  (${arrivee})",
+                                  " Destination:  ${package?.lieuDestination}  ${arrivee != null ? '(' + arrivee + ')' : ''} ",
                                   style: TextStyle(
                                       color: Color(0xFF797878),
                                       fontSize: 12,
@@ -568,7 +596,7 @@ class _DetailScreen extends State<DetailScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: Text(
-                                  " Livré (${livraison})",
+                                  " Livré ${livraison != null ? '(' + livraison + ')' : ''} ",
                                   style: TextStyle(
                                       color: Color(0xFF797878),
                                       fontSize: 12,
@@ -585,53 +613,82 @@ class _DetailScreen extends State<DetailScreen> {
                   ),
                   SizedBox(height: 9),
                   //MONTANT
+                  // // MONTANT ET RESTE A PAYER NE SONT AFFICHES QUE SI L'USER EST L'EXPEDITEUR
+                  //TEST 3
                   Container(
                     child: Column(
                       children: [
-                        Container(
-                          height: 30,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child: Image.asset('assets/images/price.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                "Montant: ${package?.tarifEnvoiEUR}${package?.tarifExtraEUR != 0 ? " + ${package?.tarifExtraEUR} " : ""} €",
-                                style: TextStyle(
-                                  color: Color(0xFF797878),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
+                        (package?.expediteur_id == userId)
+                            ? Container(
+                                height: 30,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 41,
+                                      width: 41,
+                                      child: Image.asset(
+                                          'assets/images/price.png'),
+                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                    ),
+                                    Text(
+                                      "Montant: ${package?.tarifEnvoiEUR}${package?.tarifExtraEUR != 0 ? " + ${package?.tarifExtraEUR} " : ""} €",
+                                      style: TextStyle(
+                                        color: Color(0xFF797878),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              )
+                            : SizedBox(),
                         SizedBox(height: 2.0),
+                        package?.expediteur_id == userId
+                            ? Container(
+                                height: 30,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 41,
+                                      width: 41,
+                                      child: Image.asset(
+                                          'assets/images/price.png'),
+                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                    ),
+                                    Text(
+                                      "Reste à payer: ${package?.resteAPayerEUR} €",
+                                      style: TextStyle(
+                                        color: Color(0xFF797878),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Container(
+                    height: 30,
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
                         Container(
-                          height: 30,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child: Image.asset('assets/images/price.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                "Reste à payer: ${package?.resteAPayerEUR} € ", // Destinataire
-                                style: TextStyle(
-                                    color: Color(0xFF797878),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        )
+                          height: 41, // set the height of the container
+                          width: 41, // set the width of the container
+                          child: Image.asset('assets/images/package.png'),
+                          padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                        ),
+                        Text(
+                          'Nombre de colis: ${package?.nbreColis ?? 0}',
+                          style: TextStyle(
+                              color: Color(0xFF797878),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700),
+                        ),
                       ],
                     ),
                   ),

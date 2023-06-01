@@ -51,7 +51,6 @@ class PackageModel{
     print("json");
     print(json);
 
-
     return PackageModel(
       reference: json['reference'],
       expediteur: json['expediteur'],

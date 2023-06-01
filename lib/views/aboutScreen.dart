@@ -44,7 +44,7 @@ class _AboutScreenState extends State<AboutScreen> {
       width: double.infinity, // Largeur maximale
       height: 1, // Hauteur de la ligne
       color: Colors.grey, // Couleur de la ligne
-      child: SizedBox(width: 200), // Définir une largeur personnalisée pour la ligne
+      child: SizedBox(width: 100),  // Définir une largeur personnalisée pour la ligne
     );
   } 
 
@@ -53,12 +53,19 @@ class _AboutScreenState extends State<AboutScreen> {
         scrollDirection: Axis.vertical,
         child: DataTable(
           columns: [
-            DataColumn(label: Wrap(
-              children: [
-                Text('APPLICATION MADAGROUPAGE v0.1', style: TextStyle(color: Color(0xFF2F3943))),
-              ],
-            )),
-
+            DataColumn(
+              label: Wrap(
+                children: [
+                  Text(
+                    'APPLICATION MADAGROUPAGE v0.1',
+                    style: TextStyle(
+                      color: Color(0xFF2F3943),
+                      fontSize: 12, // Adjust the font size as needed
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
           rows: [
             DataRow(cells: [

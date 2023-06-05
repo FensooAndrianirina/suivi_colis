@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client_apk/models/colis_model.dart';
+import 'package:client_apk/models/payment_model.dart';
 import 'package:intl/intl.dart';
 
 
@@ -29,6 +30,10 @@ class PackModel {
 
   String contactExpediteur;
   String contactDestinataire;
+  String? recuperateur;
+
+  List<PaymentModel> paiements;
+  
 
   PackModel({
     required this.reference,
@@ -56,6 +61,10 @@ class PackModel {
 
     required this.contactExpediteur,
     required this.contactDestinataire,
+    this.recuperateur,
+
+    required this.paiements,
+
 
   });
 

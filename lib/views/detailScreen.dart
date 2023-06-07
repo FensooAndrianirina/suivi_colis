@@ -274,265 +274,6 @@ class _DetailScreen extends State<DetailScreen> {
       );
     }
 
-    // void _showPayment(BuildContext context, PackModel package) {
-    //   showModalBottomSheet(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return Padding(
-    //         padding: const EdgeInsets.all(15),
-    //         child: Container(
-    //           decoration: BoxDecoration(
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 color: Color(0xFF295078),
-    //                 blurRadius: 6,
-    //                 offset: Offset(0, 2),
-    //               )
-    //             ],
-    //             borderRadius: BorderRadius.circular(7),
-    //             color: Colors.white,
-    //           ),
-    //           child: Padding(
-    //             padding: const EdgeInsets.all(15),
-    //             child: Container(
-    //               width: double.infinity,
-    //               color: Colors.blue, // Set the color to blue or any other visible color
-    //               height: 200,
-    //               child: Column(
-    //                 children: [
-    //                   Center(
-    //                     child: Text(
-    //                       " Ma liste de paiements ",
-    //                       style: TextStyle(
-    //                         color: Color(0xFF295078),
-    //                         fontSize: 20,
-    //                         fontWeight: FontWeight.w900,
-    //                       ),
-    //                     ),
-    //                   ),
-    //                   SizedBox(height: 20),
-    //                   ListView.builder(
-    //                     shrinkWrap: true,
-    //                     // itemCount: 3,
-    //                     itemCount: package.paiements.length,
-    //                     itemBuilder: (context, index) {
-    //                       var paiements = package.paiements[index];
-    //                       var paiement = paiements.datePaiement != null
-    //                           ? DateFormat('dd/MM/yyyy')
-    //                               .format(paiements.datePaiement!)
-    //                           : null;
-    //                       var montantMGA = paiements.montantMGA;
-
-    //                       return Padding(
-    //                         padding: const EdgeInsets.all(3),
-    //                         child: Container(
-    //                           padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-    //                           decoration: BoxDecoration(
-    //                             boxShadow: [
-    //                               BoxShadow(
-    //                                 color: Color(0xFF295078),
-    //                                 blurRadius: 6,
-    //                                 offset: Offset(0, 2),
-    //                               )
-    //                             ],
-    //                             color: Color(0xFF295078),
-    //                             borderRadius: BorderRadius.circular(10),
-    //                           ),
-    //                           child: Column(
-    //                             mainAxisAlignment: MainAxisAlignment.start,
-    //                             children: [
-    //                               Row(
-    //                                 mainAxisAlignment:
-    //                                     MainAxisAlignment.spaceEvenly,
-    //                                 children: [
-    //                                   //Ref
-    //                                   Text(
-    //                                     "Référence: ${paiements.reference} ",
-    //                                     style: TextStyle(
-    //                                       color: Color(0xFFEBEBEB),
-    //                                       fontSize: 12,
-    //                                       fontWeight: FontWeight.w700,
-    //                                     ),
-    //                                   ),
-    //                                   //Date
-    //                                   Text(
-    //                                     "Date: ${paiement != null ? '(' + paiement + ')' : ''} ",
-    //                                     style: TextStyle(
-    //                                       color: Color(0xFFEBEBEB),
-    //                                       fontSize: 12,
-    //                                       fontWeight: FontWeight.w700,
-    //                                     ),
-    //                                   ),
-                                     
-    //                                 ],
-    //                               ),
-    //                               SizedBox(height: 2),
-    //                                //Montant
-    //                               Text(
-    //                                 "Montant: 100 € ${paiements.montantEUR} ${montantMGA != null ? '($montantMGA)' : ''}",
-    //                                 style: TextStyle(
-    //                                   color: Color(0xFFEBEBEB),
-    //                                   fontSize: 12,
-    //                                   fontWeight: FontWeight.w700,
-    //                                 ),
-    //                               ),
-    //                               Text(
-    //                                 "EN ARIARY:  tsy hay",
-    //                                 style: TextStyle(
-    //                                   color: Color(0xFFEBEBEB),
-    //                                   fontSize: 12,
-    //                                   fontWeight: FontWeight.w700,
-    //                                 ),
-    //                               ),
-    //                               SizedBox(height: 2),
-                                 
-    //                             ],
-    //                           ),
-    //                         ),
-    //                       );
-    //                     },
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
-
-
-    //TEST 2
-    // void _showPayment(BuildContext context, PackModel package) {
-    //   showModalBottomSheet(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return Padding(
-    //         padding: const EdgeInsets.all(15),
-    //         child: Container(
-    //           decoration: BoxDecoration(
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 color: Color(0xFF295078),
-    //                 blurRadius: 6,
-    //                 offset: Offset(0, 2),
-    //               )
-    //             ],
-    //             borderRadius: BorderRadius.circular(7),
-    //             color: Colors.white,
-    //           ),
-    //           child: Padding(
-    //             padding: const EdgeInsets.all(15),
-    //             child: Container(
-    //               width: double.infinity,
-    //               color: Colors
-    //                   .blue, // Set the color to blue or any other visible color
-    //               // height: 200,
-    //               child: Column(
-    //                 children: [
-    //                   Center(
-    //                     child: Text(
-    //                       " Ma liste de paiements ",
-    //                       style: TextStyle(
-    //                         color: Color(0xFF295078),
-    //                         fontSize: 20,
-    //                         fontWeight: FontWeight.w900,
-    //                       ),
-    //                     ),
-    //                   ),
-    //                   SizedBox(height: 20),
-    //                   Expanded(
-    //                     child: ListView.builder(
-    //                       // itemCount: 3,
-    //                       itemCount: package.paiements.length,
-    //                       itemBuilder: (context, index) {
-    //                         var paiements = package.paiements[index];
-    //                         var paiement = paiements.datePaiement != null
-    //                             ? DateFormat('dd/MM/yyyy')
-    //                                 .format(paiements.datePaiement!)
-    //                             : null;
-    //                         var montantMGA = paiements.montantMGA;
-
-    //                         return Padding(
-    //                           padding: const EdgeInsets.all(3),
-    //                           child: Container(
-    //                             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-    //                             decoration: BoxDecoration(
-    //                               boxShadow: [
-    //                                 BoxShadow(
-    //                                   color: Color(0xFF295078),
-    //                                   blurRadius: 6,
-    //                                   offset: Offset(0, 2),
-    //                                 )
-    //                               ],
-    //                               color: Color(0xFF295078),
-    //                               borderRadius: BorderRadius.circular(10),
-    //                             ),
-    //                             child: Column(
-    //                               mainAxisAlignment: MainAxisAlignment.start,
-    //                               children: [
-    //                                 Row(
-    //                                   mainAxisAlignment:
-    //                                       MainAxisAlignment.spaceEvenly,
-    //                                   children: [
-    //                                     //Ref
-    //                                     Text(
-    //                                       "Référence: ${paiements.reference} ",
-    //                                       style: TextStyle(
-    //                                         color: Color(0xFFEBEBEB),
-    //                                         fontSize: 12,
-    //                                         fontWeight: FontWeight.w700,
-    //                                       ),
-    //                                     ),
-    //                                     //Date
-    //                                     Text(
-    //                                       "Date: ${paiement != null ? '(' + paiement + ')' : ''} ",
-    //                                       style: TextStyle(
-    //                                         color: Color(0xFFEBEBEB),
-    //                                         fontSize: 12,
-    //                                         fontWeight: FontWeight.w700,
-    //                                       ),
-    //                                     ),
-    //                                   ],
-    //                                 ),
-    //                                 SizedBox(height: 2),
-    //                                 //Montant
-    //                                 Text(
-    //                                   "Montant: 100 € ${paiements.montantEUR} ${montantMGA != null ? '($montantMGA)' : ''}",
-    //                                   style: TextStyle(
-    //                                     color: Color(0xFFEBEBEB),
-    //                                     fontSize: 12,
-    //                                     fontWeight: FontWeight.w700,
-    //                                   ),
-    //                                 ),
-    //                                 Text(
-    //                                   "EN ARIARY:  tsy hay",
-    //                                   style: TextStyle(
-    //                                     color: Color(0xFFEBEBEB),
-    //                                     fontSize: 12,
-    //                                     fontWeight: FontWeight.w700,
-    //                                   ),
-    //                                 ),
-    //                                 SizedBox(height: 2),
-    //                               ],
-    //                             ),
-    //                           ),
-    //                         );
-    //                       },
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
-
-  //TEST 3
   void _showPayment(BuildContext context, PackModel package) {
       showModalBottomSheet(
         context: context,
@@ -540,6 +281,7 @@ class _DetailScreen extends State<DetailScreen> {
           return Container(
             color: Colors.white,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(15),
@@ -552,81 +294,85 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
-                Container(
-                  child: ListView.builder(
-                    itemCount: package.paiements.length,
-                    itemBuilder: (context, index) {
-                      var paiements = package.paiements[index];
-                      var paiement = paiements.datePaiement != null
-                          ? DateFormat('dd/MM/yyyy')
-                              .format(paiements.datePaiement!)
-                          : null;
-                      var montantMGA = paiements.montantMGA;
-
-                      return Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color(0xFF295078),
-                                blurRadius: 6,
-                                offset: Offset(0, 2),
-                              )
-                            ],
-                            color: Color(0xFF295078),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    "Référence: ${paiements.reference}",
-                                    style: TextStyle(
-                                      color: Color(0xFFEBEBEB),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
+                SizedBox(height: 2),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: package.paiements.length,
+                      itemBuilder: (context, index) {
+                        var paiements = package.paiements[index];
+                        var paiement = paiements.datePaiement != null
+                            ? DateFormat('dd/MM/yyyy')
+                                .format(paiements.datePaiement!)
+                            : null;
+                        var montantMGA = paiements.montantMGA;
+                
+                        return Padding(
+                          padding: const EdgeInsets.all(3),
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFF295078),
+                                  blurRadius: 6,
+                                  offset: Offset(0, 2),
+                                )
+                              ],
+                              color: Color(0xFF295078),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      "Référence: ${paiements.reference}",
+                                      style: TextStyle(
+                                        color: Color(0xFFEBEBEB),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Date: ${paiement != null ? '(' + paiement + ')' : ''}",
-                                    style: TextStyle(
-                                      color: Color(0xFFEBEBEB),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
+                                    Text(
+                                      "Date: ${paiement != null ? '(' + paiement + ')' : ''}",
+                                      style: TextStyle(
+                                        color: Color(0xFFEBEBEB),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  "Montant: ${paiements.montantEUR} €  ${montantMGA != null ? '($montantMGA Ariary)' : ''}",
+                                  style: TextStyle(
+                                    color: Color(0xFFEBEBEB),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                "Montant: ${paiements.montantEUR} €  ${montantMGA != null ? '($montantMGA Ariary)' : ''}",
-                                style: TextStyle(
-                                  color: Color(0xFFEBEBEB),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
                                 ),
-                              ),
-                              Text(
-                                "Mode de paiement: ${paiements.modePaiement}",
-                                style: TextStyle(
-                                  color: Color(0xFFEBEBEB),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
+                                Text(
+                                  "Mode de paiement: ${paiements.modePaiement}",
+                                  style: TextStyle(
+                                    color: Color(0xFFEBEBEB),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 2),
-                            ],
+                                SizedBox(height: 2),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

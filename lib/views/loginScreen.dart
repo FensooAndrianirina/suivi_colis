@@ -30,8 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _login() async {
     if (formKey.currentState!.validate()) {
+      // Start showing the loader
       setState(() {
-        isLoading = true; // Start showing the loader
+        isLoading = true; 
       });
       try {
         var rep = await LoginService()
@@ -58,9 +59,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 confirmButtonText: "OK",
                 confirmButtonColor: const Color(0xFF3E72A4)));
       }
-
+      // Stop showing the loader
       setState(() {
-        isLoading = false; // Stop showing the loader
+        isLoading = false; 
       });
     }
   }
@@ -332,6 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  
   bool isLoading = false;
 
   @override
@@ -404,16 +406,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-                 if (isLoading)
-          Positioned.fill(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
+              if(isLoading)
+                  Positioned.fill(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
               ],
+            ),
           ),
         ),
       ),
-    ),
-    );}
+    );
+  }
 }

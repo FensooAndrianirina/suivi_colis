@@ -33,6 +33,10 @@ class _SigninScreenState extends State<SigninScreen> {
 
   _signin() async {
     if (formKey.currentState!.validate()) {
+      // Start showing the loader
+      setState(() {
+        isLoading = true; 
+      });
       try {
         var rep = await SigninService().signin(
             _nom, _email, _telephone, _adresse, _facebook, _whatsapp, _contact);
@@ -55,6 +59,10 @@ class _SigninScreenState extends State<SigninScreen> {
                 confirmButtonText: "OK",
                 confirmButtonColor: const Color(0xFF3E72A4)));
       }
+      // Stop showing the loader
+      setState(() {
+        isLoading = false; 
+      });
     }
   }
 
@@ -403,6 +411,9 @@ class _SigninScreenState extends State<SigninScreen> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -470,7 +481,13 @@ class _SigninScreenState extends State<SigninScreen> {
                       ],
                     ),
                   ),
-                )
+                ),
+                if (isLoading)
+                  Positioned.fill(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
               ],
             ),
           ),

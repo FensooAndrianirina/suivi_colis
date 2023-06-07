@@ -87,6 +87,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
     print("MANDEHA LE IZY AN");
     if (formKey.currentState!.validate()) {
     print("VALIDATED");
+      // Start showing the loader
+      setState(() {
+        isLoading = true; 
+      });
 
       try {
         var rep = await ProfileService()
@@ -122,8 +126,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
             confirmButtonText: "OK",
             confirmButtonColor: const Color(0xFF3E72A4)));
       }
-    }
-    else {
+      // Stop showing the loader
+      setState(() {
+        isLoading = false;
+      });
+    } else {
       print("TSY VALIDE");
     }
   }
@@ -418,6 +425,9 @@ Widget buildText() {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -485,12 +495,17 @@ Widget buildText() {
                     ],
                   ),
                 ),
-              )
+              ),
+              if (isLoading)
+                Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
             ],
           ),
         ),
       ),
     );
   }
-
 }

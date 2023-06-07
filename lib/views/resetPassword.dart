@@ -23,43 +23,50 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
 
-String _email="";
+  String _email="";
 
-static bool isEmail(String value) {
-    // Use a regular expression to check if value is a valid email address
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
-}
+  static bool isEmail(String value) {
+      // Use a regular expression to check if value is a valid email address
+      return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+  }
 
-void redirectionToLoginScreen() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
-}
-
+  void redirectionToLoginScreen() {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
 
 
   _resetPassword() async {
     if (formKey.currentState!.validate()) {
+      // Start showing the loader
+      setState(() {
+        isLoading = true; 
+      });
       try {
-        var rep = await ResetPasswordService()
-        .resetPassword(_email);
-        if(rep == 200){    
-          if (context.mounted) {  
-             Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        var rep = await ResetPasswordService().resetPassword(_email);
+        if (rep == 200) {
+          if (context.mounted) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
           }
         }
       } on Exception catch (exception) {
         ArtSweetAlert.show(
-          context: context,
-          artDialogArgs: ArtDialogArgs(
-            type: ArtSweetAlertType.danger,
-            dialogDecoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20)),
-            title: "Erreur",
-            text: exception.toString(),
-            confirmButtonText: "OK",
-            confirmButtonColor: const Color(0xFF3E72A4)));
+            context: context,
+            artDialogArgs: ArtDialogArgs(
+                type: ArtSweetAlertType.danger,
+                dialogDecoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)),
+                title: "Erreur",
+                text: exception.toString(),
+                confirmButtonText: "OK",
+                confirmButtonColor: const Color(0xFF3E72A4)));
       }
+      // Stop showing the loader
+      setState(() {
+        isLoading = false; 
+      });
     }
   }
 
@@ -182,7 +189,9 @@ void redirectionToLoginScreen() {
         ));
   }
 
-GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -250,12 +259,17 @@ GlobalKey<FormState> formKey = GlobalKey<FormState>();
                     ],
                   ),
                 ),
-              )
-            ],
+              ),
+              if (isLoading)
+                    Positioned.fill(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-      )
-    );
+        ));
   }
 }

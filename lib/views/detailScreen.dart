@@ -27,7 +27,6 @@ class _DetailScreen extends State<DetailScreen> {
   List<ColisModel> colisList = [];
   List<PaymentModel> paymentList = [];
 
-
   PackModel? package;
 
   int? userId;
@@ -53,6 +52,11 @@ class _DetailScreen extends State<DetailScreen> {
     String reference = widget.reference;
     print('REFERENCE');
     print(reference);
+    // Start showing the loader
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       // List<ColisModel> rep = await DetailService().articleList(reference);
       PackModel packModel = await DetailService().getPackageDetails(reference);
@@ -86,7 +90,13 @@ class _DetailScreen extends State<DetailScreen> {
               confirmButtonText: "OK",
               confirmButtonColor: const Color(0xFF3E72A4)));
     }
+    // Stop showing the loader
+    setState(() {
+      isLoading = false;
+    });
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +109,6 @@ class _DetailScreen extends State<DetailScreen> {
     var livraison = package?.dateLivraison != null
         ? DateFormat('dd/MM/yyyy').format(package!.dateLivraison!)
         : null;
- 
 
     final double screenHeight = MediaQuery.of(context).size.height;
     //   checkToken() async {
@@ -145,7 +154,7 @@ class _DetailScreen extends State<DetailScreen> {
                           child: ListView.builder(
                             itemCount: package?.colis.length,
                             itemBuilder: (context, index) {
-                            var colis = package?.colis[index];
+                              var colis = package?.colis[index];
 
                               // var fArrivee = DateFormat('dd/MM/yyyy').format(package?.dateArrivee);
                               // var fLivraison = DateFormat('dd/MM/yyyy').format(package?.dateLivraison);
@@ -274,7 +283,7 @@ class _DetailScreen extends State<DetailScreen> {
       );
     }
 
-  void _showPayment(BuildContext context, PackModel package) {
+    void _showPayment(BuildContext context, PackModel package) {
       showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -308,7 +317,7 @@ class _DetailScreen extends State<DetailScreen> {
                                 .format(paiements.datePaiement!)
                             : null;
                         var montantMGA = paiements.montantMGA;
-                
+
                         return Padding(
                           padding: const EdgeInsets.all(3),
                           child: Container(
@@ -382,110 +391,6 @@ class _DetailScreen extends State<DetailScreen> {
       );
     }
 
-
-//   // TEST WITH SIMPLE LIST
-//   void _showPayment(BuildContext context, PackModel package) {
-//   showModalBottomSheet(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return Container(
-//         color: Colors.white,
-//         child: Column(
-//           children: [
-//             Padding(
-//               padding: const EdgeInsets.all(15),
-//               child: Text(
-//                 "Ma liste de paiements",
-//                 style: TextStyle(
-//                   color: Color(0xFF295078),
-//                   fontSize: 20,
-//                   fontWeight: FontWeight.w900,
-//                 ),
-//               ),
-//             ),
-//             SizedBox(height: 20),
-//             Expanded(
-//               child: ListView(
-//                 children: package.paiements.map((paiements) {
-//                   var paiement = paiements.datePaiement != null
-//                       ? DateFormat('dd/MM/yyyy').format(paiements.datePaiement!)
-//                       : null;
-//                   var montantMGA = paiements.montantMGA;
-
-//                   return Padding(
-//                     padding: const EdgeInsets.all(3),
-//                     child: Container(
-//                       padding: EdgeInsets.all(10),
-//                       decoration: BoxDecoration(
-//                         boxShadow: [
-//                           BoxShadow(
-//                             color: Color(0xFF295078),
-//                             blurRadius: 6,
-//                             offset: Offset(0, 2),
-//                           )
-//                         ],
-//                         color: Color(0xFF295078),
-//                         borderRadius: BorderRadius.circular(10),
-//                       ),
-//                       child: Column(
-//                         mainAxisAlignment: MainAxisAlignment.start,
-//                         children: [
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                             children: [
-//                               Text(
-//                                 "Référence: ${paiements.reference}",
-//                                 style: TextStyle(
-//                                   color: Color(0xFFEBEBEB),
-//                                   fontSize: 12,
-//                                   fontWeight: FontWeight.w700,
-//                                 ),
-//                               ),
-//                               Text(
-//                                 "Date: ${paiement != null ? '(' + paiement + ')' : ''}",
-//                                 style: TextStyle(
-//                                   color: Color(0xFFEBEBEB),
-//                                   fontSize: 12,
-//                                   fontWeight: FontWeight.w700,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                           SizedBox(height: 2),
-//                           Text(
-//                             "Montant: 100 € ${paiements.montantEUR} ${montantMGA != null ? '($montantMGA)' : ''}",
-//                             style: TextStyle(
-//                               color: Color(0xFFEBEBEB),
-//                               fontSize: 12,
-//                               fontWeight: FontWeight.w700,
-//                             ),
-//                           ),
-//                           Text(
-//                             "EN ARIARY: tsy hay",
-//                             style: TextStyle(
-//                               color: Color(0xFFEBEBEB),
-//                               fontSize: 12,
-//                               fontWeight: FontWeight.w700,
-//                             ),
-//                           ),
-//                           SizedBox(height: 2),
-//                         ],
-//                       ),
-//                     ),
-//                   );
-//                 }).toList(),
-//               ),
-//             ),
-//           ],
-//         ),
-//       );
-//     },
-//   );
-// }
-
-
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF032547),
@@ -511,417 +416,393 @@ class _DetailScreen extends State<DetailScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          // Container(
-          //     padding: EdgeInsets.fromLTRB(15, 15, 30, 10),
-          //     width: double.infinity,
-          //     decoration: BoxDecoration(
-          //       color: Color(0x00FFFFFF),
-          //     ),
-          //     child: Center(
-          //         child: Image.asset(
-          //       "assets/images/liv.png",
-          //       height: 170,
-          //     ))),
-          SizedBox(height: 5),
-          Container(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                    color: Color(0xFFFFFFFF),
-                    blurRadius: 0,
-                    offset: Offset(0, 2))
-              ], color: Colors.white),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  //DETAIL COLISAGE
-                  Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 2.0),
-                        Container(
-                          height: 30,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child: Image.asset('assets/images/sender.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                // 'Expéditeur: Rajaonarison Antoine' ,
-                                // 'Expéditeur: ${package.expediteur}' ,
-                                'Expéditeur: ${package?.expediteur}',
-                                style: TextStyle(
-                                    color: Color(0xFF797878),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 20,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                       
-                              Padding(
-                                padding: const EdgeInsets.only(left:35.0),
-                                child: Text(
-                                                          
-                                  ' ${package?.contactExpediteur}',
-                                  style: TextStyle(
-                                      color: Color(0xFF797878),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 15.0), 
-                        Container(
-                          height: 30,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 41, // set the height of the container
-                                width: 41, // set the width of the container
-                                child:
-                                    Image.asset('assets/images/recipient.png'),
-                                padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                              ),
-                              Text(
-                                "Destinataire: ${package?.destinataire}", // Destinataire
-                                style: TextStyle(
-                                    color: Color(0xFF797878),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 20,
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                       
-                              Padding(
-                                padding: const EdgeInsets.only(left:35.0),
-                                child: Text(
-                                                          
-                                  ' ${package?.contactDestinataire}',
-                                  style: TextStyle(
-                                      color: Color(0xFF797878),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 9),
-                  Container(
-                    height: 30,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 41, // set the height of the container
-                          width: 41, // set the width of the container
-                          child: Image.asset('assets/images/recipient.png'),
-                          padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                        ),
-                        Text(
-                          "Récupérateur: ${package?.recuperateur ?? ''}", // Destinataire
-                          style: TextStyle(
-                            color: Color(0xFF797878),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 9),
-               
-                  //ETAT
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, left: 15),
-                    child: Column(
-                      children: [
-                        //LES 4 ETATS
-                        //ETAT 1
-                        Container(
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                  color: expedition != null
-                                      ? Color(0xFFEC6701)
-                                      : Color(0xFF797878),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  "Départ: ${package?.lieuDepart} ${expedition != null ? '(' + expedition + ')' : ''} ",
-                                  style: TextStyle(
-                                    color: Color(0xFF797878),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        SizedBox(height: 5),
-                        //ETAT 2
-                        Container(
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 15, // set the height of the container
-                                width: 15, // set the width of the container
-                                decoration: BoxDecoration(
-                                  color: arrivee != null
-                                      ? Color(0xFFEC6701)
-                                      : Color(0xFF797878),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: Text(
-                                  " Destination:  ${package?.lieuDestination}  ${arrivee != null ? '(' + arrivee + ')' : ''} ",
-                                  style: TextStyle(
-                                      color: Color(0xFF797878),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        //ETAT 4
-                        Container(
-                          child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 15, // set the height of the container
-                                width: 15, // set the width of the container
-                                decoration: BoxDecoration(
-                                  color: livraison != null
-                                      ? Color(0xFFEC6701)
-                                      : Color(0xFF797878),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 7.0),
-                                child: Text(
-                                  "Livraison: ${livraison != null ? '(' + livraison + ')' : ''} ",
-                                  style: TextStyle(
-                                      color: Color(0xFF797878),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        // FIN 4 ETATS
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 9),
-                  //MONTANT
-                  // // MONTANT ET RESTE A PAYER NE SONT AFFICHES QUE SI L'USER EST L'EXPEDITEUR
-                  //TEST 3
-                  Container(
-                    child: Column(
-                      children: [
-                        (package?.expediteur_id == userId)
-                            ? Container(
-                                height: 30,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 41,
-                                      width: 41,
-                                      child: Image.asset(
-                                          'assets/images/price.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      "Montant: ${package?.tarifEnvoiEUR}${package?.tarifExtraEUR != 0 ? " + ${package?.tarifExtraEUR} " : ""} €",
-                                      style: TextStyle(
-                                        color: Color(0xFF797878),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                        SizedBox(height: 2.0),
-                        package?.expediteur_id == userId
-                            ? Container(
-                                height: 30,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 41,
-                                      width: 41,
-                                      child: Image.asset(
-                                          'assets/images/price.png'),
-                                      padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                                    ),
-                                    Text(
-                                      "Reste à payer: ${package?.resteAPayerEUR} €",
-                                      style: TextStyle(
-                                        color: Color(0xFF797878),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10.0),
-                  Container(
-                    height: 30,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 41, // set the height of the container
-                          width: 41, // set the width of the container
-                          child: Image.asset('assets/images/package.png'),
-                          padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
-                        ),
-                        Text(
-                          'Nombre de colis: ${package?.nbreColis ?? 0}',
-                          style: TextStyle(
-                              color: Color(0xFF797878),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )),
-          SizedBox(height: 10.0),
-          Stack(
+          Column(
             children: [
-              GestureDetector(
-                onTap: () {
-                  _showArticleList(context);
-                },
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 221, 100, 1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Articles',
-                        style: TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+              //IMAGE LIVREUR
+              // Container(
+              //     padding: EdgeInsets.fromLTRB(15, 15, 30, 10),
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Color(0x00FFFFFF),
+              //     ),
+              //     child: Center(
+              //         child: Image.asset(
+              //       "assets/images/liv.png",
+              //       height: 170,
+              //     ))),
+              SizedBox(height: 5),
+              Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                        color: Color(0xFFFFFFFF),
+                        blurRadius: 0,
+                        offset: Offset(0, 2))
+                  ], color: Colors.white),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      //DETAIL COLISAGE
+                      Center(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 2.0),
+                            Container(
+                              height: 30,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        41, // set the height of the container
+                                    width: 41, // set the width of the container
+                                    child:
+                                        Image.asset('assets/images/sender.png'),
+                                    padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                  ),
+                                  Text(
+                                    // 'Expéditeur: Rajaonarison Antoine' ,
+                                    // 'Expéditeur: ${package.expediteur}' ,
+                                    'Expéditeur: ${package?.expediteur}',
+                                    style: TextStyle(
+                                        color: Color(0xFF797878),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 35.0),
+                                    child: Text(
+                                      ' ${package?.contactExpediteur}',
+                                      style: TextStyle(
+                                          color: Color(0xFF797878),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 15.0),
+                            Container(
+                              height: 30,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        41, // set the height of the container
+                                    width: 41, // set the width of the container
+                                    child: Image.asset(
+                                        'assets/images/recipient.png'),
+                                    padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                  ),
+                                  Text(
+                                    "Destinataire: ${package?.destinataire}", // Destinataire
+                                    style: TextStyle(
+                                        color: Color(0xFF797878),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 20,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 35.0),
+                                    child: Text(
+                                      ' ${package?.contactDestinataire}',
+                                      style: TextStyle(
+                                          color: Color(0xFF797878),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 9),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 41, // set the height of the container
+                              width: 41, // set the width of the container
+                              child: Image.asset('assets/images/recipient.png'),
+                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                            ),
+                            Text(
+                              "Récupérateur: ${package?.recuperateur ?? ''}", // Destinataire
+                              style: TextStyle(
+                                color: Color(0xFF797878),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 9),
+
+                      //ETAT
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5, left: 15),
+                        child: Column(
+                          children: [
+                            //LES 4 ETATS
+                            //ETAT 1
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      color: expedition != null
+                                          ? Color(0xFFEC6701)
+                                          : Color(0xFF797878),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      "Départ: ${package?.lieuDepart} ${expedition != null ? '(' + expedition + ')' : ''} ",
+                                      style: TextStyle(
+                                        color: Color(0xFF797878),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 5),
+                            //ETAT 2
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        15, // set the height of the container
+                                    width: 15, // set the width of the container
+                                    decoration: BoxDecoration(
+                                      color: arrivee != null
+                                          ? Color(0xFFEC6701)
+                                          : Color(0xFF797878),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5.0),
+                                    child: Text(
+                                      " Destination:  ${package?.lieuDestination}  ${arrivee != null ? '(' + arrivee + ')' : ''} ",
+                                      style: TextStyle(
+                                          color: Color(0xFF797878),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            //ETAT 4
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        15, // set the height of the container
+                                    width: 15, // set the width of the container
+                                    decoration: BoxDecoration(
+                                      color: livraison != null
+                                          ? Color(0xFFEC6701)
+                                          : Color(0xFF797878),
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 7.0),
+                                    child: Text(
+                                      "Livraison: ${livraison != null ? '(' + livraison + ')' : ''} ",
+                                      style: TextStyle(
+                                          color: Color(0xFF797878),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            // FIN 4 ETATS
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 9),
+                      //MONTANT
+                      // // MONTANT ET RESTE A PAYER NE SONT AFFICHES QUE SI L'USER EST L'EXPEDITEUR
+                      //TEST 3
+                      Container(
+                        child: Column(
+                          children: [
+                            (package?.expediteur_id == userId)
+                                ? Container(
+                                    height: 30,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 41,
+                                          width: 41,
+                                          child: Image.asset(
+                                              'assets/images/price.png'),
+                                          padding:
+                                              EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                        ),
+                                        Text(
+                                          "Montant: ${package?.tarifEnvoiEUR}${package?.tarifExtraEUR != 0 ? " + ${package?.tarifExtraEUR} " : ""} €",
+                                          style: TextStyle(
+                                            color: Color(0xFF797878),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(),
+                            SizedBox(height: 2.0),
+                            package?.expediteur_id == userId
+                                ? Container(
+                                    height: 30,
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 41,
+                                          width: 41,
+                                          child: Image.asset(
+                                              'assets/images/price.png'),
+                                          padding:
+                                              EdgeInsets.fromLTRB(12, 0, 5, 0),
+                                        ),
+                                        Text(
+                                          "Reste à payer: ${package?.resteAPayerEUR} €",
+                                          style: TextStyle(
+                                            color: Color(0xFF797878),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      Container(
+                        height: 30,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 41, // set the height of the container
+                              width: 41, // set the width of the container
+                              child: Image.asset('assets/images/package.png'),
+                              padding: EdgeInsets.fromLTRB(12, 0, 5, 0),
+                            ),
+                            Text(
+                              'Nombre de colis: ${package?.nbreColis ?? 0}',
+                              style: TextStyle(
+                                  color: Color(0xFF797878),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              SizedBox(height: 10.0),
+              if (isLoading)
+                Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showArticleList(context);
+                    },
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: double.infinity,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 221, 100, 1),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Articles',
+                            style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
+              ),
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showPayment(context, package!);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 50,
+                      decoration: BoxDecoration(color: Color(0xFF032547)),
+                      child: Center(
+                        child: Text(
+                          ' Paiements ',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          Stack(
-            children: [
-              GestureDetector(
-                  onTap: () {
-                  _showPayment(context, package!);
-                },
-                child: Container(
-                    width: double.infinity,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF032547) ),
-                     child: Center(
-                    child: Text(
-                      ' Paiements ',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-       
-
-          // GestureDetector(
-          //   onTap: () {
-          //     if (package != null) {
-          //       _showPaymentList(context, package!);
-          //     } else {
-          //       return null;
-          //     }
-          //   },
-          //   child: Container(
-          //     width: double.infinity,
-          //     height: 50,
-          //     decoration: BoxDecoration(
-          //       color: Color(0xFF032547),
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         'Paiements',
-          //         style: TextStyle(
-          //           color: Color.fromARGB(255, 255, 255, 255),
-          //           fontSize: 13,
-          //           fontWeight: FontWeight.w500,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // )
         ],
       ),
     );

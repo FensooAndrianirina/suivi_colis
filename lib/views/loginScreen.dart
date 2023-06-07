@@ -30,6 +30,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   _login() async {
     if (formKey.currentState!.validate()) {
+      setState(() {
+        isLoading = true; // Start showing the loader
+      });
       try {
         var rep = await LoginService()
             .login(_emailOrPhone, _userPassword);
@@ -55,6 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 confirmButtonText: "OK",
                 confirmButtonColor: const Color(0xFF3E72A4)));
       }
+
+      setState(() {
+        isLoading = false; // Stop showing the loader
+      });
     }
   }
 
@@ -325,6 +332,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -395,8 +403,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-              )
-            ],
+              ),
+                 if (isLoading)
+          Positioned.fill(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+              ],
           ),
         ),
       ),

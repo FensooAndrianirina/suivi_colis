@@ -36,6 +36,10 @@ class _ListScreen extends State<ListScreen> {
   }
 
   _packageList() async {
+    // Start showing the loader
+    setState(() {
+      isLoading = true; 
+    });
     try {
       List<PackageModel> rep = await PackageListService().packageList();
       print('REP');
@@ -67,6 +71,10 @@ class _ListScreen extends State<ListScreen> {
               confirmButtonText: "OK",
               confirmButtonColor: const Color(0xFF3E72A4)));
     }
+    // Stop showing the loader
+    setState(() {
+      isLoading = false; 
+    });
   }
 
   void showLogoutConfirmation(BuildContext context) {
@@ -117,6 +125,8 @@ class _ListScreen extends State<ListScreen> {
       },
     );
   }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +343,7 @@ class _ListScreen extends State<ListScreen> {
                           : ListView.builder(
                           shrinkWrap: true, // Added shrinkWrap property
                           physics:
-                              NeverScrollableScrollPhysics(), // Added physics property
+                          NeverScrollableScrollPhysics(), // Added physics property
                           itemCount: packages.length,
                           itemBuilder: (context, index) {
                             var package = packages[index];
@@ -611,6 +621,12 @@ class _ListScreen extends State<ListScreen> {
                       ],
                     ),
                   ),
+                ),
+                if (isLoading)
+                  Positioned.fill(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                 ),
               ],
             ),

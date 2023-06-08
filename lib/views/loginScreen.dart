@@ -19,6 +19,10 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:art_sweetalert/art_sweetalert.dart';
 
 class LoginScreen extends StatefulWidget {
+  final String? texteNotif;
+
+  LoginScreen({this.texteNotif});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -143,20 +147,36 @@ class _LoginScreenState extends State<LoginScreen> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  //txt
+  //ttitre
   Widget buildText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        if (widget.texteNotif != null)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.texteNotif!,
+                style: TextStyle(
+                  color: Color.fromRGBO(188, 79, 0, 1),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(height: 15),
+            ],
+          ),
         Container(
           child: Text(
             'Madagroupage',
             style: TextStyle(
-                color: Color(0xff295078),
-                fontSize: 35,
-                fontWeight: FontWeight.w900),
+              color: Color(0xff295078),
+              fontSize: 35,
+              fontWeight: FontWeight.w900,
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -280,7 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-   Widget buildEditProfileLink() {
+  Widget buildEditProfileLink() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -297,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-   Widget buildChangePasswordLink() {
+  Widget buildChangePasswordLink() {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -376,7 +396,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             "assets/images/package.png",
                             height: 135,
                           ))),
-                      SizedBox(height: 60),
+                      SizedBox(height: 30),
                       Container(
                           padding: EdgeInsets.fromLTRB(43, 5, 43, 0),
                           child: Form(
@@ -406,12 +426,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              if(isLoading)
+              if (isLoading)
                   Positioned.fill(
                     child: Center(
                       child: CircularProgressIndicator(),
                     ),
-                  ),
+                ),
               ],
             ),
           ),

@@ -31,6 +31,10 @@ class _SigninScreenState extends State<SigninScreen> {
   String _whatsapp = "";
   String _adresse = "";
 
+  late String texteNotif;
+
+  // _SigninScreenState({required this.texteNotif});
+
   _signin() async {
     if (formKey.currentState!.validate()) {
       // Start showing the loader
@@ -118,10 +122,6 @@ class _SigninScreenState extends State<SigninScreen> {
         .hasMatch(value);
   }
 
-  void redirectionToLoginScreen() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
-  }
 
   void signinUser(String nom, String email, String telephone, String adresse,
       String facebook, String whatsapp, String contact) async {
@@ -150,7 +150,9 @@ class _SigninScreenState extends State<SigninScreen> {
         String _descRetour = responseMap["descRetour"];
 
         if (_codeRetour == 200) {
-          //Saving user information inside SharedPref
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ListScreen()));
+        } else if(_codeRetour == 202) {
+          texteNotif = 'Veuillez vérifier votre boîte mail, vous devriez avoir reçu un mot de passe';
           redirectionToLoginScreen();
         } else {
           throw _descRetour;
@@ -168,7 +170,12 @@ class _SigninScreenState extends State<SigninScreen> {
         backgroundColor: Colors.grey,
       );
     }
-    //
+
+  }
+
+  void redirectionToLoginScreen() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginScreen(texteNotif: texteNotif)));
   }
 
   //txt

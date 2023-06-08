@@ -24,6 +24,8 @@ class ResetPassword extends StatefulWidget {
 class _ResetPasswordState extends State<ResetPassword> {
 
   String _email="";
+  
+  late String texteNotif;
 
   static bool isEmail(String value) {
       // Use a regular expression to check if value is a valid email address
@@ -46,8 +48,9 @@ class _ResetPasswordState extends State<ResetPassword> {
         var rep = await ResetPasswordService().resetPassword(_email);
         if (rep == 200) {
           if (context.mounted) {
+            texteNotif = 'Veuillez vérifier votre boîte mail, vous devriez avoir reçu un mot de passe';
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LoginScreen()));
+            MaterialPageRoute(builder: (context) => LoginScreen(texteNotif: texteNotif)));
           }
         }
       } on Exception catch (exception) {

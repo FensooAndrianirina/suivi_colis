@@ -778,7 +778,9 @@ class _DetailScreen extends State<DetailScreen> {
                   ),
                 ],
               ),
-              Stack(
+              //La liste de paiements n'est visible que si l'user est expéditeur
+              (package?.expediteur_id == userId)
+                ? Stack(
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -800,7 +802,7 @@ class _DetailScreen extends State<DetailScreen> {
                     ),
                   ),
                 ],
-              ),
+              )  : SizedBox()
             ],
           ),
         ],

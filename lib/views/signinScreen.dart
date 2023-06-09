@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_new
-
 import 'package:client_apk/views/changePassword.dart';
 import 'package:client_apk/views/listScreen.dart';
 import 'package:client_apk/views/loginScreen.dart';
@@ -16,6 +14,9 @@ import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:client_apk/services/signin_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
+
+import '../exceptions/api_exception.dart';
 
 class SigninScreen extends StatefulWidget {
   @override
@@ -33,42 +34,117 @@ class _SigninScreenState extends State<SigninScreen> {
 
   late String texteNotif;
 
-  // _SigninScreenState({required this.texteNotif});
-
-  _signin() async {
-    if (formKey.currentState!.validate()) {
-      // Start showing the loader
-      setState(() {
-        isLoading = true; 
-      });
-      try {
-        var rep = await SigninService().signin(
-            _nom, _email, _telephone, _adresse, _facebook, _whatsapp, _contact);
-        if (rep == 200 || rep == 202) {
-          if (context.mounted) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LoginScreen()));
-          }
-        }
-      } on Exception catch (exception) {
-        ArtSweetAlert.show(
-            context: context,
-            artDialogArgs: ArtDialogArgs(
-                type: ArtSweetAlertType.danger,
-                dialogDecoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                title: "Erreur",
-                text: exception.toString(),
-                confirmButtonText: "OK",
-                confirmButtonColor: const Color(0xFF3E72A4)));
-      }
-      // Stop showing the loader
-      setState(() {
-        isLoading = false; 
-      });
-    }
+   void redirectionToLoginScreen() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginScreen(texteNotif: texteNotif)));
   }
+
+  Future<void> showAlertDialog(
+  BuildContext context,
+  String title,
+  String message,
+  String linkText,
+) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(text: message),
+              TextSpan(
+                text: linkText,
+                style: TextStyle(
+                  color: Color(0xFF052642),
+                  decoration: TextDecoration.underline,
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    redirectionToLoginScreen();
+                  },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              },
+              child: Text('Fermer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+ _signin() async {
+  if (formKey.currentState!.validate()) {
+    // Start showing the loader
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      var response = await SigninService().signin(
+        _nom,
+        _email,
+        _telephone,
+        _adresse,
+        _facebook,
+        _whatsapp,
+        _contact,
+      );
+      // print(response);
+      if (response['CodeRetour'] == 200 || response['CodeRetour'] == 202) {
+        if (context.mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        }
+      } else if (response['CodeRetour'] == 502) {
+        print('Calling showAlertDialog for codeRetour 502');
+        String errorDetail = 'Cet email est déjà associé à un compte';
+        String linkText = 'ici';
+        await showAlertDialog(
+          context,
+          'Cet email est déjà associé à un compte',
+          'Cherchez-vous à vous connecter ? Cliquez ',
+          linkText,
+        );
+        redirectionToLoginScreen();
+      } else {
+        throw ApiException(response['DescRetour']);
+      }
+    } on Exception catch (exception) {
+      ArtSweetAlert.show(
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+          type: ArtSweetAlertType.danger,
+          dialogDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: "Erreur",
+          text: exception.toString(),
+          confirmButtonText: "OK",
+          confirmButtonColor: const Color(0xFF3E72A4),
+        ),
+      );
+    }
+    // Stop showing the loader
+    setState(() {
+      isLoading = false;
+    });
+  }
+}
+
 
   // static bool isName(String value){
   //     //at least at least 2 letters, with at least one uppercase and one lowercase:
@@ -141,7 +217,7 @@ class _SigninScreenState extends State<SigninScreen> {
 
     Response? response = null;
     var body = null;
-
+    //lay tsy miasa
     try {
       response = await dio.post(api, data: data);
       if (response != null) {
@@ -150,13 +226,26 @@ class _SigninScreenState extends State<SigninScreen> {
         String _descRetour = responseMap["descRetour"];
 
         if (_codeRetour == 200) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ListScreen()));
-        } else if(_codeRetour == 202) {
-          texteNotif = 'Veuillez vérifier votre boîte mail, vous devriez avoir reçu un mot de passe';
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
           redirectionToLoginScreen();
-        } else {
-          throw _descRetour;
         }
+    
+        // else if (_codeRetour == 502) {
+        //   print('Calling showAlertDialog for codeRetour 502');
+        //   String errorDetail = responseMap["retour"]["DetailRetour"];
+        //   String linkText = 'ici';
+        //   await showAlertDialog(
+        //     context,
+        //     'Cet email est déjà associé à un compte',
+        //     'Cherchez-vous à vous connecter ? Cliquez ',
+        //     linkText,
+        //   );
+
+        //   redirectionToLoginScreen();
+        // }
+
+
       } else {
         throw "Erreur venant du serveur";
       }
@@ -170,12 +259,6 @@ class _SigninScreenState extends State<SigninScreen> {
         backgroundColor: Colors.grey,
       );
     }
-
-  }
-
-  void redirectionToLoginScreen() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen(texteNotif: texteNotif)));
   }
 
   //txt
@@ -420,7 +503,6 @@ class _SigninScreenState extends State<SigninScreen> {
 
   bool isLoading = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -429,8 +511,8 @@ class _SigninScreenState extends State<SigninScreen> {
           // Handle back button press
           // Implement your desired behavior here
           if (context.mounted) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginScreen()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
           } // Exit the application
           return true; // Return true to allow the back navigation, or false to prevent it
         },

@@ -57,7 +57,7 @@ class _AboutScreenState extends State<AboutScreen> {
               label: Wrap(
                 children: [
                   Text(
-                    'APPLICATION MADAGROUPAGE v0.1',
+                    'APPLICATION MADAGROUPAGE v0.2',
                     style: TextStyle(
                       color: Color(0xFF2F3943),
                       fontSize: 12, // Adjust the font size as needed

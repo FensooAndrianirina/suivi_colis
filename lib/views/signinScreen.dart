@@ -15,6 +15,8 @@ import 'package:client_apk/services/signin_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
+import 'dart:async';
+
 
 import '../exceptions/api_exception.dart';
 
@@ -32,56 +34,126 @@ class _SigninScreenState extends State<SigninScreen> {
   String _whatsapp = "";
   String _adresse = "";
 
-  late String texteNotif;
+  // late String texteNotif;
 
    void redirectionToLoginScreen() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginScreen(texteNotif: texteNotif)));
+            // builder: (context) => LoginScreen(texteNotif: texteNotif)));
+            builder: (context) => LoginScreen()));
   }
 
-  Future<void> showAlertDialog(
+// Future<void> showAlertDialog(
+//   BuildContext context,
+//   String title,
+//   String message,
+//   String linkText,
+// ) {
+//   Completer<void> completer = Completer<void>();
+
+//   showDialog<void>(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return AlertDialog(
+//         title: Text(title),
+//         content: RichText(
+//           text: TextSpan(
+//             children: [
+//               TextSpan(
+//                 text: message,
+//                 style: TextStyle(color: Color(0xFF1C354E),  fontWeight: FontWeight.w500), 
+//               ),
+//               TextSpan(
+//                 text: linkText,
+//                 style: TextStyle(
+//                   color: Color(0xFF1C354E),
+//                   fontWeight: FontWeight.w500,
+//                   decoration: TextDecoration.underline,
+//                 ),
+//                 recognizer: TapGestureRecognizer()
+//                   ..onTap = () {
+//                     redirectionToLoginScreen();
+//                     Navigator.pop(context); // Dismiss the dialog
+//                     completer.complete(); // Resolve the completer
+//                   },
+//               ),
+//             ],
+//           ),
+//         ),
+//         actions: [
+//           TextButton(
+//             onPressed: () {
+//               Navigator.pop(context);
+//               completer.complete(); // Resolve the completer if closed by the button
+//             },
+//             child: Text('Fermer'),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+
+//   return completer.future;
+// }
+
+Future<void> showAlertDialog(
   BuildContext context,
   String title,
   String message,
   String linkText,
-) async {
-  return showDialog<void>(
+) {
+  Completer<void> completer = Completer<void>();
+
+  showDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(text: message),
-              TextSpan(
-                text: linkText,
-                style: TextStyle(
-                  color: Color(0xFF052642),
-                  decoration: TextDecoration.underline,
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(20), 
+        child: AlertDialog(
+          title: Text(title),
+          content: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: message,
+                  style: TextStyle(color: Color(0xFF1C354E), fontSize: 13, fontWeight: FontWeight.w500),
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    redirectionToLoginScreen();
-                  },
-              ),
-            ],
+                TextSpan(
+                  text: linkText,
+                  style: TextStyle(
+                    color: Color(0xFF1C354E),
+                    fontWeight: FontWeight.w800,
+                    // decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      redirectionToLoginScreen();
+                      Navigator.pop(context); // Dismiss the dialog
+                      completer.complete(); // Resolve the completer
+                    },
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                completer.complete(); // Resolve the completer if closed by the button
               },
               child: Text('Fermer'),
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+
+  return completer.future;
+}
+
+
 
 
  _signin() async {
@@ -109,16 +181,30 @@ class _SigninScreenState extends State<SigninScreen> {
           );
         }
       } else if (response['CodeRetour'] == 502) {
-        print('Calling showAlertDialog for codeRetour 502');
-        String errorDetail = 'Cet email est déjà associé à un compte';
-        String linkText = 'ici';
+        String errorDetail;
+        String linkText = 'Cliquez ici';
         await showAlertDialog(
           context,
-          'Cet email est déjà associé à un compte',
-          'Cherchez-vous à vous connecter ? Cliquez ',
+          'Cet email est déjà associé à un compte. Cherchez-vous à vous connecter ?',
+          '',
           linkText,
         );
-        redirectionToLoginScreen();
+        // Check if the dialog was dismissed by clicking the link or closed by the button
+        if (!Navigator.canPop(context)) {
+          redirectionToLoginScreen();
+        }
+      } else if (response['CodeRetour'] == 503) {
+        String errorDetail;
+        String linkText = 'Cliquez ici';
+        await showAlertDialog(
+          context,
+          'Ce numéro est déjà associé à un compte. Cherchez-vous à vous connecter ?',
+          '',
+          linkText,
+        );
+        if (!Navigator.canPop(context)) {
+          redirectionToLoginScreen();
+        }
       } else {
         throw ApiException(response['DescRetour']);
       }
@@ -230,21 +316,6 @@ class _SigninScreenState extends State<SigninScreen> {
           //     context, MaterialPageRoute(builder: (context) => LoginScreen()));
           redirectionToLoginScreen();
         }
-    
-        // else if (_codeRetour == 502) {
-        //   print('Calling showAlertDialog for codeRetour 502');
-        //   String errorDetail = responseMap["retour"]["DetailRetour"];
-        //   String linkText = 'ici';
-        //   await showAlertDialog(
-        //     context,
-        //     'Cet email est déjà associé à un compte',
-        //     'Cherchez-vous à vous connecter ? Cliquez ',
-        //     linkText,
-        //   );
-
-        //   redirectionToLoginScreen();
-        // }
-
 
       } else {
         throw "Erreur venant du serveur";

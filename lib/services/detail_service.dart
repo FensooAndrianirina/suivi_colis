@@ -22,6 +22,7 @@ class DetailService {
     try {
       // print("getToken  ETO AMIN ITOOOOOOOO");
       String token = await Util.getToken();
+      // String token = "gagzjkjekdfkjzfkjzbefhzbfkzefkzfekzebzef";
      
     
       Map<String, String> headers = 

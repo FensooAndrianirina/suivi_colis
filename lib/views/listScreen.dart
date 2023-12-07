@@ -25,7 +25,6 @@ class _ListScreen extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
-    print('ATO AM INIT');
     //get List colis from api
     _packageList();
     initPrefs();
@@ -42,22 +41,12 @@ class _ListScreen extends State<ListScreen> {
     });
     try {
       List<PackageModel> rep = await PackageListService().packageList();
-      print('REP');
-      print(rep);
       if (rep != null) {
-        print('Package list fetched successfully');
-
         setState(() {
           packages =
               rep; // Assuming the API response returns a list of packages
         });
       } else {
-        //   Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => ChangeProfile(),
-        //   ),
-        // );
       }
     } on Exception catch (exception) {
       ArtSweetAlert.show(
@@ -112,8 +101,6 @@ class _ListScreen extends State<ListScreen> {
                 )),
             TextButton(
                 onPressed: () {
-                  print('CANCEL');
-
                   Navigator.of(context).pop(); // Dismiss the dialog
                 },
                 child: Text(
@@ -304,8 +291,6 @@ class _ListScreen extends State<ListScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      print('CANCEL');
-
                       Navigator.of(context).pop(); // Dismiss the dialog
                     },
                     child: Text('Non'),
@@ -353,7 +338,6 @@ class _ListScreen extends State<ListScreen> {
                             return GestureDetector(
                               onTap: () {
                                 String reference = package.reference;
-                                print('ON TAP START');
                                 // Navigate to the desired screen when the container is tapped
                                 Navigator.push(
                                   context,
@@ -361,7 +345,6 @@ class _ListScreen extends State<ListScreen> {
                                     builder: (context) => DetailScreen(reference: reference),
                                   ),
                                 );
-                                print('ON TAP END');
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),

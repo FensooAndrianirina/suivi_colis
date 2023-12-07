@@ -120,7 +120,7 @@ class _ChangePassword extends State<ChangePassword> {
 
         if (_codeRetour == 200) {
           //Saving user information inside SharedPref
-          print("TONGA ETO");
+      
           redirectionToListScreen();
         } else {
           throw _descRetour;
@@ -129,7 +129,6 @@ class _ChangePassword extends State<ChangePassword> {
         throw "Erreur venant du serveur";
       }
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,
@@ -151,7 +150,6 @@ class _ChangePassword extends State<ChangePassword> {
     prefs = await SharedPreferences.getInstance();
   }
 
-  //txt
   Widget buildText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

@@ -203,10 +203,8 @@ class _EditProfileState extends State<EditProfile> {
           child: ElevatedButton(
             onPressed: () {
                if (formKey.currentState!.validate()) {
-                  print("OK");
                 }
                 else {
-                  print("NOT OK");
                 }
             },
             style: ElevatedButton.styleFrom(

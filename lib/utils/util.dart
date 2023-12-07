@@ -7,12 +7,9 @@ class Util {
   static Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.get('token') != null && prefs.get("token").toString().isNotEmpty) { 
-      print("IF");
       return prefs.get("token") as String;
     } else {
-      print("ELSE");
       throw const HttpException("Unauthorized");
-
     }
   }
 
@@ -35,7 +32,6 @@ class Util {
     } else {
     
       throw const HttpException("Unauthorized");
-
     }
   }
 }

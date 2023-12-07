@@ -109,14 +109,11 @@ class _LoginScreenState extends State<LoginScreen> {
         int _codeRetour = responseMap["codeRetour"];
         String _descRetour = responseMap["descRetour"];
 
-        print("DESCRIPTION RETOUR");
         if (_codeRetour == 200 || _codeRetour == 202 ) {
           //Saving user information inside SharedPref
           SharedPreferences prefs = await SharedPreferences.getInstance(); 
           
           prefs.setString('token', "test");
-  
-          print('OHATRAAAA');
         
           redirectionToListScreen();
         } else {
@@ -126,7 +123,6 @@ class _LoginScreenState extends State<LoginScreen> {
         throw "Erreur venant du serveur";
       }
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_SHORT,

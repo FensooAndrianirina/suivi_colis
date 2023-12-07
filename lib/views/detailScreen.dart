@@ -50,33 +50,19 @@ class _DetailScreen extends State<DetailScreen> {
 
   _packList() async {
     String reference = widget.reference;
-    print('REFERENCE');
-    print(reference);
     // Start showing the loader
     setState(() {
       isLoading = true;
     });
 
     try {
-      // List<ColisModel> rep = await DetailService().articleList(reference);
       PackModel packModel = await DetailService().getPackageDetails(reference);
 
-      print('REP');
-      print(packModel);
       if (packModel != null) {
-        print('Package list fetched successfully');
-
         setState(() {
-          // colisList = rep; // Assuming the API response returns a list of packages
           package = packModel;
         });
       } else {
-        //   Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => ChangeProfile(),
-        //   ),
-        // );
       }
     } on Exception catch (exception) {
       ArtSweetAlert.show(

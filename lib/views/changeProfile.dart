@@ -84,9 +84,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
   }
 
   _changeProfile(String nom, String email, String telephone, String adresse, String facebook, String whatsapp, String contact) async {
-    print("MANDEHA LE IZY AN");
     if (formKey.currentState!.validate()) {
-    print("VALIDATED");
       // Start showing the loader
       setState(() {
         isLoading = true; 
@@ -126,12 +124,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
             confirmButtonText: "OK",
             confirmButtonColor: const Color(0xFF3E72A4)));
       }
-      // Stop showing the loader
-      setState(() {
-        isLoading = false;
-      });
-    } else {
-      print("TSY VALIDE");
+        // Stop showing the loader
+        setState(() {
+          isLoading = false;
+        });
+      } else {
     }
   }
 
@@ -391,9 +388,7 @@ Widget buildText() {
           // color: Color.fromARGB(255, 120, 180, 9),
           padding: EdgeInsets.fromLTRB(75, 0, 75, 0),
           child: ElevatedButton(
-            onPressed: () {
-              print("dssss");
-              
+            onPressed: () {        
               String nom = _nomController.text;
               String email = _emailController.text;
               String telephone = _telephoneController.text;

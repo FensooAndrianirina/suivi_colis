@@ -18,11 +18,9 @@ class PackageListService {
     List<PackageModel> packages = [];
     
     try{
-      print("getToken");
       String token = await Util.getToken();
       UserModel user1 = await Util.getUser();
       
-      print(token);
       Map<String, String> headers = 
       {
         'x-access-token': token
@@ -40,28 +38,12 @@ class PackageListService {
 
         
         if (data['CodeRetour'] == 200) {
-          print('200');
-          print(data);
-          print('LISTE JSON');
-          print(data['Data']);
-
           List<dynamic> lisitra = data['Data'];
-
-          print('PRINT LISITRA');
-          print(lisitra);
-
           for( var item in lisitra) {
-            print('ITEM');
             Map<String, dynamic> itemMap = Map<String, dynamic>.from(item.cast<String, dynamic>());
-            print(itemMap);
-            print('PM - Standard');
             PackageModel pm = PackageModel.fromJson(itemMap);
-            print(pm);
             packages.add(pm);
           }
-          print('PACKAGES');
-          print(packages);
-
           return packages;
          } else {
            throw ApiException(data['DescRetour']);
@@ -80,8 +62,6 @@ class PackageListService {
         // Gérer l'exception de connexion Internet manquante ici
         throw ApiException("Pas d'internet");
       } catch (e) {
-        print('CATCH');
-        print(e);
       // Gérer toutes les autres exceptions ici
        throw ApiException("Erreur venant du serveur");
      }

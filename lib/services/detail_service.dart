@@ -20,22 +20,16 @@ class DetailService {
   Future<PackModel> getPackageDetails(String reference) async {
     
     try {
-      // print("getToken  ETO AMIN ITOOOOOOOO");
       String token = await Util.getToken();
-      // String token = "gagzjkjekdfkjzfkjzbefhzbfkzefkzfekzebzef";
      
-    
       Map<String, String> headers = 
       {
         'x-access-token': token
       };
       final url = "${Const.host}/api-client/declarations/${reference}";
-      // print(url);
-      // print('AMBOOOOOONY');
 
       var uri =  Uri.parse(url);
-      // print(uri);
-      // print('URRRRRRRRRRRRRRRRI');
+     
       var response = await http.get(
         uri,
         headers: headers    
@@ -43,18 +37,14 @@ class DetailService {
 
 
       if (response.statusCode == 200) {
-        print('200');
 
         final jsonData = jsonDecode(response.body);
-        // print(jsonData);
 
         if (jsonData['CodeRetour'] == 200) {
-            print('CODERETOUR = 200');
           final data = jsonData['Data'];
           
           List<ColisModel> colisList = [];
           if (data['colis'] != null) {
-            print('TONGA ETO ARY ISIKA AN');
             colisList = (data['colis'] as List)
                 .map((item) => ColisModel(
                       contenu: item['contenu'],
@@ -70,14 +60,11 @@ class DetailService {
 
           List<PaymentModel> paymentList = [];
           if (data['paiements'] != null) {
-            print('TONGA ETO AM PAIMENT AN');
             paymentList = (data['paiements'] as List)
                 .map((item) => PaymentModel(
                       reference: item['reference'],
                       datePaiement: item['datePaiement'] != null ? DateTime.parse(item['datePaiement']) : null,
                       montantEUR: item['montantEUR'] != null ? item['montantEUR'].toDouble() ?? 0 : 0,
-                      // montantMGA: item['montantMGA'] != null ? item['montantMGA'].toDouble() ?? 0 : 0,
-                      // montantMGA: item['montantMGA'] != null ? '${item['montantMGA'].toDouble()} Ariary' : '',
                  montantMGA: item['montantMGA'] != null ? item['montantMGA'].toDouble() : null,
 
 
@@ -85,59 +72,7 @@ class DetailService {
                     ))
                 .toList();
           }
-         
-          print("COLIS LIST");
-          for( var item in colisList) {
-          //  print("item");
-          //   print(item.contenu);
-          //   print(item.volume);
-          //   print(item.poids);
-          //   print(item.tarifEnvoiEUR);
-          //   print(item.nombre);
-          //   print(item.numeroColis);
-          //   print(item.referenceColis);
-
-          }
       
-          print("******** RETURN ********");
-          // print(data['reference']);
-          // print(data['expediteur']);
-          // print(data['destinataire']);
-          // print(data['tarifEnvoiEUR']);
-          // print(data['tarifExtraEUR']);
-          // print(data['resteAPayerEUR']);
-          // print(data['lieuDepart']);
-          // print(data['lieuDestination']);
-
-          print("PAIEMENT LIST");
-          // for( var item in paymentList) {
-          //   print(item.reference);
-          //   print(item.datePaiement);
-          //   print('AMPVONY');
-          //   print(item.montantEUR);
-          //   print(item.montantMGA);
-          //   print(item.modePaiement);
-        
-          // }
-      
-          print("******** TAFIDIIIIIIIIIIIITRA ATOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ********");
-          print('REF');
-          print(data['reference']);
-          print('DATE'); 
-          print(data['datePaiement']); 
-          print('EURO');    
-          print(data['montantEUR']);
-          print('MGA'); 
-          print(data['montantMGA']);
-          print('MODE'); 
-          print(data['modePaiement']);
-
-      
-      
-          print('///////////////////// OKOKOOKOKOKOKOKOKOKOKOKOKKOKOKOKOKOK');
-          
-
-          print ("AVANT *********************");
           return PackModel(
             reference: data['reference'],
 
@@ -173,29 +108,25 @@ class DetailService {
           );
 
         }else{
-           print(' --------------- CODERETOUR = '+jsonData['CodeRetour']+' ---------------');
+
         }
       }else{
         var statuscode = (response.statusCode).toString() ;
-        print(' ---------------- RESPONSE CODE ='+ statuscode + ' ---------------');
+
       }
     } catch (e) {
-      print('CATCH');
-      print(e);
-    }
+  }
     
     throw Exception('Failed to fetch package details');
-  }
+}
 
 
   Future<List<ColisModel>> articleList(String reference) async {
     List<ColisModel> colisList = [];
     
     try{
-      print("getToken");
       String token = await Util.getToken();
       
-      print(token);
       Map<String, String> headers = 
       {
         'x-access-token': token
@@ -210,30 +141,16 @@ class DetailService {
       if (reponse.statusCode == 200) {
 
         dynamic data = jsonDecode(reponse.body);
-
-        
+   
         if (data['CodeRetour'] == 200) {
-          print('200');
-          print(data);
-          print('LISTE JSON');
-          print(data['Data']);
 
           List<dynamic> lisitra = data['Data']['colis'];
 
-          print('PRINT LISITRA');
-          print(lisitra);
-
           for( var item in lisitra) {
-            print('ITEM');
             Map<String, dynamic> itemMap = Map<String, dynamic>.from(item.cast<String, dynamic>());
-            print(itemMap);
-            print('PM - Standard');
             ColisModel pm = ColisModel.fromJson(itemMap);
-            print(pm);
             colisList.add(pm);
           }
-          print('COLIS');
-          print(colisList);
 
           return colisList;
          } else {
@@ -253,8 +170,6 @@ class DetailService {
         // Gérer l'exception de connexion Internet manquante ici
         throw ApiException("Pas d'internet");
       } catch (e) {
-        print('CATCH');
-        print(e);
       // Gérer toutes les autres exceptions ici
        throw ApiException("Erreur venant du serveur");
      }
@@ -266,10 +181,8 @@ class DetailService {
     List<PaymentModel> paymentList = [];
     
     try{
-      print("getToken");
       String token = await Util.getToken();
       
-      print(token);
       Map<String, String> headers = 
       {
         'x-access-token': token
@@ -285,30 +198,15 @@ class DetailService {
 
         dynamic data = jsonDecode(reponse.body);
 
-        
         if (data['CodeRetour'] == 200) {
-          print('200');
-          print(data);
-          print('LISTE JSON');
-          print(data['Data']);
-
+       
           List<dynamic> liste = data['Data']['paiements'];
 
-          print('PRINT LISTE');
-          print(liste);
-
           for( var item in liste) {
-            print('ITEM');
             Map<String, dynamic> itemMap = Map<String, dynamic>.from(item.cast<String, dynamic>());
-            print(itemMap);
-            print('PM - Standard');
             PaymentModel pmt = PaymentModel.fromJson(itemMap);
-            print(pmt);
             paymentList.add(pmt);
           }
-          print('PAIEMENT');
-          print(paymentList);
-
           return paymentList;
          } else {
            throw ApiException(data['DescRetour']);
@@ -327,16 +225,10 @@ class DetailService {
         // Gérer l'exception de connexion Internet manquante ici
         throw ApiException("Pas d'internet");
       } catch (e) {
-        print('CATCH');
-        print(e);
       // Gérer toutes les autres exceptions ici
        throw ApiException("Erreur venant du serveur");
      }
  
   }
-
-
-
-
 }
 

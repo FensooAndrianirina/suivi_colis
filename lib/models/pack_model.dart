@@ -68,30 +68,4 @@ class PackModel {
 
   });
 
-
-  // factory PackModel.fromJson(Map<String, dynamic> json) {
-  //   final List<dynamic> colisData = json['colis'] ?? [];
-  //   final List<ColisModel> colisList = colisData.map((item) => ColisModel.fromJson(item)).toList();
-
-  //   return PackModel(
-  //     reference: json['reference'],
-
-  //     expediteur: json['expediteur'],
-  //     destinataire: json['destinataire'],
-
-  //     tarifEnvoiEUR: json['tarifEnvoiEUR'] ?? 0.0,
-  //     tarifExtraEUR:  json['tarifExtraEUR'] ?? 0.0,
-  //     resteAPayerEUR: json['resteAPayerEUR'] ?? 0.0,
-
-  //     lieuDepart: json['lieuDepart'],
-  //     lieuDestination: json['lieuDestination'],
-
-  //     dateExpedition: json['dateExpedition'] != null ? DateTime.parse(json['dateExpedition']) : null,
-  //     dateArrivee: json['dateArrivee'] != null ? DateTime.parse(json['dateArrivee']) : null,
-  //     dateLivraison: json['dateLivraison'] != null ? DateTime.parse(json['dateLivraison']) : null,
-  //     // dateArrivee: DateTime.parse(json['dateArrivee']),
-
-  //     colis: colisList,
-  //   );
-  // }
 }

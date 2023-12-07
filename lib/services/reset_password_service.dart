@@ -39,14 +39,12 @@ class ResetPasswordService {
         throw e;
       }
       on HttpException catch(e) {
-        print(e.message);
         throw ApiException("Token inexistant");
       }
       on SocketException catch (_) {
         // Gérer l'exception de connexion Internet manquante ici
         throw ApiException("Pas d'internet");
       } catch (e) {
-      // print(e);
       // Gérer toutes les autres exceptions ici
        throw ApiException("Erreur venant du serveur");
      }

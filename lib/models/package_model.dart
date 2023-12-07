@@ -22,8 +22,6 @@ class PackageModel{
   int expediteur_id;
   int destinataire_id;
 
-  // List<ColisModel> colis;
-
   PackageModel({
     required this.reference,
     required this.expediteur,
@@ -43,14 +41,10 @@ class PackageModel{
     this.tauxDeChange,
     required this.expediteur_id,
     required this.destinataire_id,
-    // required this.colis,
   });
 
   factory PackageModel.fromJson(Map<String, dynamic> json) {
-    
-    print("json");
-    print(json);
-
+ 
     return PackageModel(
       reference: json['reference'],
       expediteur: json['expediteur'],
@@ -70,7 +64,7 @@ class PackageModel{
       tauxDeChange: json['tauxDeChange'] != null ? json['tauxDeChange'].toDouble() : 0,
       expediteur_id: json['expediteur_id'],
       destinataire_id: json['destinataire_id'],   
-      // colis: json['colis']
+
       
     );
   }

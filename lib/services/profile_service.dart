@@ -16,10 +16,6 @@ class ProfileService {
     
     try{
       String token = await Util.getToken();
-      print("getToken");
-      // String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjgzNzk0NzYwLCJleHAiOjE2ODM4ODExNjB9.YRUWFcvkZvldyVOYOC2sJe6yxlm9EYf_znJ0Zkdxa_A";
-
-      print(token);
       Map<String, String> headers = 
       {
         'x-access-token': token
@@ -45,34 +41,25 @@ class ProfileService {
           headers: headers
         );
 
-      print("REPONSE");
-
        if (reponse.statusCode == 200) {
-          print("ANATY 200");
-         dynamic data = jsonDecode(reponse.body);
+   
+        dynamic data = jsonDecode(reponse.body);
          if (data['CodeRetour'] == 200 ) {
             return data['CodeRetour'];
-         } else {
+          } else {
             throw ApiException(data['DescRetour']);
-         }
+          }
        } else {
-          print("TSY ANATY 200");
           throw ApiException("ERREUR_SERVEUR");
        }
      }on ApiException catch (e) {
-        print("API");
-
         throw e;
      }
      on SocketException catch (_) {
        // Gérer l'exception de connexion Internet manquante ici
-        print("INTERNET");
-
         throw ApiException("PAS_INTERNET");
      } catch (e) {
        // Gérer toutes les autres exceptions ici
-        print("SERVEUR");
-
        throw ApiException("ERREUR_SERVEUR");
      }
 
